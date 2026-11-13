@@ -105,6 +105,9 @@
   html { -webkit-text-size-adjust: 100%; -webkit-tap-highlight-color: transparent; }
   body { font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif; }
 
+  /* <picture> uit pic(): geen eigen box, de <img> bepaalt de layout */
+  picture { display: contents; }
+
   /* Lucide-iconen: kleur volgt de tekst, verticaal gecentreerd */
   .icon { display: inline-block; flex-shrink: 0; vertical-align: -0.125em; stroke-width: var(--icon-stroke); }
 

@@ -1,0 +1,375 @@
+{
+ "fotos/pexels-roman-odintsov-4869221.jpg": {
+  "w": 1600,
+  "h": 1067,
+  "webp": [
+   [
+    "opt/fotos-pexels-roman-odintsov-4869221-800.webp",
+    800
+   ],
+   [
+    "opt/fotos-pexels-roman-odintsov-4869221-1200.webp",
+    1200
+   ],
+   [
+    "opt/fotos-pexels-roman-odintsov-4869221-1600.webp",
+    1600
+   ]
+  ],
+  "avif": [
+   [
+    "opt/fotos-pexels-roman-odintsov-4869221-800.avif",
+    800
+   ],
+   [
+    "opt/fotos-pexels-roman-odintsov-4869221-1200.avif",
+    1200
+   ],
+   [
+    "opt/fotos-pexels-roman-odintsov-4869221-1600.avif",
+    1600
+   ]
+  ]
+ },
+ "fotos/pexels-anchornhaven-43716305-29445728.jpg": {
+  "w": 1200,
+  "h": 1800,
+  "webp": [
+   [
+    "opt/fotos-pexels-anchornhaven-43716305-29445728-800.webp",
+    800
+   ],
+   [
+    "opt/fotos-pexels-anchornhaven-43716305-29445728-1200.webp",
+    1200
+   ]
+  ],
+  "avif": [
+   [
+    "opt/fotos-pexels-anchornhaven-43716305-29445728-800.avif",
+    800
+   ],
+   [
+    "opt/fotos-pexels-anchornhaven-43716305-29445728-1200.avif",
+    1200
+   ]
+  ]
+ },
+ "fotos/pexels-casnafu-24796900.jpg": {
+  "w": 1200,
+  "h": 1800,
+  "webp": [
+   [
+    "opt/fotos-pexels-casnafu-24796900-800.webp",
+    800
+   ],
+   [
+    "opt/fotos-pexels-casnafu-24796900-1200.webp",
+    1200
+   ]
+  ],
+  "avif": [
+   [
+    "opt/fotos-pexels-casnafu-24796900-800.avif",
+    800
+   ],
+   [
+    "opt/fotos-pexels-casnafu-24796900-1200.avif",
+    1200
+   ]
+  ]
+ },
+ "fotos/pexels-amar-28056733.jpg": {
+  "w": 800,
+  "h": 1200,
+  "webp": [
+   [
+    "opt/fotos-pexels-amar-28056733-800.webp",
+    800
+   ]
+  ],
+  "avif": [
+   [
+    "opt/fotos-pexels-amar-28056733-800.avif",
+    800
+   ]
+  ]
+ },
+ "fotos/pexels-fedigioia-11634304.jpg": {
+  "w": 800,
+  "h": 1198,
+  "webp": [
+   [
+    "opt/fotos-pexels-fedigioia-11634304-800.webp",
+    800
+   ]
+  ],
+  "avif": [
+   [
+    "opt/fotos-pexels-fedigioia-11634304-800.avif",
+    800
+   ]
+  ]
+ },
+ "fotos/pexels-barbara-g-135944487-11599632.jpg": {
+  "w": 800,
+  "h": 1200,
+  "webp": [
+   [
+    "opt/fotos-pexels-barbara-g-135944487-11599632-800.webp",
+    800
+   ]
+  ],
+  "avif": [
+   [
+    "opt/fotos-pexels-barbara-g-135944487-11599632-800.avif",
+    800
+   ]
+  ]
+ },
+ "fotos/pexels-marina-gr-109305987-19574245.jpg": {
+  "w": 1200,
+  "h": 1498,
+  "webp": [
+   [
+    "opt/fotos-pexels-marina-gr-109305987-19574245-800.webp",
+    800
+   ],
+   [
+    "opt/fotos-pexels-marina-gr-109305987-19574245-1200.webp",
+    1200
+   ]
+  ],
+  "avif": []
+ },
+ "specials/tafel.png": {
+  "w": 500,
+  "h": 750,
+  "webp": [
+   [
+    "opt/specials-tafel-500.webp",
+    500
+   ]
+  ],
+  "avif": [
+   [
+    "opt/specials-tafel-500.avif",
+    500
+   ]
+  ]
+ },
+ "specials/koffie.png": {
+  "w": 500,
+  "h": 750,
+  "webp": [
+   [
+    "opt/specials-koffie-500.webp",
+    500
+   ]
+  ],
+  "avif": [
+   [
+    "opt/specials-koffie-500.avif",
+    500
+   ]
+  ]
+ },
+ "specials/smoothie.png": {
+  "w": 500,
+  "h": 750,
+  "webp": [
+   [
+    "opt/specials-smoothie-500.webp",
+    500
+   ]
+  ],
+  "avif": [
+   [
+    "opt/specials-smoothie-500.avif",
+    500
+   ]
+  ]
+ },
+ "specials/bagelvdmaand.png": {
+  "w": 1200,
+  "h": 801,
+  "webp": [
+   [
+    "opt/specials-bagelvdmaand-800.webp",
+    800
+   ],
+   [
+    "opt/specials-bagelvdmaand-1200.webp",
+    1200
+   ]
+  ],
+  "avif": [
+   [
+    "opt/specials-bagelvdmaand-800.avif",
+    800
+   ],
+   [
+    "opt/specials-bagelvdmaand-1200.avif",
+    1200
+   ]
+  ]
+ },
+ "specials/bruidstaart-home.jpg": {
+  "w": 1019,
+  "h": 957,
+  "webp": [
+   [
+    "opt/specials-bruidstaart-home-800.webp",
+    800
+   ],
+   [
+    "opt/specials-bruidstaart-home-1019.webp",
+    1019
+   ]
+  ],
+  "avif": []
+ },
+ "taarten/apple.png": {
+  "w": 800,
+  "h": 533,
+  "webp": [
+   [
+    "opt/taarten-apple-800.webp",
+    800
+   ]
+  ],
+  "avif": [
+   [
+    "opt/taarten-apple-800.avif",
+    800
+   ]
+  ]
+ },
+ "taarten/oreo.png": {
+  "w": 800,
+  "h": 464,
+  "webp": [
+   [
+    "opt/taarten-oreo-800.webp",
+    800
+   ]
+  ],
+  "avif": [
+   [
+    "opt/taarten-oreo-800.avif",
+    800
+   ]
+  ]
+ },
+ "taarten/chocolade.png": {
+  "w": 780,
+  "h": 585,
+  "webp": [
+   [
+    "opt/taarten-chocolade-780.webp",
+    780
+   ]
+  ],
+  "avif": [
+   [
+    "opt/taarten-chocolade-780.avif",
+    780
+   ]
+  ]
+ },
+ "taarten/carrot.png": {
+  "w": 780,
+  "h": 585,
+  "webp": [
+   [
+    "opt/taarten-carrot-780.webp",
+    780
+   ]
+  ],
+  "avif": []
+ },
+ "taarten/redvelvet.png": {
+  "w": 780,
+  "h": 585,
+  "webp": [
+   [
+    "opt/taarten-redvelvet-780.webp",
+    780
+   ]
+  ],
+  "avif": [
+   [
+    "opt/taarten-redvelvet-780.avif",
+    780
+   ]
+  ]
+ },
+ "taarten/tekst.png": {
+  "w": 780,
+  "h": 585,
+  "webp": [
+   [
+    "opt/taarten-tekst-780.webp",
+    780
+   ]
+  ],
+  "avif": []
+ },
+ "taarten/bruidstaart.png": {
+  "w": 780,
+  "h": 585,
+  "webp": [
+   [
+    "opt/taarten-bruidstaart-780.webp",
+    780
+   ]
+  ],
+  "avif": [
+   [
+    "opt/taarten-bruidstaart-780.avif",
+    780
+   ]
+  ]
+ },
+ "menu/menu_1.webp": {
+  "w": 1600,
+  "h": 1101,
+  "webp": [
+   [
+    "opt/menu-menu_1-1200.webp",
+    1200
+   ],
+   [
+    "opt/menu-menu_1-1600.webp",
+    1600
+   ]
+  ],
+  "avif": []
+ },
+ "menu/menu_2.webp": {
+  "w": 1600,
+  "h": 1089,
+  "webp": [
+   [
+    "opt/menu-menu_2-1200.webp",
+    1200
+   ],
+   [
+    "opt/menu-menu_2-1600.webp",
+    1600
+   ]
+  ],
+  "avif": []
+ },
+ "logo.png": {
+  "w": 150,
+  "h": 150,
+  "webp": [
+   [
+    "opt/logo-150.webp",
+    150
+   ]
+  ],
+  "avif": []
+ }
+}

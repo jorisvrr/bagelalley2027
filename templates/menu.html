@@ -245,7 +245,7 @@
 
 <nav>
   <a href="/" class="nav-logo">
-    <img src="{{ url_for('static', filename='logo.png') }}" alt="" width="36" height="36">
+    <img src="{{ url_for('static', filename='opt/logo-150.webp') }}" alt="" width="36" height="36">
     <span class="nav-logo-text">Bagel <span>Alley</span></span>
   </a>
   <a href="/" class="nav-back">{{ icon('arrow-left', 16) }} Terug naar de website</a>
@@ -277,7 +277,7 @@
     </div>
     <div class="menu-img-card">
       <a class="menu-zoom" href="{{ url_for('static', filename='menu/menu_1.webp') }}" target="_blank" rel="noopener" aria-label="Menukaart pagina 1 op ware grootte openen">
-      <img src="{{ url_for('static', filename='menu/menu_1.webp') }}" alt="Menukaart Bagel Alley, pagina 1: ontbijt, bagels, sappen, smoothies, yoghurt en bowls" loading="eager" onerror="this.closest('.menu-img-card').querySelector('.menu-img-fallback').style.display='flex';this.style.display='none'"></a>
+      {{ pic('menu/menu_1.webp', 'Menukaart Bagel Alley, pagina 1: ontbijt, bagels, sappen, smoothies, yoghurt en bowls', '(max-width: 1100px) 100vw, 1000px', eager=True) }}</a>
       <div class="menu-img-fallback">
         
         <div class="menu-img-fallback-text">
@@ -305,7 +305,7 @@
     </div>
     <div class="menu-img-card">
       <a class="menu-zoom" href="{{ url_for('static', filename='menu/menu_2.webp') }}" target="_blank" rel="noopener" aria-label="Menukaart pagina 2 op ware grootte openen">
-      <img src="{{ url_for('static', filename='menu/menu_2.webp') }}" alt="Menukaart Bagel Alley, pagina 2: soepen, salades, zoetigheden, high tea, tapas, koffie en thee" loading="lazy" onerror="this.closest('.menu-img-card').querySelector('.menu-img-fallback').style.display='flex';this.style.display='none'"></a>
+      {{ pic('menu/menu_2.webp', 'Menukaart Bagel Alley, pagina 2: soepen, salades, zoetigheden, high tea, tapas, koffie en thee', '(max-width: 1100px) 100vw, 1000px') }}</a>
       <div class="menu-img-fallback">
         
         <div class="menu-img-fallback-text">

@@ -160,6 +160,35 @@ except Exception as e:
     print(f"[MENU] tekstversie niet geladen: {e}")
     MENUKAART = []
 
+# Responsieve afbeeldingen: public/static/opt/manifest.json (WebP/AVIF-varianten).
+# pic() geeft een <picture> met srcset, width/height en lazy loading. Zonder manifest
+# valt hij terug op het originele bestand.
+from markupsafe import Markup
+try:
+    with open(os.path.join(app.static_folder, "opt", "manifest.json"), encoding="utf-8") as _fh:
+        _IMG_MANIFEST = json.load(_fh)
+except Exception as e:
+    print(f"[IMG] manifest niet geladen: {e}")
+    _IMG_MANIFEST = {}
+
+
+@app.template_global()
+def pic(path, alt="", sizes="100vw", cls="", eager=False, priority=False):
+    from flask import url_for
+    e = _html.escape
+    klasse = f' class="{e(cls)}"' if cls else ""
+    laden = "eager" if (eager or priority) else "lazy"
+    prio = ' fetchpriority="high"' if priority else ""
+    m = _IMG_MANIFEST.get(path)
+    if not m:
+        return Markup(f'<img src="{url_for("static", filename=path)}" alt="{e(alt)}"{klasse} loading="{laden}" decoding="async"{prio}>')
+    srcset = lambda items: ", ".join(f'{url_for("static", filename=p)} {w}w' for p, w in items)
+    bron = f'<source type="image/avif" srcset="{srcset(m["avif"])}" sizes="{e(sizes)}">' if m.get("avif") else ""
+    fallback = url_for("static", filename=m["webp"][0][0])
+    return Markup(f'<picture>{bron}<img src="{fallback}" srcset="{srcset(m["webp"])}" sizes="{e(sizes)}" '
+                  f'width="{m["w"]}" height="{m["h"]}" alt="{e(alt)}"{klasse} loading="{laden}" decoding="async"{prio}></picture>')
+
+
 # region ── SENDGRID MAIL ───────────────────────────────────────
 SENDGRID_API_KEY = os.environ.get("SENDGRID_API_KEY", "")
 MAIL_VAN         = os.environ.get("MAIL_VAN", "jorisvrr@gmail.com")

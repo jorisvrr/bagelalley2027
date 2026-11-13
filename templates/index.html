@@ -131,7 +131,7 @@
 
     /* HERO */
     .hero { position: relative; height: 95vh; min-height: 560px; overflow: hidden; display: flex; align-items: flex-end; }
-    .hero-bg { position: absolute; inset: 0; background-image: url("{{ url_for('static', filename='fotos/pexels-roman-odintsov-4869221.jpg') }}"); background-size: cover; background-position: center 45%; animation: heroZoom 12s ease-out forwards; }
+    .hero-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 45%; animation: heroZoom 12s ease-out forwards; }}"); background-size: cover; background-position: center 45%; animation: heroZoom 12s ease-out forwards; }
     @keyframes heroZoom { from { transform: scale(1.05); } to { transform: scale(1); } }
     .hero-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(26,16,24,.93) 0%, rgba(26,16,24,.55) 45%, rgba(26,16,24,.12) 100%); }
     .hero-content { position: relative; z-index: 2; padding: 0 6rem 5rem; max-width: 780px; }
@@ -165,7 +165,7 @@
     /* SHORTCUT CARDS */
     .shortcuts { display: grid; grid-template-columns: 1fr 1fr; height: 300px; }
     .shortcut-card { position: relative; overflow: hidden; cursor: pointer; text-decoration: none; display: flex; align-items: flex-end; }
-    .shortcut-card-bg { position: absolute; inset: 0; background-size: cover; background-position: center; transition: transform .6s ease; }
+    .shortcut-card-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform .6s ease; }
     @media (hover: hover) and (pointer: fine) { .shortcut-card:hover .shortcut-card-bg { transform: scale(1.05); } }
     .shortcut-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(26,16,24,.85) 0%, rgba(26,16,24,.2) 60%, transparent 100%); transition: background .3s; }
     @media (hover: hover) and (pointer: fine) { .shortcut-card:hover .shortcut-overlay { background: linear-gradient(to top, rgba(26,16,24,.9) 0%, rgba(26,16,24,.4) 60%, transparent 100%); } }
@@ -545,7 +545,7 @@
 <!-- NAV -->
 <nav id="site-nav">
   <a href="#home" class="nav-logo">
-    <img src="{{ url_for('static', filename='logo.png') }}" alt="" width="38" height="38" onerror="this.style.display='none'">
+    <img src="{{ url_for('static', filename='opt/logo-150.webp') }}" alt="" width="38" height="38">
     <span class="nav-logo-text">Bagel <span>Alley</span></span>
   </a>
   <ul class="nav-links" id="nav-links">
@@ -564,7 +564,7 @@
 
 <!-- HERO -->
 <section class="hero" id="home">
-  <div class="hero-bg"></div>
+  {{ pic('fotos/pexels-roman-odintsov-4869221.jpg', '', '100vw', 'hero-bg', priority=True) }}
   <div class="hero-overlay"></div>
   <div class="hero-allergen"><span class="ha-icon">{{ icon('check', 16) }}</span> Glutenvrij &amp; lactosevrij</div>
   <div class="hero-content">
@@ -589,7 +589,7 @@
 <!-- SHORTCUTS -->
 <div class="shortcuts">
   <a href="#menu" class="shortcut-card">
-    <div class="shortcut-card-bg" style="background-image:url('{{ url_for('static', filename='fotos/pexels-anchornhaven-43716305-29445728.jpg') }}')"></div>
+    {{ pic('fotos/pexels-anchornhaven-43716305-29445728.jpg', '', '(max-width: 768px) 100vw, 50vw', 'shortcut-card-bg') }}
     <div class="shortcut-overlay"></div>
     <div class="shortcut-body">
       <h2 class="shortcut-title">Bagels, High Tea<br>&amp; Tapas</h2>
@@ -597,7 +597,7 @@
     </div>
   </a>
   <a href="{{ reserveer_url }}" class="shortcut-card">
-    <div class="shortcut-card-bg" style="background-image:url('{{ url_for('static', filename='specials/tafel.png') }}')"></div>
+    {{ pic('specials/tafel.png', '', '(max-width: 768px) 100vw, 50vw', 'shortcut-card-bg') }}
     <div class="shortcut-overlay"></div>
     <div class="shortcut-body">
       {% if online_reserveren %}
@@ -666,13 +666,13 @@ document.addEventListener('DOMContentLoaded', function() {
   <h2 class="section-title reveal">Warme gastvrijheid,<br>elke dag vers.</h2>
   <div class="sfeer-grid">
     <div class="sfeer-img sfeer-main reveal">
-      <img src="{{ url_for('static', filename='fotos/pexels-casnafu-24796900.jpg') }}" alt="Bagel Alley sfeer" loading="lazy">
+      {{ pic('fotos/pexels-casnafu-24796900.jpg', 'Belegde bagels in de vitrine bij Bagel Alley', '(max-width: 768px) 100vw, 50vw') }}
     </div>
     <div class="sfeer-img reveal reveal-delay-1">
-      <img src="{{ url_for('static', filename='fotos/pexels-amar-28056733.jpg') }}" alt="Bagel met koffie" loading="lazy">
+      {{ pic('fotos/pexels-amar-28056733.jpg', 'Bagel met koffie', '(max-width: 768px) 100vw, 25vw') }}
     </div>
     <div class="sfeer-img reveal reveal-delay-2">
-      <img src="{{ url_for('static', filename='fotos/pexels-fedigioia-11634304.jpg') }}" alt="Artisan bagel" loading="lazy">
+      {{ pic('fotos/pexels-fedigioia-11634304.jpg', 'Bagel op een bord', '(max-width: 768px) 100vw, 25vw') }}
     </div>
     <div class="sfeer-text reveal reveal-delay-1">
       <h3 class="sfeer-text-title">Ambachtelijk bereid,<br>altijd verse ingrediënten</h3>
@@ -689,14 +689,14 @@ document.addEventListener('DOMContentLoaded', function() {
   <div class="feature-grid">
     <div class="reveal">
       <div class="feature-img">
-        <img src="{{ url_for('static', filename='specials/koffie.png') }}" alt="Verse koffie bij Bagel Alley" loading="lazy">
+        {{ pic('specials/koffie.png', 'Koffie bij Bagel Alley', '(max-width: 768px) 100vw, 45vw') }}
       </div>
       <h3 class="feature-title">Espresso met een verhaal</h3>
       <p class="feature-body">Bij Bagel Alley werken we met hoogwaardige bonen van La Garanta, zorgvuldig geselecteerd uit Colombia en Brazilië. Vol van smaak, met een mooi aroma en constante kwaliteit in elke kop.</p>
     </div>
     <div class="reveal reveal-delay-1">
       <div class="feature-img">
-        <img src="{{ url_for('static', filename='specials/smoothie.png') }}" alt="Verse sappen en smoothies" loading="lazy">
+        {{ pic('specials/smoothie.png', 'Verse sappen en smoothies', '(max-width: 768px) 100vw, 45vw') }}
       </div>
       <h3 class="feature-title">Dagelijks vers geperst</h3>
       <p class="feature-body">Onze verse fruitsappen en smoothies maken we elke dag met verse ingrediënten en een krachtige Booster Blender. Een gezonde, verfrissende keuze voor elk moment van de dag.</p>
@@ -709,7 +709,7 @@ document.addEventListener('DOMContentLoaded', function() {
 <section class="botm-section">
   <div class="botm-inner">
     <div class="botm-img-wrap">
-      <img src="{{ url_for('static', filename='specials/bagelvdmaand.png') }}" alt="Bagel van de maand: The Spanish Classic" class="botm-img">
+      {{ pic('specials/bagelvdmaand.png', 'Bagel van de maand: The Spanish Classic', '(max-width: 768px) 100vw, 50vw', 'botm-img') }}
       <div class="botm-img-overlay"></div>
       <span class="botm-badge">Bagel van de maand</span>
     </div>
@@ -747,7 +747,7 @@ document.addEventListener('DOMContentLoaded', function() {
       <h2 class="section-title reveal">Meer dan<br>alleen<br>een bagel.</h2>
       <p class="menu-section-body reveal">Van klassieke bagels met cream cheese tot uitgebreide High Tea arrangementen. Alles vers bereid in onze eigen keuken.</p>
       <div class="menu-photo reveal reveal-delay-1">
-        <img src="{{ url_for('static', filename='fotos/pexels-barbara-g-135944487-11599632.jpg') }}" alt="Vers gebakken bagels" loading="lazy">
+        {{ pic('fotos/pexels-barbara-g-135944487-11599632.jpg', 'Vers gebakken bagels', '(max-width: 1024px) 100vw, 33vw') }}
         <div class="menu-photo-caption">Vers uit de keuken</div>
       </div>
       <div class="menu-links reveal">
@@ -802,7 +802,7 @@ document.addEventListener('DOMContentLoaded', function() {
 <section class="sfeer-section" id="bruidstaart">
   <div class="bruidstaart-grid">
     <div class="bruidstaart-img reveal">
-      <img src="{{ url_for('static', filename='specials/bruidstaart-home.jpg') }}" alt="Bruidstaart op maat van Bagel Alley" loading="lazy">
+      {{ pic('specials/bruidstaart-home.jpg', 'Bruidstaart op maat van Bagel Alley', '(max-width: 768px) 100vw, 50vw') }}
     </div>
     <div class="reveal reveal-delay-1">
       <h3 class="bruidstaart-title">Bruidstaart op maat</h3>
@@ -830,7 +830,7 @@ document.addEventListener('DOMContentLoaded', function() {
       <a href="{{ reserveer_url }}" class="btn-purple hours-cta">{{ reserveer_label }}</a>
     </div>
     <div class="hours-visual reveal reveal-delay-1">
-      <img src="{{ url_for('static', filename='fotos/pexels-marina-gr-109305987-19574245.jpg') }}" alt="Bagel Alley display" loading="lazy">
+      {{ pic('fotos/pexels-marina-gr-109305987-19574245.jpg', 'Vitrine bij Bagel Alley', '(max-width: 768px) 100vw, 50vw') }}
       <div class="hours-visual-overlay"></div>
     </div>
   </div>

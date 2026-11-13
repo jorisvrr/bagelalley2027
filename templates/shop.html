@@ -87,7 +87,7 @@
 {% include "_loader.html" ignore missing %}
 <nav>
   <a href="/" class="nav-logo">
-    <img src="{{ url_for('static', filename='logo.png') }}" alt="" width="36" height="36">
+    <img src="{{ url_for('static', filename='opt/logo-150.webp') }}" alt="" width="36" height="36">
     <span class="nav-logo-text">Bagel <span>Alley</span></span>
   </a>
   <a href="/" class="nav-back">{{ icon('arrow-left', 16) }} Terug naar de website</a>
@@ -112,7 +112,7 @@
     <h2 class="shop-section-title">Taarten &amp; Gebak</h2>
     <div class="product-grid">
       <a href="/bestellen" class="product-card">
-        <div class="product-card-img-wrap"><img class="product-card-img" src="{{ url_for('static', filename='taarten/apple.png') }}" loading="lazy" alt="Applepie"></div>
+        <div class="product-card-img-wrap">{{ pic('taarten/apple.png', 'Apple Pie', '(max-width: 480px) 100vw, (max-width: 768px) 50vw, 340px', 'product-card-img') }}</div>
         <div class="product-card-body">
           <div class="product-card-title">Apple Pie</div>
           <p class="product-card-desc">Huisgemaakte appeltaart, per stuk of heel te bestellen.</p>
@@ -120,7 +120,7 @@
         <div class="product-card-footer"><span class="product-card-price">Vanaf €32,50</span><span class="product-card-btn">Bestellen {{ icon('chevron-right', 16) }}</span></div>
       </a>
       <a href="/bestellen" class="product-card">
-        <div class="product-card-img-wrap"><img class="product-card-img" src="{{ url_for('static', filename='taarten/oreo.png') }}" loading="lazy" alt="Oreo taart"></div>
+        <div class="product-card-img-wrap">{{ pic('taarten/oreo.png', 'Oreo taart', '(max-width: 480px) 100vw, (max-width: 768px) 50vw, 340px', 'product-card-img') }}</div>
         <div class="product-card-body">
           <div class="product-card-title">Oreo taart</div>
           <p class="product-card-desc">Romige taart versierd met Oreo koekjes, een echte favoriet.</p>
@@ -128,7 +128,7 @@
         <div class="product-card-footer"><span class="product-card-price">Vanaf €32,50</span><span class="product-card-btn">Bestellen {{ icon('chevron-right', 16) }}</span></div>
       </a>
       <a href="/bestellen" class="product-card">
-        <div class="product-card-img-wrap"><img class="product-card-img" src="{{ url_for('static', filename='taarten/chocolade.png') }}" loading="lazy" alt="Chocoladetaart"></div>
+        <div class="product-card-img-wrap">{{ pic('taarten/chocolade.png', 'Chocoladetaart', '(max-width: 480px) 100vw, (max-width: 768px) 50vw, 340px', 'product-card-img') }}</div>
         <div class="product-card-body">
           <div class="product-card-title">Chocoladetaart</div>
           <p class="product-card-desc">Intense pure chocolade, zijdezacht en ambachtelijk bereid.</p>
@@ -136,7 +136,7 @@
         <div class="product-card-footer"><span class="product-card-price">Vanaf €32,50</span><span class="product-card-btn">Bestellen {{ icon('chevron-right', 16) }}</span></div>
       </a>
       <a href="/bestellen" class="product-card">
-        <div class="product-card-img-wrap"><img class="product-card-img" src="{{ url_for('static', filename='taarten/carrot.png') }}" loading="lazy" alt="Carrot Cake"></div>
+        <div class="product-card-img-wrap">{{ pic('taarten/carrot.png', 'Carrot Cake', '(max-width: 480px) 100vw, (max-width: 768px) 50vw, 340px', 'product-card-img') }}</div>
         <div class="product-card-body">
           <div class="product-card-title">Carrot Cake</div>
           <p class="product-card-desc">Wortelcake met rozijnen en walnoot, luchtig en smaakvol.</p>
@@ -144,7 +144,7 @@
         <div class="product-card-footer"><span class="product-card-price">€45,00</span><span class="product-card-btn">Bestellen {{ icon('chevron-right', 16) }}</span></div>
       </a>
       <a href="/bestellen" class="product-card">
-        <div class="product-card-img-wrap"><img class="product-card-img" src="{{ url_for('static', filename='taarten/redvelvet.png') }}" loading="lazy" alt="Red Velvet Cake"></div>
+        <div class="product-card-img-wrap">{{ pic('taarten/redvelvet.png', 'Red Velvet Cake', '(max-width: 480px) 100vw, (max-width: 768px) 50vw, 340px', 'product-card-img') }}</div>
         <div class="product-card-body">
           <div class="product-card-title">Red Velvet Cake</div>
           <p class="product-card-desc">Met rode vruchten, macarons en witte chocolade. Volledig te bestellen.</p>
@@ -152,7 +152,7 @@
         <div class="product-card-footer"><span class="product-card-price">Vanaf €32,50</span><span class="product-card-btn">Bestellen {{ icon('chevron-right', 16) }}</span></div>
       </a>
       <a href="https://www.bagelalley.nl/shop" target="_blank" rel="noopener" class="product-card">
-        <div class="product-card-img-wrap"><img class="product-card-img" src="{{ url_for('static', filename='taarten/tekst.png') }}" loading="lazy" alt="Tekst op taart"></div>
+        <div class="product-card-img-wrap">{{ pic('taarten/tekst.png', 'Tekst op taart', '(max-width: 480px) 100vw, (max-width: 768px) 50vw, 340px', 'product-card-img') }}</div>
         <div class="product-card-body">
           <div class="product-card-title">Tekst op taart</div>
           <p class="product-card-desc">Laat een naam of persoonlijke tekst op de taart zetten.</p>
@@ -160,7 +160,7 @@
         <div class="product-card-footer"><span class="product-card-price">Op aanvraag</span><span class="product-card-btn">Meer info {{ icon('chevron-right', 16) }}</span></div>
       </a>
       <a href="mailto:vrcbagel@gmail.com" class="product-card">
-        <div class="product-card-img-wrap"><img class="product-card-img" src="{{ url_for('static', filename='taarten/bruidstaart.png') }}" loading="lazy" alt="Bruidstaart" style="object-position:center top"></div>
+        <div class="product-card-img-wrap">{{ pic('taarten/bruidstaart.png', 'Bruidstaart', '(max-width: 480px) 100vw, (max-width: 768px) 50vw, 340px', 'product-card-img') }}</div>
         <div class="product-card-body">
           <div class="product-card-title">Bruidstaart</div>
           <p class="product-card-desc">Op maat gemaakt voor jouw speciale dag. Neem contact op voor een offerte.</p>
