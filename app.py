@@ -97,6 +97,11 @@ def _clean_str(value, maxlen: int) -> str:
     """Strip + harde lengtelimiet voor vrije-tekst input."""
     return str(value or "").strip()[:maxlen]
 
+def _json_body() -> dict:
+    """JSON-body als dict. Alles wat geen JSON-object is (lijst, getal, tekst) telt als leeg."""
+    data = request.get_json(silent=True)
+    return data if isinstance(data, dict) else {}
+
 _EMAIL_RE = re.compile(r"^[^@\s]+@[^@\s]+\.[^@\s]+$")
 
 def _valid_iso_date(s: str):
@@ -1157,7 +1162,7 @@ def bestelling_mail_html(b: dict) -> str:
 @app.route("/bestellen/verstuur", methods=["POST"])
 @limiter.limit("5 per minute")
 def bestelling_verstuur():
-    data = request.get_json(silent=True) or {}
+    data = _json_body()
     bestelling, fout = valideer_bestelling(data)
     if fout:
         return jsonify({"succes": False, "reden": "ongeldig", "fout": fout}), 400
@@ -1175,7 +1180,7 @@ def bestelling_verstuur():
 @app.route("/chat", methods=["POST"])
 @limiter.limit("20 per minute")
 def chat():
-    data = request.get_json(silent=True) or {}
+    data = _json_body()
     bericht = _clean_str(data.get("bericht"), 1000)   # harde lengtelimiet
     if not bericht:
         return jsonify({"antwoord": "Ik begreep je niet, kun je het opnieuw proberen?"})
@@ -1205,7 +1210,7 @@ def reserveren_post():
             "succes": False,
             "fout": "Online reserveren is op dit moment niet mogelijk. Bel ons op 070-514 61 16.",
         }), 403
-    data = request.get_json(silent=True) or {}
+    data = _json_body()
     naam     = _clean_str(data.get("naam"), 100)
     email    = _clean_str(data.get("email"), 150)
     telefoon = _clean_str(data.get("telefoon"), 30)
@@ -1335,7 +1340,7 @@ def admin():
 @app.route("/admin/login", methods=["POST"])
 @limiter.limit("5 per minute")
 def admin_login():
-    data = request.get_json(silent=True) or {}
+    data = _json_body()
     gebruiker = _clean_str(data.get("gebruiker"), 100)
     wachtwoord = str(data.get("wachtwoord") or "")[:200]
     if ADMIN_PASS and _safe_eq(gebruiker, ADMIN_USER) and _safe_eq(wachtwoord, ADMIN_PASS):
