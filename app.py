@@ -241,18 +241,30 @@ def _mail_topbar():
 
 # ── Bagel van de maand (centraal beheerd; pas dit maandelijks aan) ──
 BAGEL_VD_MAAND = {
-    "maand": "Juni 2026",
     "naam": "The Spanish Classic",
     "tagline": "Mediterraan. Hartig. Vol van smaak.",
     "beschrijving": "Een mediterrane klassieker: onze krokante alles-bagel met verse rucola, "
                     "luchtige omelet, pittige chorizo en zoete zongedroogde tomaten. "
                     "Zuid-Europese smaken in &eacute;&eacute;n perfecte hap.",
-    "inspiratie": "Ge&iuml;nspireerd op Zuid-Europa: lichte, zonnige smaken en de juiste "
-                  "balans tussen hartig en fris. Een bagel die net zo goed werkt bij het "
-                  "ontbijt, de lunch of een ontspannen weekendbrunch.",
+    "inspiratie": "Lichte, zonnige smaken en de balans tussen hartig en fris. "
+                  "Lekker bij het ontbijt, de lunch of een weekendbrunch.",
     "ingredienten": ["Rucola", "Omelet", "Chorizo", "Zongedroogde tomaten"],
-    "afbeelding": "/static/specials/bagelvdmaand.png",
+    "foto": "specials/bagelvdmaand.png",
 }
+_MAANDEN = ["januari", "februari", "maart", "april", "mei", "juni",
+            "juli", "augustus", "september", "oktober", "november", "december"]
+
+
+def bagel_vd_maand() -> dict:
+    """BAGEL_VD_MAAND plus de huidige maand (Nederlandse naam) en het einde van de
+    maand in Nederlandse tijd, voor de aftelklok. Eén plek om de bagel te wijzigen."""
+    nu = nu_amsterdam()
+    begin_volgende = (nu.replace(year=nu.year + 1, month=1) if nu.month == 12 else nu.replace(month=nu.month + 1)) \
+        .replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+    return {**BAGEL_VD_MAAND,
+            "maand": f"{_MAANDEN[nu.month - 1].capitalize()} {nu.year}",
+            "einde": begin_volgende.isoformat(),
+            "afbeelding": "/static/" + BAGEL_VD_MAAND["foto"]}
 
 def mail_html(naam: str, datum_str: str, tijd: str, gasten: int) -> str:
     """Reserverings-bevestigingsmail (warme, redactionele stijl)."""
@@ -287,7 +299,7 @@ def mail_html(naam: str, datum_str: str, tijd: str, gasten: int) -> str:
       <tr><td style="padding:11px 0;font-family:Arial,sans-serif;font-size:12px;color:#a99fb3;">Locatie</td><td style="padding:11px 0;text-align:right;font-family:Georgia,serif;font-size:15px;font-weight:bold;color:#2a2230;">Langstraat 42, Wassenaar</td></tr>
     </table>
     <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:22px;"><tr><td align="center">
-      <a href="https://maps.google.com/?q=Langstraat+42+2242+KM+Wassenaar" style="display:inline-block;background:#8758ce;color:#ffffff;font-family:Arial,sans-serif;font-size:13px;font-weight:bold;text-decoration:none;padding:13px 30px;border-radius:8px;">Route plannen &rarr;</a>
+      <a href="https://maps.google.com/?q=Langstraat+42+2242+KM+Wassenaar" style="display:inline-block;background:#8758ce;color:#ffffff;font-family:Arial,sans-serif;font-size:13px;font-weight:bold;text-decoration:none;padding:13px 30px;border-radius:8px;">Route plannen</a>
     </td></tr></table>
     <div style="font-family:Arial,sans-serif;font-size:11px;color:#b3a9bd;text-align:center;margin-top:14px;">Parkeren mogelijk in de omgeving</div>
   </td></tr>
@@ -315,7 +327,7 @@ def mail_html(naam: str, datum_str: str, tijd: str, gasten: int) -> str:
 
 def newsletter_html(naam: str = "") -> str:
     """Maandelijkse nieuwsbrief rond de Bagel van de Maand."""
-    b = BAGEL_VD_MAAND
+    b = bagel_vd_maand()
     delen = naam.split() if naam else []
     voornaam = delen[0] if delen else ""
     intro = (f"Hoi {voornaam}, ontdek " if voornaam else "Ontdek ")
@@ -355,7 +367,7 @@ def newsletter_html(naam: str = "") -> str:
     <div style="font-family:Georgia,serif;font-size:17px;font-style:italic;color:#8758ce;margin-top:10px;">{b['tagline']}</div>
     <div style="font-family:Arial,sans-serif;font-size:13px;color:#7c7484;line-height:1.8;margin-top:14px;">{intro}onze nieuwste creatie van {b['maand'].lower()}. {b['beschrijving']}</div>
     <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:22px;"><tr><td align="center">
-      <a href="{SITE_URL}/menu" style="display:inline-block;background:#8758ce;color:#ffffff;font-family:Arial,sans-serif;font-size:13px;font-weight:bold;text-decoration:none;padding:13px 30px;border-radius:8px;">Proef hem deze maand &rarr;</a>
+      <a href="{SITE_URL}/menu" style="display:inline-block;background:#8758ce;color:#ffffff;font-family:Arial,sans-serif;font-size:13px;font-weight:bold;text-decoration:none;padding:13px 30px;border-radius:8px;">Proef hem deze maand</a>
     </td></tr></table>
   </td></tr>
 
@@ -374,15 +386,15 @@ def newsletter_html(naam: str = "") -> str:
     <div style="font-family:Georgia,serif;font-size:18px;font-weight:bold;font-style:italic;color:#8758ce;margin-bottom:16px;">Meer om van te genieten</div>
     <table width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
       {_more(img_coffee, "Specialty Coffee", "Vers gezet, perfect bij je bagel of als moment voor jezelf.")}
-      {_more(img_cake, "Verse taarten", "Huisgemaakt en elke dag vers, ook op bestelling via onze webshop.")}
+      {_more(img_cake, "Verse taarten", "Huisgemaakt en elke dag vers, ook als hele taart te bestellen via onze website.")}
       {_more(img_bagel, "Klassieke bagels", "Van New York Classic tot Smoked Salmon Deluxe. Onze alltime favorieten.")}
     </tr></table>
   </td></tr>
 
   <tr><td style="background:#8758ce;padding:36px 40px;text-align:center;">
     <div style="font-family:Georgia,serif;font-size:24px;font-weight:bold;color:#ffffff;margin-bottom:10px;">Zin in gezelligheid?</div>
-    <div style="font-family:Arial,sans-serif;font-size:13px;color:rgba(255,255,255,0.85);line-height:1.7;margin-bottom:22px;">Kom langs en ontdek waarom onze gasten telkens terugkomen voor iets nieuws. Reserveer eenvoudig je tafel en geniet.</div>
-    <a href="{SITE_URL}/reserveren" style="display:inline-block;background:#ffffff;color:#8758ce;font-family:Arial,sans-serif;font-size:13px;font-weight:bold;text-decoration:none;padding:13px 30px;border-radius:8px;">Reserveer een tafel &rarr;</a>
+    <div style="font-family:Arial,sans-serif;font-size:13px;color:rgba(255,255,255,0.85);line-height:1.7;margin-bottom:22px;">Kom langs aan de Langstraat. Reserveren? Bel 070-514 61 16.</div>
+    <a href="tel:+31705146116" style="display:inline-block;background:#ffffff;color:#8758ce;font-family:Arial,sans-serif;font-size:13px;font-weight:bold;text-decoration:none;padding:13px 30px;border-radius:8px;">Bel om te reserveren</a>
   </td></tr>
 
   {_mail_footer()}
@@ -592,6 +604,7 @@ def inject_seo_globals():
     return {
         "site_url": SITE_URL,
         "jaar": date.today().year,
+        "bvdm": bagel_vd_maand(),
         "restaurant_schema_json": schema,
         "online_reserveren": ONLINE_RESERVEREN,
         "reserveer_url": "/reserveren" if ONLINE_RESERVEREN else RESERVEER_TEL_LINK,
@@ -643,29 +656,38 @@ def favicon_ico():
 
 # region ── LINK HULPFUNCTIE ────────────────────────────────────
 def link(tekst, url):
-    """Maakt een klikbare HTML link met huisstijl."""
-    return f'<a href="{url}" target="_blank" rel="noopener" style="color:#8758ce;font-weight:600;text-decoration:none;border-bottom:1px solid #c9a8f0;">{tekst}</a>'
+    """Maakt een klikbare HTML link met huisstijl. Eigen pagina's (/...) openen in hetzelfde tabblad."""
+    extern = url.startswith("http")
+    doel = ' target="_blank" rel="noopener"' if extern else ""
+    return f'<a href="{url}"{doel} style="color:#8758ce;font-weight:600;text-decoration:none;border-bottom:1px solid #c9a8f0;">{tekst}</a>'
 # endregion
 
 # region ── KENNISBANK ──────────────────────────────────────────
 # Alle antwoorden van de chatbot, vul per bedrijf in
+_TEL = link("070-514 61 16", "tel:+31705146116")
+_MAIL = link("info@bagelalley.nl", "mailto:info@bagelalley.nl")
+_ROUTE = "https://www.google.com/maps/search/?api=1&query=Bagel%20Alley%20Langstraat%2042%20Wassenaar"
+
 KENNISBANK = {
-    "openingstijden": f'We zijn open van maandag en woensdag t/m zondag van 08:00 tot 16:00. Op dinsdag zijn wij gesloten. Meer info vind je {link("hier", "https://www.bagelalley.nl")}.',
-    "adres":          f'Je vindt ons op Langstraat 42, 2242 KM Wassenaar. Plan je route {link("hier", "https://maps.google.com/?q=Langstraat+42+Wassenaar")}.',
-    "contact":        f'Bel ons op 070-514 61 16 of neem contact op via {link("ons contactformulier", "https://www.bagelalley.nl/contact")}.',
-    "menu":           f'We serveren vers ontbijt en lunch met zelfgemaakte bagels, sandwiches en salades. Bekijk het volledige menu {link("hier", "https://www.bagelalley.nl/menu-takeaway")}.',
-    "bagels":         f'Onze bagels zijn zelfgemaakt met verse ingrediënten, elke dag vers gebakken. Bekijk alle opties {link("hier", "https://www.bagelalley.nl/menu-takeaway")}.',
-    "high_tea":       f'Onze High Tea is perfect voor een bijzondere gelegenheid. De Take Away box is €39,50 voor 2 personen. Bekijk ons aanbod {link("hier", "https://www.bagelalley.nl/high-tea")}.',
-    "tapas":          f'We hebben een heerlijk tapas aanbod! Bekijk de tapaskaart {link("hier", "https://www.bagelalley.nl/tapas")}.',
-    "takeaway":       f'Takeaway is zeker mogelijk! Bestel online via onze webshop, ga {link("hier", "https://www.bagelalley.nl/online-shop")} naartoe.',
-    "shop":           f'Online bestellen kan via onze webshop. Klik {link("hier", "https://www.bagelalley.nl/online-shop")} voor pie & box orders.',
-    "cadeaubon":      f'Cadeaubonnen zijn verkrijgbaar vanaf €5,00, af te halen in de zaak. Meer info vind je {link("hier", "https://www.bagelalley.nl/cadeaubon")}.',
-    "parking":        f'In Wassenaar zijn er parkeerplekken in de omgeving van de Langstraat. Bekijk de route {link("hier", "https://maps.google.com/?q=Langstraat+42+Wassenaar")}.',
-    "allergieen":     f'Voor vragen over allergenen of dieetwensen neem je contact op via {link("dit formulier", "https://www.bagelalley.nl/contact")} of bel 070-514 61 16.',
-    "reserveren":     'Reserveren gaat op dit moment telefonisch. Bel ons op '
-                      '<a href="tel:+31705146116" style="color:#8758ce;font-weight:600;text-decoration:none;border-bottom:1px solid #c9a8f0;">070-514 61 16</a>, '
-                      'dan zetten we een tafel voor je klaar. We zijn bereikbaar op ma en wo t/m zo van 08:00 tot 16:00.',
-    "groepen":        f'Voor groepen of speciale gelegenheden bel je ons op 070-514 61 16 of stuur een bericht via {link("onze contactpagina", "https://www.bagelalley.nl/contact")}.',
+    "openingstijden": "We zijn open op maandag en woensdag t/m zondag van 08:00 tot 16:00. Op dinsdag zijn we gesloten. De keuken sluit om 15:30.",
+    "adres":          f'Je vindt ons aan de Langstraat 42, 2242 KM Wassenaar. Plan je route {link("hier", _ROUTE)}.',
+    "contact":        f"Bel ons op {_TEL} of mail naar {_MAIL}.",
+    "menu":           f'Op de kaart staan bagels, ontbijt, soepen, salades, high tea en tapas. Bekijk {link("de hele kaart", "/menu")}.',
+    "bagels":         f'Een bagel naar keuze kost €2,95, belegd vanaf €4,95. De hele kaart vind je {link("hier", "/menu")}.',
+    "high_tea":       f"High tea kan vanaf 2 personen: Afternoon tea €17,95, Dream tea €27,50, Alley's tea €32,50. Bel {_TEL} om te reserveren.",
+    "tapas":          f'Tapas bagels voor 2 personen: drie gesneden bagels met zes dips, voor €24,95. Bekijk {link("de kaart", "/menu")}.',
+    "takeaway":       f'Alles van de kaart kun je meenemen; bestel aan de kassa. Een hele taart bestel je {link("hier", "/bestellen")}.',
+    "taart":          f'Een hele taart bestel je via {link("het bestelformulier", "/bestellen")}. Je haalt hem op in de zaak aan de Langstraat; bezorgen is niet mogelijk.',
+    "bruidstaart":    f"Gaan jullie trouwen of iets groots vieren? We maken een bruidstaart op maat. Mail ons wat jullie in gedachten hebben via {_MAIL}, of bel {_TEL} voor een direct antwoord.",
+    "koffie":         f'We schenken koffie van La Garanta, met bonen uit Colombia. Koffie kost vanaf €2,75; de hele kaart vind je {link("hier", "/menu")}.',
+    "cadeaubon":      "Cadeaubonnen zijn verkrijgbaar vanaf €5,00, af te halen in de zaak.",
+    "parking":        f'In Wassenaar zijn er parkeerplekken in de omgeving van de Langstraat. Bekijk de route {link("hier", _ROUTE)}.',
+    "allergieen":     f"We hebben een glutenvrije bagel, en haver- of sojamelk voor je koffie. Heb je een allergie? Bel ons even op {_TEL}, dan vertellen we precies wat erin zit.",
+    "groepen":        f"Voor groepen of speciale gelegenheden bel je ons op {_TEL}.",
+    "vacatures":      f'We zoeken mensen voor bediening en keuken. Kijk {link("hier", "/jobs")}.',
+    "keuken":         "De keuken sluit om 15:30.",
+    "reserveren":     f"Reserveren gaat op dit moment telefonisch. Bel ons op {_TEL}, dan zetten we een tafel voor je klaar. "
+                      "We zijn bereikbaar op ma en wo t/m zo van 08:00 tot 16:00.",
 }
 # endregion
 
@@ -693,7 +715,7 @@ Bedrijfsinfo:
 - Naam: Bagel Alley
 - Telefoon: 070-514 61 16
 - Adres: Langstraat 42, 2242 KM Wassenaar
-- Website: https://www.bagelalley.nl
+- Eigen pagina's (gebruik relatieve links): /menu, /bestellen, /jobs, /reserveren
 - Open: ma, wo, do, vr, za, zo van 08:00-16:00 | dinsdag gesloten
 
 Regels:
@@ -701,7 +723,7 @@ Regels:
 - Wees warm, informeel en enthousiast, praat als een echte eigenares die haar zaak kent
 - Kort en to-the-point (max 2-3 zinnen)
 - Voeg altijd een klikbare HTML link toe als er een relevante pagina is, gebruik dit format exact:
-  <a href="https://..." target="_blank" style="color:#8758ce;font-weight:600;text-decoration:none;border-bottom:1px solid #c9a8f0;">ankertekst</a>
+  <a href="/menu" style="color:#8758ce;font-weight:600;text-decoration:none;border-bottom:1px solid #c9a8f0;">ankertekst</a>
   Gebruik ankerteksten zoals "hier", "ons menu", "het formulier". Schrijf NOOIT de URL uit
 - Als je iets niet weet, verwijs naar 070-514 61 16
 - Geen markdown, geen opsommingstekens, gewone tekst
@@ -738,45 +760,50 @@ def reageer_met_ai(bericht: str) -> str:
 
 
 def reageer_zonder_ai(bericht: str) -> str:
-    """Fallback keyword-matching zonder API key."""
+    """Ingebouwde antwoorden op trefwoorden (zonder API-key). Volgorde telt: specifiek eerst."""
     b = bericht.lower()
-    # Reserveren eerst: anders matcht "online reserveren" op de webshop.
+    has = lambda *woorden: any(w in b for w in woorden)
     if not ONLINE_RESERVEREN and re.search(r"reserv|tafel|boek|plekje", b):
         return KENNISBANK["reserveren"]
-    # Allergie/dieet voor menu/bagel: "glutenvrije bagels?" hoort hier.
-    if any(w in b for w in ["allergie", "allergeen", "allergenen", "glutenvrij", "vegan", "vegetarisch", "lactose", "dieet"]):
+    if has("bruidstaart", "trouwtaart", "bruiloft", "trouwen"):
+        return KENNISBANK["bruidstaart"]
+    if has("allergie", "allergeen", "allergenen", "gluten", "lactose", "dieet", "vegan", "vegetarisch"):
         return KENNISBANK["allergieen"]
-    # Let op: gebruik \b woordgrens voor "open" zodat "verkopen" niet matcht
-    if re.search(r'\b(open|uur)\b', b) or any(w in b for w in ["tijden", "wanneer", "openingstijden"]):
-        return KENNISBANK["openingstijden"]
-    elif any(w in b for w in ["adres", "locatie", "waar", "vinden", "wassenaar"]):
-        return KENNISBANK["adres"]
-    elif any(w in b for w in ["telefoon", "bellen", "mail", "contact", "bereiken"]):
-        return KENNISBANK["contact"]
-    elif any(w in b for w in ["high tea", "high-tea", "hightea", "tea"]):
+    if has("high tea", "high-tea", "hightea"):
         return KENNISBANK["high_tea"]
-    elif any(w in b for w in ["tapas"]):
+    if has("taart", "gebak", "cake", " pie"):
+        return KENNISBANK["taart"]
+    if has("vacature", "werken bij", "solliciteer", "solliciteren", "baan", "bijbaan"):
+        return KENNISBANK["vacatures"]
+    if has("keuken"):
+        return KENNISBANK["keuken"]
+    if has("koffie", "espresso", "cappuccino", "latte", "bonen"):
+        return KENNISBANK["koffie"]
+    if re.search(r"\b(open|uur)\b", b) or has("tijden", "wanneer", "dicht", "gesloten", "dinsdag"):
+        return KENNISBANK["openingstijden"]
+    if has("adres", "locatie", "waar", "vinden", "route", "wassenaar"):
+        return KENNISBANK["adres"]
+    if has("telefoon", "bellen", "mail", "contact", "bereiken"):
+        return KENNISBANK["contact"]
+    if has("tapas"):
         return KENNISBANK["tapas"]
-    elif any(w in b for w in ["takeaway", "afhalen", "meenemen", "take away"]):
+    if has("takeaway", "take away", "afhalen", "meenemen", "bestel"):
         return KENNISBANK["takeaway"]
-    elif any(w in b for w in ["shop", "webshop", "online", "bestell"]):
-        return KENNISBANK["shop"]
-    elif any(w in b for w in ["cadeau", "bon", "kado", "gift"]):
+    if re.search(r"cadeau|\bbon(nen)?\b|kado|gift", b):
         return KENNISBANK["cadeaubon"]
-    elif any(w in b for w in ["menu", "eten", "kaart", "lunch", "ontbijt"]):
-        return KENNISBANK["menu"]
-    elif any(w in b for w in ["bagel"]):
-        return KENNISBANK["bagels"]
-    elif any(w in b for w in ["groep", "verjaardag", "feest", "jubileum"]):
+    if has("groep", "personen", "verjaardag", "feest", "jubileum"):
         return KENNISBANK["groepen"]
-    elif any(w in b for w in ["parke", "auto"]):
+    if has("bagel", "prijs", "kost", "duur"):
+        return KENNISBANK["bagels"]
+    if has("menu", "eten", "kaart", "lunch", "ontbijt"):
+        return KENNISBANK["menu"]
+    if has("parke", "auto"):
         return KENNISBANK["parking"]
-    elif re.search(r"\b(hallo|hoi|hey|hi|hello|goedemorgen|goedemiddag)\b", b):
+    if re.search(r"\b(hallo|hoi|hey|hi|hello|goedemorgen|goedemiddag)\b", b):
         return "Hallo! Welkom bij Bagel Alley Wassenaar. Leuk dat je er bent!"
-    elif any(w in b for w in ["doei", "bye", "tot ziens", "bedankt", "dankjewel", "thanks"]):
+    if has("doei", "bye", "tot ziens", "bedankt", "dankjewel", "thanks"):
         return "STOP"
-    else:
-        return f'Dat weet ik niet zeker. Bel ons op 070-514 61 16 of kijk {link("op onze website", "https://www.bagelalley.nl")}!'
+    return f"Dat weet ik niet. Bel ons op {_TEL}, dan helpen we je meteen."
 # endregion
 
 # region ── FLASK ROUTES ────────────────────────────────────────

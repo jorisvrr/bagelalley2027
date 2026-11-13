@@ -467,6 +467,10 @@
     .bruidstaart-title { font-family: 'Playfair Display', serif; font-size: var(--fs-2xl); font-weight: 700; color: var(--dark); line-height: 1.2; margin-top: .6rem; }
     .bruidstaart-body { font-size: var(--fs-md); color: var(--muted); line-height: 1.7; margin-top: .8rem; }
     .hours-cta { margin-top: 2rem; }
+    .bruidstaart-actions { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: 1.4rem; }
+    .bruidstaart-actions .btn-purple, .btn-ghost-dark { display: inline-flex; align-items: center; gap: .5rem; min-height: 44px; padding: .8rem 1.4rem; font-size: var(--fs-sm); }
+    .btn-ghost-dark { color: var(--purple3); border: 1.5px solid rgba(135,88,206,.35); border-radius: var(--r-btn); font-weight: 500; letter-spacing: var(--track-button); text-transform: uppercase; text-decoration: none; }
+    @media (hover: hover) and (pointer: fine) { .btn-ghost-dark:hover { border-color: var(--purple); } }
     @media (max-width: 768px) {
       .bruidstaart-grid { grid-template-columns: 1fr; gap: 1.5rem; }
       .bruidstaart-img { height: 260px; }
@@ -573,15 +577,15 @@
       Langstraat 42, Wassenaar
     </a>
     <h1>Elke hap<br>een <em>verhaal.</em></h1>
-    <p class="hero-desc">Breakfast, Lunch, Tea &amp; Takeaway. Verse ingrediënten, Amerikaans geïnspireerd, bereid met liefde, in het hart van Wassenaar.</p>
+    <p class="hero-desc">Bagels, ontbijt, lunch en high tea aan de Langstraat in Wassenaar. Eet bij ons of neem het mee.</p>
     <div class="hero-buttons">
       <a href="{{ reserveer_url }}" class="btn-purple">{{ reserveer_label }}</a>
       <a href="#menu" class="btn-ghost-light">Bekijk het menu</a>
     </div>
   </div>
   <div class="hero-stats">
-    <div class="hero-stat"><span class="hero-stat-number">25+</span><span class="hero-stat-label">Bagel soorten</span></div>
-    <div class="hero-stat"><span class="hero-stat-number">6×</span><span class="hero-stat-label">Per week open</span></div>
+    <div class="hero-stat"><span class="hero-stat-number">25</span><span class="hero-stat-label">Bagelsoorten</span></div>
+    <div class="hero-stat"><span class="hero-stat-number">6</span><span class="hero-stat-label">Dagen open</span></div>
     <div class="hero-stat hero-stat--accent"><span class="hero-stat-number">High Tea</span><span class="hero-stat-label">Op reservering</span></div>
   </div>
 </section>
@@ -634,7 +638,7 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-  var end = new Date(2026, 5, 30, 23, 59, 59).getTime();
+  var end = Date.parse({{ bvdm.einde|tojson }});  // einde van de huidige maand (NL-tijd)
   function tick() {
     var now = Date.now();
     var diff = end - now;
@@ -663,7 +667,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 <!-- SFEER -->
 <section class="sfeer-section" id="sfeer">
-  <h2 class="section-title reveal">Warme gastvrijheid,<br>elke dag vers.</h2>
+  <h2 class="section-title reveal">Zo ziet het eruit<br>aan de Langstraat.</h2>
   <div class="sfeer-grid">
     <div class="sfeer-img sfeer-main reveal">
       {{ pic('fotos/pexels-casnafu-24796900.jpg', 'Belegde bagels in de vitrine bij Bagel Alley', '(max-width: 768px) 100vw, 50vw') }}
@@ -675,8 +679,8 @@ document.addEventListener('DOMContentLoaded', function() {
       {{ pic('fotos/pexels-fedigioia-11634304.jpg', 'Bagel op een bord', '(max-width: 768px) 100vw, 25vw') }}
     </div>
     <div class="sfeer-text reveal reveal-delay-1">
-      <h3 class="sfeer-text-title">Ambachtelijk bereid,<br>altijd verse ingrediënten</h3>
-      <p class="sfeer-text-body">Elke dag beginnen we opnieuw. Verse ingrediënten, zelfgemaakte producten en een warme sfeer, dat is waar Bagel Alley voor staat.</p>
+      <h3 class="sfeer-text-title">Taarten uit eigen keuken</h3>
+      <p class="sfeer-text-body">Onze taarten bakken we zelf. Je bagel kies je uit 25 soorten.</p>
       <a href="#menu" class="sfeer-link">Bekijk de menukaart</a>
     </div>
   </div>
@@ -692,14 +696,14 @@ document.addEventListener('DOMContentLoaded', function() {
         {{ pic('specials/koffie.png', 'Koffie bij Bagel Alley', '(max-width: 768px) 100vw, 45vw') }}
       </div>
       <h3 class="feature-title">Espresso met een verhaal</h3>
-      <p class="feature-body">Bij Bagel Alley werken we met hoogwaardige bonen van La Garanta, zorgvuldig geselecteerd uit Colombia en Brazilië. Vol van smaak, met een mooi aroma en constante kwaliteit in elke kop.</p>
+      <p class="feature-body">We schenken koffie van La Garanta, met bonen uit Colombia. Single origin specialty koffie, vers voor ons gebrand en direct bij de boeren ingekocht.</p>
     </div>
     <div class="reveal reveal-delay-1">
       <div class="feature-img">
         {{ pic('specials/smoothie.png', 'Verse sappen en smoothies', '(max-width: 768px) 100vw, 45vw') }}
       </div>
       <h3 class="feature-title">Dagelijks vers geperst</h3>
-      <p class="feature-body">Onze verse fruitsappen en smoothies maken we elke dag met verse ingrediënten en een krachtige Booster Blender. Een gezonde, verfrissende keuze voor elk moment van de dag.</p>
+      <p class="feature-body">Sappen en smoothies maken we vers voor je klaar, bijvoorbeeld rood, groen of oranje.</p>
     </div>
   </div>
 </section>
@@ -709,20 +713,17 @@ document.addEventListener('DOMContentLoaded', function() {
 <section class="botm-section">
   <div class="botm-inner">
     <div class="botm-img-wrap">
-      {{ pic('specials/bagelvdmaand.png', 'Bagel van de maand: The Spanish Classic', '(max-width: 768px) 100vw, 50vw', 'botm-img') }}
+      {{ pic(bvdm.foto, 'Bagel van de maand: ' ~ bvdm.naam, '(max-width: 768px) 100vw, 50vw', 'botm-img') }}
       <div class="botm-img-overlay"></div>
       <span class="botm-badge">Bagel van de maand</span>
     </div>
     <div class="botm-content">
-      <span class="botm-month">Juni 2026</span>
-      <h2 class="botm-title">The Spanish<br><em>Classic</em></h2>
-      <p class="botm-desc">Een mediterrane klassieker, onze krokante alles-bagel met verse rucola, luchtige omelet, pittige chorizo en zoete zongedroogde tomaten. Zuid-Europese smaken in één perfecte hap.</p>
+      <span class="botm-month">{{ bvdm.maand }}</span>
+      {% set _bn = bvdm.naam.rsplit(" ", 1) %}<h2 class="botm-title">{{ _bn[0] }}<br><em>{{ _bn[1] if _bn|length > 1 else "" }}</em></h2>
+      <p class="botm-desc">{{ bvdm.beschrijving|safe }}</p>
       <div class="botm-tags">
-        <span class="botm-tag">Rucola</span>
-        <span class="botm-tag">Omelet</span>
-        <span class="botm-tag">Chorizo</span>
-        <span class="botm-tag">Zongedroogde tomaten</span>
-      </div>
+        {% for ing in bvdm.ingredienten %}<span class="botm-tag">{{ ing }}</span>
+        {% endfor %}</div>
       <div class="botm-divider"></div>
       <div>
         <div class="botm-countdown-label">Nieuwe bagel over</div>
@@ -767,27 +768,26 @@ document.addEventListener('DOMContentLoaded', function() {
           <span class="diet-tag">Glutenvrij</span>
           <span class="diet-tag">Lactosevrij</span>
         </div>
-        <span class="menu-card-price">Vanaf €8,50</span>
+        <span class="menu-card-price">Vanaf €2,95</span>
       </div>
       <div class="menu-card reveal reveal-delay-1">
         <h3 class="menu-card-title">High Tea</h3>
-        <p class="menu-card-body">Een heerlijk arrangement met mini sandwiches, scones, zoetjes en onbeperkt thee. Op reservering.</p>
-        <span class="menu-card-price">Vanaf €22,50 p.p.</span>
+        <p class="menu-card-body">High tea vanaf 2 personen, bel om te reserveren.</p>
+        <span class="menu-card-price">Vanaf €17,95</span>
       </div>
       <div class="menu-card reveal reveal-delay-1">
         <h3 class="menu-card-title">Tapas &amp; Sharing</h3>
-        <p class="menu-card-body">Kleine gerechten, grote smaak. Perfect om te delen met vrienden of collega's aan tafel.</p>
-        <span class="menu-card-price">Vanaf €4,50 p.stuk</span>
+        <p class="menu-card-body">Drie gesneden bagels met zes dips, om te delen.</p>
+        <span class="menu-card-price">€24,95 voor 2 personen</span>
       </div>
       <div class="menu-card reveal reveal-delay-2">
         <h3 class="menu-card-title">Takeaway</h3>
-        <p class="menu-card-body">Alles wat we serveren, ook om mee te nemen. Bagels, salades en vers gebak voor onderweg.</p>
-        <span class="menu-card-price">Zelfde prijs</span>
+        <p class="menu-card-body">Alles van de kaart kun je ook meenemen.</p>
       </div>
       <div class="menu-card reveal reveal-delay-2">
         <h3 class="menu-card-title">Koffie &amp; Thee</h3>
-        <p class="menu-card-body">Van ochtendkoffie tot middagthee. Specialty koffie, verse thee en koude dranken.</p>
-        <span class="menu-card-price">Vanaf €2,50</span>
+        <p class="menu-card-body">Koffie, verse munt- en gemberthee en koude dranken.</p>
+        <span class="menu-card-price">Koffie vanaf €2,75</span>
       </div>
       <div class="menu-card menu-card-dark reveal">
         <h3 class="menu-card-title menu-card-title-light">Geef een<br>smaakvolle beleving</h3>
@@ -806,15 +806,18 @@ document.addEventListener('DOMContentLoaded', function() {
     </div>
     <div class="reveal reveal-delay-1">
       <h3 class="bruidstaart-title">Bruidstaart op maat</h3>
-      <p class="bruidstaart-body">Trouwen, een jubileum of een feest om nooit te vergeten? Wij maken jullie bruidstaart volledig op maat. Vers, ambachtelijk en precies zoals jullie 'm voor je zien. Van een klassieke witte taart tot een verrassende smaakcombinatie, samen bedenken we de perfecte taart voor jullie dag.</p>
-      <a href="/shop" class="sfeer-link">Vraag een bruidstaart aan</a>
+      <p class="bruidstaart-body">Gaan jullie trouwen of iets groots vieren? We maken een bruidstaart op maat. Mail ons wat jullie in gedachten hebben, of bel 070-514 61 16 voor een direct antwoord.</p>
+      <div class="bruidstaart-actions">
+        <a href="mailto:info@bagelalley.nl?subject=Bruidstaart" class="btn-purple">{{ icon('mail', 20) }} Mail ons</a>
+        <a href="tel:+31705146116" class="btn-ghost-dark">{{ icon('phone', 20) }} Bel 070-514 61 16</a>
+      </div>
     </div>
   </div>
 </section>
 
 <!-- OPENINGSTIJDEN -->
 <section class="hours-section" id="tijden">
-  <h2 class="section-title reveal">Altijd een<br>tafel voor je klaar.</h2>
+  <h2 class="section-title reveal">Openingstijden</h2>
   <div class="hours-layout">
     <div class="reveal">
       <table class="hours-table">
@@ -876,7 +879,7 @@ document.addEventListener('DOMContentLoaded', function() {
   <div class="footer-top">
     <div class="footer-brand">
       <div class="footer-brand-name">Bagel <span>Alley</span></div>
-      <div class="footer-tagline">Breakfast · Lunch · Tea · Take Away, Wassenaar</div>
+      <div class="footer-tagline">Ontbijt, lunch, high tea en takeaway in Wassenaar</div>
     </div>
     <div class="footer-links">
       <div class="footer-col">
