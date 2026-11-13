@@ -682,7 +682,7 @@ _ALLERGIE_SLOT = f'Heb je een allergie? Bel {link("ons even", "tel:+31705146116"
 
 # Nog niet bevestigde feiten. Zolang de waarde None is, geeft de chat een veilig antwoord
 # dat het onderwerp herkent en naar de telefoon verwijst. Vul hier het antwoord in zodra
-# de klant het bevestigt (zie CLIENT-TODO.md, "Chatbot: veilige antwoorden").
+# de klant het bevestigt (zie CLIENT-TODO.md in de projectdocumenten buiten de repo, "Chatbot: veilige antwoorden").
 CHAT_FEITEN = {
     "feestdagen":       None,   # openingstijden rond kerst, oud en nieuw, pasen, koningsdag ...
     "parking":          None,   # waar parkeren, betaald of blauwe zone?
