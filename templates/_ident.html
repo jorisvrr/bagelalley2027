@@ -6,7 +6,8 @@
     right: clamp(1rem, 3vw, 2rem);
     bottom: calc(clamp(1rem, 3vw, 2rem) + var(--safe-bottom, 0px));
     z-index: var(--z-ident);
-    display: inline-flex; align-items: center; gap: 0;
+    display: inline-flex; align-items: center; justify-content: center; gap: 0;
+    min-width: 44px; min-height: 44px;   /* tikdoel */
     text-decoration: none;
     color: #9a9ca1;                 /* kleur van "jorisvrr" op donkere footer */
     opacity: 0; transform: translateY(12px); pointer-events: none;
