@@ -679,21 +679,22 @@ def robots_txt():
     )
     return Response(body, mimetype="text/plain")
 
+# Datum van de laatste inhoudelijke wijziging per pagina (voor <lastmod> in de sitemap).
+# Pas de datum aan als de tekst, prijzen of tijden op die pagina veranderen.
+SITEMAP = [
+    ("/", "2026-11-13"),
+    ("/menu", "2026-11-13"),
+    ("/shop", "2026-11-13"),
+    ("/bestellen", "2026-11-13"),
+    ("/reserveren", "2026-11-13"),
+    ("/jobs", "2026-11-13"),
+]
+
 @app.route("/sitemap.xml")
 def sitemap_xml():
-    vandaag = date.today().isoformat()
-    paginas = [
-        ("/", "1.0"),
-        ("/menu", "0.9"),
-        ("/shop", "0.9"),
-        ("/reserveren", "0.8"),
-        ("/bestellen", "0.7"),
-        ("/jobs", "0.5"),
-    ]
     items = "".join(
-        "<url><loc>{0}{1}</loc><lastmod>{2}</lastmod><changefreq>weekly</changefreq>"
-        "<priority>{3}</priority></url>".format(SITE_URL, pad, vandaag, prio)
-        for pad, prio in paginas
+        "<url><loc>{0}{1}</loc><lastmod>{2}</lastmod></url>".format(SITE_URL, pad, gewijzigd)
+        for pad, gewijzigd in SITEMAP
     )
     xml = ('<?xml version="1.0" encoding="UTF-8"?>\n'
            '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'
