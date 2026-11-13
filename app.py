@@ -647,13 +647,12 @@ def inject_seo_globals():
 # Nieuwe regel nodig? Voeg hem hier toe, zonder slash aan het eind; "/pad/" werkt dan ook.
 OUDE_URLS = {
     "/menu-takeaway": "/menu",
-    "/high-tea": "/menu#high-tea",
     "/tapas": "/menu#tapas",
     "/online-shop": "/shop",
     "/contact": "/#contact",
     "/cadeaubon": "/#cadeaubon",
 }
-_PAGINAS = {"/menu", "/shop", "/bestellen", "/jobs", "/reserveren"}
+_PAGINAS = {"/menu", "/high-tea", "/shop", "/bestellen", "/jobs", "/reserveren"}
 _CANON_HOST = urlsplit(os.environ["SITE_URL"]).netloc.lower() if os.environ.get("SITE_URL") else ""
 
 @app.before_request
@@ -688,6 +687,7 @@ def robots_txt():
 SITEMAP = [
     ("/", "2026-11-13"),
     ("/menu", "2026-11-13"),
+    ("/high-tea", "2026-11-13"),
     ("/shop", "2026-11-13"),
     ("/bestellen", "2026-11-13"),
     ("/reserveren", "2026-11-13"),
@@ -846,7 +846,7 @@ KENNISBANK = {
     "prijzen":          f'Een bagel kost €2,95, belegd €4,95 tot €10,50. Ontbijt kost €9,50 tot €16,50, koffie vanaf €2,75 en high tea vanaf €17,95. Alle prijzen staan op {link("de kaart", "/menu")}.',
     "bagels":           f'Je kiest uit 25 bagelsoorten, ook glutenvrij. Een bagel naar keuze kost €2,95, belegd vanaf €4,95. Bekijk {link("de kaart", "/menu")}.',
     "ontbijt_brunch_lunch": f'Er zijn zes ontbijtjes van €9,50 tot €16,50. Voor de lunch zijn er bagels, soep (€7,95) en salades (€13,50). Bekijk {link("de kaart", "/menu")}.',
-    "high_tea":         f"High tea kan vanaf 2 personen: Afternoon tea €17,95, Dream tea €27,50, Alley's tea €32,50. Bel {_TEL} om te reserveren.",
+    "high_tea":         f"High tea kan vanaf 2 personen: Afternoon tea €17,95, Dream tea €27,50, Alley's tea €32,50. Bel {_TEL} om te reserveren. Meer op {link('de high tea-pagina', '/high-tea')}.",
     "tapas":            f'Tapas bagels voor 2 personen: drie gesneden bagels met zes dips, voor €24,95. Bekijk {link("de kaart", "/menu")}.',
     "koffie":           "We schenken koffie van La Garanta, met bonen uit Colombia. Koffie kost vanaf €2,75 en een cappuccino vanaf €3,50; haver- of sojamelk is €0,75.",
     "thee":             "Thee naar keuze kost €3,25, verse munt- of gemberthee €3,95 en een pot thee €7,25. Chai thee of chai latte is €4,95.",
@@ -1102,6 +1102,22 @@ def shop():
 @app.route("/bestellen")
 def bestellen():
     return render_template("bestellen.html", bedrijf=BEDRIJF)
+
+
+def _high_tea_regels():
+    """(naam, prijs) van de High Tea-sectie op de gedrukte kaart (menukaart.py)."""
+    for sectie in MENUKAART:
+        if sectie.get("titel") == "High Tea":
+            return [(naam, prijs) for naam, _omschrijving, prijs in sectie["regels"] if prijs]
+    return []
+
+
+@app.route("/high-tea")
+def high_tea():
+    regels = _high_tea_regels()
+    if not regels:
+        abort(404)
+    return render_template("high_tea.html", bedrijf=BEDRIJF, high_tea=regels)
 
 
 @app.route("/jobs")

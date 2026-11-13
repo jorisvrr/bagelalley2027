@@ -159,6 +159,7 @@
     .sfeer-link { display: inline-flex; align-items: center; gap: .4rem; margin-top: 1.2rem; font-size: var(--fs-sm); font-weight: 500; letter-spacing: var(--track-button); text-transform: uppercase; color: var(--purple3); text-decoration: none; transition: gap .2s; }
     @media (hover: hover) and (pointer: fine) { .sfeer-link:hover { gap: .7rem; } }
     .menu-card-dark .sfeer-link, .sfeer-text .sfeer-link { color: var(--purple-light); }
+    .menu-card-price + .sfeer-link { display: flex; width: fit-content; margin-top: .6rem; }
 
     /* MENU */
     .menu-section { padding: 7rem 6rem; background: var(--cream2); }
@@ -717,6 +718,7 @@ document.addEventListener('DOMContentLoaded', function() {
         <h3 class="menu-card-title">High Tea</h3>
         <p class="menu-card-body">High tea vanaf 2 personen, bel om te reserveren.</p>
         <span class="menu-card-price">Vanaf €17,95</span>
+        <a href="/high-tea" class="sfeer-link">Meer over high tea</a>
       </div>
       <div class="menu-card reveal reveal-delay-1">
         <h3 class="menu-card-title">Tapas &amp; Sharing</h3>
@@ -830,7 +832,7 @@ document.addEventListener('DOMContentLoaded', function() {
         <h4>Menu</h4>
         <a href="/menu">Volledige menukaart</a>
         <a href="/menu#bagels">Bagels &amp; Toppings</a>
-        <a href="/menu#high-tea">High Tea</a>
+        <a href="/high-tea">High Tea</a>
         <a href="/menu#tapas">Tapas</a>
         <a href="/shop">Online Shop</a>
       </div>

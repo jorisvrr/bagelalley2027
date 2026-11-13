@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+{% from "_icons.html" import icon with context %}
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
+  {% set seo_title = "High tea in Wassenaar vanaf 2 personen | Bagel Alley" %}
+  {% set seo_desc = "High tea bij Bagel Alley in Wassenaar, al vanaf 2 personen: Afternoon tea €17,95, Dream tea €27,50 of Alley's tea €32,50. Reserveren gaat telefonisch." %}
+  {% set seo_path = "/high-tea" %}
+  {% set seo_crumb = "High tea" %}
+  {% include "_seo.html" ignore missing %}
+  {% include "_tokens.html" ignore missing %}
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--dark); color: var(--cream); min-height: 100vh; min-height: 100svh; }
+
+    /* NAV */
+    nav { position: sticky; top: 0; z-index: var(--z-nav); display: flex; justify-content: space-between; align-items: center; padding: 1rem 3rem; background: var(--dark2); border-bottom: 2px solid var(--purple); }
+    .nav-logo { display: flex; align-items: center; gap: .75rem; text-decoration: none; }
+    .nav-logo img { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; }
+    .nav-logo-text { font-family: 'Playfair Display', serif; font-size: var(--fs-logo); font-weight: 700; color: var(--cream); }
+    .nav-logo-text span { color: var(--purple2); }
+    .nav-back { display: inline-flex; align-items: center; gap: .4rem; font-size: var(--fs-sm); color: rgba(245,240,232,.62); text-decoration: none; transition: color .2s; }
+    @media (hover: hover) and (pointer: fine) { .nav-back:hover { color: var(--purple2); } }
+    .nav-cta { background: var(--purple); color: white; padding: .5rem 1.4rem; border-radius: var(--r-btn); font-size: var(--fs-sm); font-weight: 500; text-decoration: none; }
+    @media (hover: hover) and (pointer: fine) { .nav-cta:hover { background: var(--purple3); } }
+
+    /* HERO */
+    .page-hero { background: linear-gradient(135deg, var(--dark2) 0%, rgba(135,88,206,.1) 100%); padding: 4rem 3rem 3rem; border-bottom: 1px solid rgba(135,88,206,.12); }
+    .page-hero-inner { max-width: 700px; }
+    .page-title { font-family: 'Playfair Display', serif; font-size: clamp(2.2rem, 4.5vw, 3.5rem); font-weight: 700; line-height: 1.1; color: var(--cream); margin-bottom: 1.1rem; }
+    .page-title em { font-style: italic; color: var(--purple2); }
+    .page-desc { font-size: var(--fs-base); color: rgba(245,240,232,.65); line-height: 1.75; }
+
+    /* MAIN */
+    .ht-main { max-width: 820px; margin: 0 auto; padding: 3rem 3rem 6rem; }
+
+    /* ARRANGEMENTEN */
+    .ht-card { background: var(--dark2); border-radius: var(--r-card); border: 1px solid rgba(135,88,206,.2); overflow: hidden; margin-bottom: 2rem; }
+    .ht-card-header { background: var(--purple); padding: 1.8rem 2.2rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+    .ht-card-title { font-family: 'Playfair Display', serif; font-size: var(--fs-2xl); font-weight: 700; color: white; }
+    .ht-badge { background: rgba(26,16,24,.3); color: white; font-size: var(--fs-xs); font-weight: 600; letter-spacing: var(--track-label); text-transform: uppercase; padding: .3rem .85rem; border-radius: var(--r-pill); }
+    .ht-body { padding: 2rem 2.2rem; }
+    .ht-list { list-style: none; margin-bottom: 1.5rem; }
+    .ht-row { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; padding: 1rem 0; border-bottom: 1px solid rgba(135,88,206,.15); }
+    .ht-row:last-child { border-bottom: none; }
+    .ht-naam { font-family: 'Playfair Display', serif; font-size: var(--fs-lg); color: var(--cream); }
+    .ht-prijs { font-size: var(--fs-md); font-weight: 600; color: var(--purple-light); white-space: nowrap; }
+    .ht-note { font-size: var(--fs-md); line-height: 1.7; color: rgba(245,240,232,.7); }
+    .ht-note a { color: var(--purple-light); }
+
+    /* CONTACT CTA */
+    .contact-cta { background: rgba(135,88,206,.1); border: 1px solid rgba(135,88,206,.25); border-radius: var(--r-card); padding: 2rem 2.2rem; }
+    .contact-cta-title { font-family: 'Playfair Display', serif; font-size: var(--fs-lg); font-weight: 700; color: var(--cream); margin-bottom: .5rem; }
+    .contact-cta-sub { font-size: var(--fs-md); color: rgba(245,240,232,.62); margin-bottom: 1.5rem; line-height: 1.6; }
+    .contact-btns { display: flex; gap: .9rem; flex-wrap: wrap; }
+    .btn-purple { background: var(--purple); color: white; padding: .8rem 1.8rem; font-size: var(--fs-md); font-weight: 500; letter-spacing: var(--track-button); text-decoration: none; display: inline-flex; align-items: center; gap: .5rem; border-radius: var(--r-btn); transition: background .2s; }
+    @media (hover: hover) and (pointer: fine) { .btn-purple:hover { background: var(--purple3); } }
+    .btn-ghost { background: transparent; color: rgba(245,240,232,.7); padding: .8rem 1.8rem; font-size: var(--fs-md); font-weight: 500; border: 1.5px solid rgba(245,240,232,.2); text-decoration: none; display: inline-flex; align-items: center; gap: .5rem; border-radius: var(--r-btn); transition: background-color .2s, border-color .2s, color .2s, transform .2s, box-shadow .2s; }
+    @media (hover: hover) and (pointer: fine) { .btn-ghost:hover { border-color: rgba(245,240,232,.4); color: var(--cream); } }
+
+    @media (max-width: 768px) {
+      nav { padding: .9rem 1.2rem; }
+      .page-hero { padding: 2.5rem 1.2rem 2rem; }
+      .ht-main { padding: 2rem 1.2rem 4rem; }
+      .ht-body { padding: 1.5rem 1.4rem; }
+      .ht-card-header { flex-direction: column; align-items: flex-start; }
+    }
+    @media (max-width: 600px) { .nav-back { display: none; } .nav-logo-text { white-space: nowrap; } .nav-cta { white-space: nowrap; } }
+    /* Mobiel: veilige zones en tikdoelen */
+    nav { padding-top: max(1rem, env(safe-area-inset-top, 0px)); }
+    .nav-logo, .nav-back { min-height: 44px; }
+    .nav-cta { display: inline-flex; align-items: center; gap: .4rem; min-height: 44px; }
+    .nav-cta-short { display: none; }
+    @media (max-width: 1024px) {
+      nav { padding-left: max(1.2rem, env(safe-area-inset-left, 0px)); padding-right: max(1.2rem, env(safe-area-inset-right, 0px)); }
+    }
+    @media (max-width: 400px) {
+      .nav-cta-long { display: none; }
+      .nav-cta-short { display: inline; }
+    }
+  </style>
+  {% include "_favicons.html" ignore missing %}
+</head>
+<body>
+{% include "_loader.html" ignore missing %}
+
+<nav>
+  <a href="/" class="nav-logo">
+    <img src="{{ url_for('static', filename='opt/logo-150.webp') }}" alt="" width="36" height="36">
+    <span class="nav-logo-text">Bagel <span>Alley</span></span>
+  </a>
+  <a href="/" class="nav-back">{{ icon('arrow-left', 16) }} Terug naar de website</a>
+  <a href="{{ reserveer_url }}" class="nav-cta">{{ icon('phone', 16) }} <span class="nav-cta-long">{{ reserveer_label }}</span><span class="nav-cta-short">Bellen</span></a>
+</nav>
+
+<div class="page-hero">
+  <div class="page-hero-inner">
+    <h1 class="page-title">High tea in Wassenaar,<br><em>vanaf 2 personen</em></h1>
+    <p class="page-desc">Bij Bagel Alley aan de Langstraat in Wassenaar kun je al met z'n tweeën high tea drinken. Reserveren gaat telefonisch.</p>
+  </div>
+</div>
+
+<div class="ht-main">
+
+  <div class="ht-card">
+    <div class="ht-card-header">
+      <h2 class="ht-card-title">Onze arrangementen</h2>
+      <span class="ht-badge">Vanaf 2 personen</span>
+    </div>
+    <div class="ht-body">
+      <ul class="ht-list">
+        {% for naam, prijs in high_tea %}
+        <li class="ht-row"><span class="ht-naam">{{ naam }}</span><span class="ht-prijs">€{{ prijs }}</span></li>
+        {% endfor %}
+      </ul>
+      <p class="ht-note">Zie onze wandborden in de zaak voor meer informatie. De rest van de kaart vind je op <a href="/menu">de menukaart</a>.</p>
+    </div>
+  </div>
+
+  <div class="contact-cta">
+    <h2 class="contact-cta-title">High tea reserveren</h2>
+    <p class="contact-cta-sub">Bel ons om je high tea te reserveren. We zijn open op maandag en woensdag tot en met zondag van 08:00 tot 16:00. Op dinsdag zijn we gesloten.</p>
+    <div class="contact-btns">
+      <a href="tel:+31705146116" class="btn-purple">{{ icon('phone', 20) }} Bel 070-514 61 16</a>
+      <a href="/menu" class="btn-ghost">{{ icon('utensils', 20) }} Bekijk de menukaart</a>
+    </div>
+  </div>
+
+</div>
+{% include "_ident.html" ignore missing %}
+</body>
+</html>

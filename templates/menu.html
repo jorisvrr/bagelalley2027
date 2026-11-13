@@ -277,6 +277,7 @@
       <section class="menu-text-section" id="{{ sectie.titel|slug }}">
         <h3>{{ sectie.titel }}</h3>
         {% if sectie.intro %}<p class="menu-text-intro">{{ sectie.intro }}</p>{% endif %}
+        {% if sectie.titel == "High Tea" %}<p class="menu-text-intro"><a href="/high-tea">Meer over onze high tea</a></p>{% endif %}
         <dl>
           {% for naam, omschrijving, prijs in sectie.regels %}
           <div class="menu-text-row{% if not prijs %} menu-text-row--sub{% endif %}">
@@ -290,8 +291,9 @@
     </div>
   </details>
   <script>
-    // Link naar een sectie (bijv. /menu#high-tea): klap de tekstversie open en spring ernaartoe.
+    // Link naar een sectie (bijv. /menu#tapas): klap de tekstversie open en spring ernaartoe.
     (function () {
+      if (location.hash === '#high-tea') { location.replace('/high-tea'); return; }   // high tea heeft een eigen pagina
       var doel = location.hash && document.getElementById(decodeURIComponent(location.hash.slice(1)));
       var d = doel && doel.closest('details');
       if (d) { d.open = true; doel.scrollIntoView(); }
