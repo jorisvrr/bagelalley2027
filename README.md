@@ -52,6 +52,8 @@ Op Vercel bewaart de reserveringsdatabase alleen tijdelijk (`/tmp`). Zet online 
 - `templates/`: Jinja-templates. Gedeelde stukken beginnen met `_`.
 - `public/static/`: alle statische bestanden (afbeeldingen, lettertypes, favicons, e-mailafbeeldingen). Vercel serveert deze map via zijn CDN onder `/static/...`; lokaal doet Flask dat. Data die de Python-code tijdens het draaien nodig heeft, hoort daarom niet in `public/` maar in een Python-module naast `app.py`.
 
+`vercel.json` zet de browsercache voor `/static/`: lettertypes een jaar (een nieuw lettertype krijgt dus een nieuwe bestandsnaam), de rest een dag.
+
 De originele bronfoto's staan niet in de repo. Alleen de verkleinde varianten in `public/static/opt/` worden gebruikt.
 
 ## Chatbot
