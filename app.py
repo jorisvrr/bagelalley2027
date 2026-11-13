@@ -187,6 +187,12 @@ except Exception as e:
     _IMG_MANIFEST = {}
 
 
+@app.template_filter("slug")
+def slug(tekst) -> str:
+    """'High Tea' -> 'high-tea'. Voor ankers in de tekstversie van de kaart."""
+    return re.sub(r"[^a-z0-9]+", "-", str(tekst).lower()).strip("-")
+
+
 @app.template_global()
 def pic(path, alt="", sizes="100vw", cls="", eager=False, priority=False):
     from flask import url_for

@@ -274,7 +274,7 @@
     <p class="menu-text-note">Overgenomen van de gedrukte kaart. Prijzen in euro.</p>
     <div class="menu-text-grid">
       {% for sectie in menukaart %}
-      <section class="menu-text-section">
+      <section class="menu-text-section" id="{{ sectie.titel|slug }}">
         <h3>{{ sectie.titel }}</h3>
         {% if sectie.intro %}<p class="menu-text-intro">{{ sectie.intro }}</p>{% endif %}
         <dl>
@@ -289,6 +289,14 @@
       {% endfor %}
     </div>
   </details>
+  <script>
+    // Link naar een sectie (bijv. /menu#high-tea): klap de tekstversie open en spring ernaartoe.
+    (function () {
+      var doel = location.hash && document.getElementById(decodeURIComponent(location.hash.slice(1)));
+      var d = doel && doel.closest('details');
+      if (d) { d.open = true; doel.scrollIntoView(); }
+    })();
+  </script>
   {% endif %}
 
   <!-- CTA -->
