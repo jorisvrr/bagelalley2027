@@ -70,7 +70,7 @@
     .size-opt-price { display: block; font-size: var(--fs-xs); opacity: .7; margin-top: .15rem; }
 
     .form-group { display: flex; flex-direction: column; gap: .45rem; }
-    .form-label { font-size: var(--fs-sm); font-weight: 500; color: var(--muted); letter-spacing: var(--track-button); text-transform: uppercase; }
+    .form-label { font-size: var(--fs-sm); font-weight: 500; color: var(--muted);   }
     .form-label span { color: var(--purple); }
     .form-input, .form-select, .form-textarea {
       padding: .75rem 1rem; font-size: var(--fs-base);
@@ -134,23 +134,25 @@
     .summary-line:last-of-type { border-bottom: none; }
     .summary-line.empty { color: rgba(245,240,232,.62); font-style: italic; }
     .summary-total { display: flex; justify-content: space-between; align-items: baseline; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid rgba(135,88,206,.15); }
-    .summary-total-label { font-size: var(--fs-sm); color: rgba(245,240,232,.62); text-transform: uppercase; letter-spacing: var(--track-button); }
+    .summary-total-label { font-size: var(--fs-sm); color: rgba(245,240,232,.62);   }
     .summary-total-value { font-family: 'Playfair Display', serif; font-size: var(--fs-2xl); font-weight: 700; color: var(--purple2); }
 
     .sidebar-info-list { display: flex; flex-direction: column; gap: .9rem; }
     .sidebar-info-item { display: flex; align-items: flex-start; gap: .75rem; }
     .sidebar-info-item .icon { margin-top: 1px; }
-    .sidebar-info-label { font-size: var(--fs-xs); color: rgba(245,240,232,.62); text-transform: uppercase; letter-spacing: var(--track-button); margin-bottom: .1rem; }
+    .sidebar-info-label { font-size: var(--fs-xs); color: rgba(245,240,232,.62);   margin-bottom: .1rem; }
     .sidebar-info-value { font-size: var(--fs-md); color: var(--cream); font-weight: 500; line-height: 1.4; }
 
     @media (max-width: 900px) {
       nav { padding: 1rem 1.5rem; }
       .order-hero { padding: 2.5rem 1.5rem 2rem; }
       .order-main { grid-template-columns: 1fr; padding: 2rem 1.5rem 4rem; }
-      .order-sidebar { order: -1; position: static; }
+      .order-sidebar { position: static; }
       .product-grid { grid-template-columns: 1fr; }
       .steps-bar { padding: 1.4rem 1rem 0; }
       .step-label { display: none; }
+      body { padding-bottom: calc(64px + var(--safe-bottom)); }
+
     }
     @media (max-width: 480px) {
       .form-row { grid-template-columns: 1fr; }
@@ -168,10 +170,20 @@
       .nav-cta-long { display: none; }
       .nav-cta-short { display: inline; }
     }
+    .steps-current { display: none; text-align: center; font-size: var(--fs-sm); color: var(--muted); margin-top: .6rem; }
+    .mobile-total { display: none; position: fixed; left: 0; right: 0; bottom: 0; z-index: var(--z-nav); align-items: center; justify-content: space-between; gap: 1rem;
+      padding: .8rem max(1.2rem, env(safe-area-inset-left, 0px)) calc(.8rem + var(--safe-bottom)) max(1.2rem, env(safe-area-inset-left, 0px));
+      background: var(--dark2); color: var(--cream); box-shadow: var(--shadow-up); font-size: var(--fs-sm); }
+    .mobile-total strong { font-family: 'Playfair Display', serif; font-size: var(--fs-xl); color: var(--purple-light); }
+    @media (max-width: 900px) {
+      body.has-totalbar { --chatbar-h: 64px; }
+      .steps-current { display: block; }
+      .mobile-total { display: flex; }
+    }
   </style>
   {% include "_favicons.html" ignore missing %}
 </head>
-<body>
+<body class="has-totalbar">
 {% include "_loader.html" ignore missing %}
 
 <!-- NAV -->
@@ -184,7 +196,6 @@
 
 <!-- HERO -->
 <div class="order-hero">
-  <span class="order-hero-label">Wassenaar · Langstraat 42</span>
   <h1>Bestel je taart<br><em>vers gemaakt, klaar voor jou.</em></h1>
   <p class="order-hero-sub">Kies één of meerdere taarten, voeg eventueel een tekst toe en geef aan wanneer je ze komt afhalen.</p>
 </div>
@@ -208,6 +219,8 @@
     <div class="step-label">Opmerkingen</div>
   </div>
 </div>
+
+<p class="steps-current" id="stepsCurrent" aria-live="polite">Stap 1 van 4: Taart kiezen</p>
 
 <!-- MAIN -->
 <div class="order-main">
@@ -508,6 +521,8 @@
     });
 
     document.getElementById('cardTitle').textContent = stepTitles[stap][0];
+    const stapNamen = ['Taart kiezen', 'Extra opties', 'Afhalen', 'Opmerkingen'];
+    document.getElementById('stepsCurrent').textContent = `Stap ${stap} van 4: ${stapNamen[stap - 1]}`;
     document.getElementById('cardSub').textContent = stepTitles[stap][1];
     document.querySelector('.order-card-body').scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
@@ -567,6 +582,7 @@
 
     lines.innerHTML = html;
     document.getElementById('summaryTotal').textContent = '€' + total.toFixed(2).replace('.', ',');
+    document.getElementById('mobileTotal').textContent = '€' + total.toFixed(2).replace('.', ',');
   }
 
   // ---------- BESTELLING VERSTUREN ----------
@@ -652,6 +668,7 @@
   }
 </script>
 
+<div class="mobile-total" aria-live="polite"><span>Totaal van je bestelling</span><strong id="mobileTotal">€0,00</strong></div>
 {% include "_ident.html" ignore missing %}
 {% include "_cookie.html" ignore missing %}
 </body>

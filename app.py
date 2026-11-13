@@ -117,28 +117,48 @@ def _ratelimit_handler(e):
 def _error_pagina(titel: str, tekst: str, code: int):
     # Inline HTML zonder template, zodat de foutpagina zelf nooit kan falen.
     html = f"""<!DOCTYPE html><html lang="nl"><head><meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0"><title>{titel} | Bagel Alley</title>
-<style>body{{margin:0;height:100vh;display:flex;align-items:center;justify-content:center;
-background:radial-gradient(circle at 50% 40%,#271b30,#1A1018);color:#F5F0E8;
-font-family:Georgia,'Times New Roman',serif;text-align:center;padding:24px;}}
-.c{{max-width:440px}}.b{{font-size:64px;font-weight:bold;color:#9B6EE0;line-height:1}}
-h1{{font-size:24px;margin:14px 0 8px}}p{{color:rgba(245,240,232,.65);font-size:15px;line-height:1.6;
-font-family:Arial,sans-serif}}a{{display:inline-block;margin-top:20px;background:#8758CE;color:#fff;
-text-decoration:none;padding:12px 26px;border-radius:8px;font-family:Arial,sans-serif;font-size:14px;font-weight:bold}}</style>
-</head><body><div class="c"><div class="b">{code}</div><h1>{titel}</h1><p>{tekst}</p>
-<a href="/">Terug naar de homepage</a></div></body></html>"""
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>{titel} | Bagel Alley</title>
+<meta name="theme-color" content="#1A1018"><meta name="robots" content="noindex">
+<style>
+@font-face{{font-family:'Playfair Display';font-weight:400 900;font-display:swap;src:url('/static/fonts/playfair-display-latin.woff2') format('woff2')}}
+@font-face{{font-family:'DM Sans';font-weight:100 1000;font-display:swap;src:url('/static/fonts/dm-sans-latin.woff2') format('woff2')}}
+*{{box-sizing:border-box}}
+body{{margin:0;min-height:100vh;min-height:100svh;display:flex;align-items:center;justify-content:center;
+background:radial-gradient(circle at 50% 40%,#271b30,#1A1018);color:#F5F0E8;font-family:'DM Sans',Arial,sans-serif;
+text-align:center;padding:max(24px,env(safe-area-inset-top)) 24px max(24px,env(safe-area-inset-bottom))}}
+.c{{max-width:460px}}.b{{font-family:'Playfair Display',Georgia,serif;font-size:64px;font-weight:700;color:#9B6EE0;line-height:1}}
+h1{{font-family:'Playfair Display',Georgia,serif;font-size:26px;margin:14px 0 8px}}
+p{{color:rgba(245,240,232,.75);font-size:16px;line-height:1.6;margin:0}}
+nav{{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:24px}}
+a{{display:inline-flex;align-items:center;min-height:44px;padding:0 20px;border-radius:3px;text-decoration:none;font-size:14px;font-weight:600;
+color:#F5F0E8;border:1.5px solid rgba(245,240,232,.35)}}a.p{{background:#8758CE;border-color:#8758CE;color:#fff}}
+a:focus-visible{{outline:2px solid #B394EC;outline-offset:2px}}</style>
+</head><body><main class="c"><div class="b">{code}</div><h1>{titel}</h1><p>{tekst}</p>
+<nav aria-label="Verder naar"><a class="p" href="/">Naar de homepage</a><a href="/menu">Bekijk de kaart</a>
+<a href="tel:+31705146116">Bel 070-514 61 16</a>
+<a href="https://www.google.com/maps/search/?api=1&amp;query=Bagel%20Alley%20Langstraat%2042%20Wassenaar" rel="noopener">Route</a></nav></main></body></html>"""
     return html, code
 
 @app.errorhandler(404)
 def _not_found(e):
     return _error_pagina("Pagina niet gevonden",
-                         "Deze pagina bestaat niet (meer). Misschien is de link verouderd.", 404)
+                         "Deze pagina bestaat niet. Bekijk de kaart, bel ons of ga terug naar de homepage.", 404)
 
 @app.errorhandler(500)
 def _server_error(e):
     return _error_pagina("Er ging iets mis",
                          "Er is een onverwachte fout opgetreden. Probeer het zo nog eens.", 500)
 # endregion
+
+# Tekstversie van de menukaart (menukaart.py). Ontbreekt het bestand, dan alleen de afbeeldingen.
+try:
+    import importlib.util as _ilu
+    _spec = _ilu.spec_from_file_location("menukaart", os.path.join(os.path.dirname(os.path.abspath(__file__)), "menukaart.py"))
+    _mod = _ilu.module_from_spec(_spec); _spec.loader.exec_module(_mod)
+    MENUKAART = _mod.MENUKAART
+except Exception as e:
+    print(f"[MENU] tekstversie niet geladen: {e}")
+    MENUKAART = []
 
 # region ── SENDGRID MAIL ───────────────────────────────────────
 SENDGRID_API_KEY = os.environ.get("SENDGRID_API_KEY", "")
@@ -166,15 +186,15 @@ def _fav_row(img, titel, tekst):
 def _mail_footer():
     return f"""<tr><td style="background:#efe9e0;padding:30px 34px;border-top:1px solid #e4dcd0;">
     <table width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
-      <td width="33%" valign="top" style="font-family:Arial,sans-serif;">
+      <td class="col" width="33%" valign="top" style="font-family:Arial,sans-serif;padding-right:10px;">
         <div style="font-size:10px;letter-spacing:1.5px;color:#8758ce;text-transform:uppercase;margin-bottom:8px;">Openingstijden</div>
         <div style="font-size:12px;color:#7c7484;line-height:1.7;">Maandag, woensdag t/m zondag<br>08:00 &ndash; 16:00<br>Dinsdag gesloten</div>
       </td>
-      <td width="34%" valign="top" style="font-family:Arial,sans-serif;">
+      <td class="col" width="34%" valign="top" style="font-family:Arial,sans-serif;padding-right:10px;">
         <div style="font-size:10px;letter-spacing:1.5px;color:#8758ce;text-transform:uppercase;margin-bottom:8px;">Bagel Alley Wassenaar</div>
         <div style="font-size:12px;color:#7c7484;line-height:1.7;">Langstraat 42<br>2242 KM Wassenaar<br>070 514 61 16<br>info@bagelalley.nl</div>
       </td>
-      <td width="33%" valign="top" style="font-family:Arial,sans-serif;">
+      <td class="col" width="33%" valign="top" style="font-family:Arial,sans-serif;padding-right:10px;">
         <div style="font-size:10px;letter-spacing:1.5px;color:#8758ce;text-transform:uppercase;margin-bottom:8px;">Volg ons</div>
         <div style="font-size:12px;color:#7c7484;line-height:1.7;">Voor de lekkerste bagels, nieuwtjes en dagelijkse inspiratie.<br><a href="https://instagram.com/bagelalleywassenaar" style="color:#8758ce;text-decoration:none;">@bagelalleywassenaar</a></div>
       </td>
@@ -215,10 +235,10 @@ def mail_html(naam: str, datum_str: str, tijd: str, gasten: int) -> str:
     img_classic = f"{SITE_URL}/static/fotos/pexels-barbara-g-135944487-11599632.jpg"
     img_salmon  = f"{SITE_URL}/static/fotos/pexels-amar-28056766.jpg"
     img_coffee  = f"{SITE_URL}/static/specials/koffie.png"
-    return f"""<!DOCTYPE html><html lang="nl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Je tafel staat klaar | Bagel Alley</title></head>
+    return f"""<!DOCTYPE html><html lang="nl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Je tafel staat klaar | Bagel Alley</title><style>@media (max-width:480px){{.col{{display:block!important;width:100%!important;padding-bottom:18px!important}}}}</style></head>
 <body style="margin:0;padding:0;background:#ece7df;font-family:Georgia,'Times New Roman',serif;">
 <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#ece7df;"><tr><td align="center" style="padding:26px 12px;">
-<table width="600" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;width:100%;background:#faf7f2;border-radius:14px;overflow:hidden;">
+<table width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;width:100%;background:#faf7f2;border-radius:14px;overflow:hidden;">
   {_mail_topbar()}
 
   <tr><td style="font-size:0;line-height:0;"><img src="{img_hero}" width="600" alt="Vers ontbijt bij Bagel Alley" style="display:block;width:100%;max-width:600px;height:auto;"></td></tr>
@@ -283,7 +303,7 @@ def newsletter_html(naam: str = "") -> str:
     )
 
     def _more(img, titel, tekst):
-        return f"""<td width="33%" valign="top" style="padding:0 6px;">
+        return f"""<td class="col" width="33%" valign="top" style="padding:0 6px;">
           <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#ffffff;border-radius:10px;overflow:hidden;">
             <tr><td style="font-size:0;line-height:0;"><img src="{img}" width="170" alt="{titel}" style="display:block;width:100%;height:110px;object-fit:cover;"></td></tr>
             <tr><td style="padding:12px 12px 14px;">
@@ -293,10 +313,10 @@ def newsletter_html(naam: str = "") -> str:
           </table>
         </td>"""
 
-    return f"""<!DOCTYPE html><html lang="nl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Bagel van de maand | Bagel Alley</title></head>
+    return f"""<!DOCTYPE html><html lang="nl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Bagel van de maand | Bagel Alley</title><style>@media (max-width:480px){{.col{{display:block!important;width:100%!important;padding-bottom:18px!important}}}}</style></head>
 <body style="margin:0;padding:0;background:#ece7df;font-family:Georgia,'Times New Roman',serif;">
 <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#ece7df;"><tr><td align="center" style="padding:26px 12px;">
-<table width="600" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;width:100%;background:#faf7f2;border-radius:14px;overflow:hidden;">
+<table width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;width:100%;background:#faf7f2;border-radius:14px;overflow:hidden;">
   {_mail_topbar()}
 
   <tr><td style="background:#faf7f2;padding:38px 40px 6px;text-align:center;">
@@ -738,7 +758,7 @@ def home():
 
 @app.route("/menu")
 def menu():
-    return render_template("menu.html", bedrijf=BEDRIJF)
+    return render_template("menu.html", bedrijf=BEDRIJF, menukaart=MENUKAART)
 
 
 @app.route("/shop")
@@ -754,14 +774,6 @@ def bestellen():
 @app.route("/jobs")
 def jobs():
     return render_template("jobs.html", bedrijf=BEDRIJF)
-
-
-@app.route("/menukaart/<filename>")
-def menukaart_img(filename):
-    """Serveert de menukaart webp bestanden vanuit public/static/menu."""
-    from flask import send_from_directory
-    menu_dir = os.path.join(app.static_folder, "menu")
-    return send_from_directory(menu_dir, filename)
 
 
 # ── TAARTBESTELLING ──────────────────────────────────────────

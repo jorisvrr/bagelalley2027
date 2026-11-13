@@ -57,7 +57,7 @@
     .booking-card-body { padding: 2rem; display: flex; flex-direction: column; gap: 1.2rem; }
 
     .form-group { display: flex; flex-direction: column; gap: .45rem; }
-    .form-label { font-size: var(--fs-sm); font-weight: 500; color: var(--muted); letter-spacing: var(--track-button); text-transform: uppercase; }
+    .form-label { font-size: var(--fs-sm); font-weight: 500; color: var(--muted);   }
     .form-label span { color: var(--purple); }
     .form-input, .form-select {
       padding: .75rem 1rem; font-size: var(--fs-base);
@@ -71,7 +71,7 @@
     .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
 
     /* TIJDSLOT GRID */
-    .slot-label { font-size: var(--fs-sm); font-weight: 500; color: var(--muted); letter-spacing: var(--track-button); text-transform: uppercase; margin-top: .2rem; }
+    .slot-label { font-size: var(--fs-sm); font-weight: 500; color: var(--muted);   margin-top: .2rem; }
     .slot-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: .6rem; }
     .slot { min-height: 44px; padding: .55rem .4rem; border: 1.5px solid rgba(135,88,206,.2); border-radius: var(--r-field); font-size: var(--fs-sm); text-align: center; cursor: pointer; color: var(--text); transition: background-color .15s, border-color .15s, color .15s, transform .15s, box-shadow .15s; font-family: 'DM Sans', sans-serif; }
     @media (hover: hover) and (pointer: fine) { .slot:hover { border-color: var(--purple); background: rgba(135,88,206,.06); } }
@@ -99,7 +99,7 @@
     .sidebar-info-list { display: flex; flex-direction: column; gap: .9rem; }
     .sidebar-info-item { display: flex; align-items: flex-start; gap: .75rem; }
     .sidebar-info-item .icon { margin-top: 1px; }
-    .sidebar-info-label { font-size: var(--fs-xs); color: rgba(245,240,232,.62); text-transform: uppercase; letter-spacing: var(--track-button); margin-bottom: .1rem; }
+    .sidebar-info-label { font-size: var(--fs-xs); color: rgba(245,240,232,.62);   margin-bottom: .1rem; }
     .sidebar-info-value { font-size: var(--fs-md); color: var(--cream); font-weight: 500; line-height: 1.4; }
 
     /* Openingstijden tabel sidebar */
@@ -165,7 +165,6 @@
 
 <!-- HERO STRIP -->
 <div class="booking-hero">
-  <span class="booking-hero-label">Wassenaar · Langstraat 42</span>
   {% if online_reserveren %}
   <h1>Reserveer je tafel<br><em>direct bevestigd.</em></h1>
   <p class="booking-hero-sub">Kies een datum en tijdstip en ontvang direct een bevestiging per e-mail.</p>
@@ -189,8 +188,8 @@
 
       <!-- MELDING ARRANGEMENTEN + GROEPEN -->
       <div style="background:rgba(135,88,206,.08);border:1px solid rgba(135,88,206,.2);border-radius:10px;padding:1rem 1.2rem;margin-bottom:.5rem;font-size:.85rem;color:var(--muted);line-height:1.7;">
-        <div style="margin-bottom:.5rem;"><strong style="color:var(--dark)">Arrangement boeken?</strong> Voor High Tea, Tapas box of catering bel ons: <a href="tel:0705146116" style="color:var(--purple);font-weight:600;">070-514 61 16</a> of WhatsApp <a href="https://wa.me/31651343359" style="color:var(--purple);font-weight:600;">06-513 43 359</a></div>
-        <div><strong style="color:var(--dark)">Met 7 of meer personen?</strong> Reserveer telefonisch via <a href="tel:0705146116" style="color:var(--purple);font-weight:600;">070-514 61 16</a></div>
+        <div style="margin-bottom:.5rem;"><strong style="color:var(--dark)">Arrangement boeken?</strong> Voor High Tea, Tapas box of catering bel ons: <a href="tel:+31705146116" style="color:var(--purple);font-weight:600;">070-514 61 16</a> of WhatsApp <a href="https://wa.me/31651343359" style="color:var(--purple);font-weight:600;">06-513 43 359</a></div>
+        <div><strong style="color:var(--dark)">Met 7 of meer personen?</strong> Reserveer telefonisch via <a href="tel:+31705146116" style="color:var(--purple);font-weight:600;">070-514 61 16</a></div>
       </div>
 
       <div class="form-row">

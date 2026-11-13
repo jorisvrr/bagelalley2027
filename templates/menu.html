@@ -200,6 +200,24 @@
     .menu-img-caption { gap: 1rem; }
     .menu-img-caption-badge { white-space: nowrap; }
 
+    .menu-zoom { display: block; }
+    .menu-zoom-hint { font-size: var(--fs-xs); color: var(--purple-light); white-space: nowrap; }
+    .menu-text { background: var(--dark2); border: 1px solid var(--line-dark); border-radius: var(--r-card); margin: 1rem 0 2rem; }
+    .menu-text summary { display: flex; align-items: center; gap: .6rem; min-height: 56px; padding: .9rem 1.4rem; cursor: pointer; font-family: 'Playfair Display', serif; font-size: var(--fs-lg); font-weight: 700; color: var(--cream); list-style: none; }
+    .menu-text summary::-webkit-details-marker { display: none; }
+    .menu-text summary::after { content: "+"; margin-left: auto; font-family: 'DM Sans', sans-serif; font-weight: 400; color: var(--purple-light); }
+    .menu-text[open] summary::after { content: "\2212"; }
+    .menu-text-note { padding: 0 1.4rem; font-size: var(--fs-sm); color: var(--on-dark-muted); }
+    .menu-text-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem 3rem; padding: 1.4rem; }
+    .menu-text-section h3 { font-family: 'Playfair Display', serif; font-size: var(--fs-lg); color: var(--cream); margin-bottom: .6rem; }
+    .menu-text-intro { font-size: var(--fs-sm); color: var(--on-dark-muted); margin-bottom: .6rem; line-height: 1.5; }
+    .menu-text-row { display: flex; justify-content: space-between; gap: 1rem; padding: .45rem 0; border-bottom: 1px solid var(--line-dark); }
+    .menu-text-row dt { font-size: var(--fs-md); color: var(--cream); }
+    .menu-text-row dt span { display: block; font-size: var(--fs-sm); color: var(--on-dark-muted); margin-top: .1rem; }
+    .menu-text-row dd { font-size: var(--fs-md); color: var(--purple-light); white-space: nowrap; font-variant-numeric: tabular-nums; }
+    .menu-text-row--sub { border-bottom: 0; padding-bottom: 0; }
+    .menu-text-row--sub dt { font-style: italic; color: var(--on-dark-muted); }
+
     @media (max-width: 768px) {
       nav { padding: .9rem 1.2rem; }
       .page-hero { padding: 2.5rem 1.2rem 2rem; }
@@ -236,8 +254,7 @@
 
 <div class="page-hero">
   <div class="page-hero-inner">
-    <span class="page-label">Onze kaart</span>
-    <h1 class="page-title">De volledige<br><em>menukaart</em></h1>
+    <h1 class="page-title">De volledige<br>menukaart</h1>
     <p class="page-desc">Van verse ontbijtbagels tot uitgebreide High Tea, alles vers bereid in onze eigen keuken. Elke dag wisselend aanbod.</p>
   </div>
 </div>
@@ -256,11 +273,11 @@
   <!-- MENUKAART 1 -->
   <div class="menu-img-wrapper">
     <div class="menu-img-header">
-      <span class="menu-section-label">Pagina 1 van 2</span>
       <h2 class="menu-section-title">Bagels, Ontbijt, Bowls & Boxes</h2>
     </div>
     <div class="menu-img-card">
-      <img src="{{ url_for('static', filename='menu/menu_1.webp') }}" alt="Menukaart Bagel Alley, pagina 1: ontbijt, bagels, sappen, smoothies, yoghurt en bowls" loading="eager" onerror="this.closest('.menu-img-card').querySelector('.menu-img-fallback').style.display='flex';this.style.display='none'">
+      <a class="menu-zoom" href="{{ url_for('static', filename='menu/menu_1.webp') }}" target="_blank" rel="noopener" aria-label="Menukaart pagina 1 op ware grootte openen">
+      <img src="{{ url_for('static', filename='menu/menu_1.webp') }}" alt="Menukaart Bagel Alley, pagina 1: ontbijt, bagels, sappen, smoothies, yoghurt en bowls" loading="eager" onerror="this.closest('.menu-img-card').querySelector('.menu-img-fallback').style.display='flex';this.style.display='none'"></a>
       <div class="menu-img-fallback">
         
         <div class="menu-img-fallback-text">
@@ -270,7 +287,7 @@
       </div>
       <div class="menu-img-caption">
         <span class="menu-img-caption-text">Bagels · Ontbijt · Fresh Juices · Smoothies · Yoghurt · Bowls · Take Away Boxes</span>
-        <span class="menu-img-caption-badge">Pagina 1</span>
+        <span class="menu-zoom-hint">Tik om te vergroten</span>
       </div>
     </div>
   </div>
@@ -284,11 +301,11 @@
   <!-- MENUKAART 2 -->
   <div class="menu-img-wrapper">
     <div class="menu-img-header">
-      <span class="menu-section-label">Pagina 2 van 2</span>
       <h2 class="menu-section-title">Soepen, Salades, Drankjes & Zoet</h2>
     </div>
     <div class="menu-img-card">
-      <img src="{{ url_for('static', filename='menu/menu_2.webp') }}" alt="Menukaart Bagel Alley, pagina 2: soepen, salades, zoetigheden, high tea, tapas, koffie en thee" loading="lazy" onerror="this.closest('.menu-img-card').querySelector('.menu-img-fallback').style.display='flex';this.style.display='none'">
+      <a class="menu-zoom" href="{{ url_for('static', filename='menu/menu_2.webp') }}" target="_blank" rel="noopener" aria-label="Menukaart pagina 2 op ware grootte openen">
+      <img src="{{ url_for('static', filename='menu/menu_2.webp') }}" alt="Menukaart Bagel Alley, pagina 2: soepen, salades, zoetigheden, high tea, tapas, koffie en thee" loading="lazy" onerror="this.closest('.menu-img-card').querySelector('.menu-img-fallback').style.display='flex';this.style.display='none'"></a>
       <div class="menu-img-fallback">
         
         <div class="menu-img-fallback-text">
@@ -298,10 +315,33 @@
       </div>
       <div class="menu-img-caption">
         <span class="menu-img-caption-text">Soups & Salads · Sweets & Goodies · Coffee · Drinks · High Tea · Tapas</span>
-        <span class="menu-img-caption-badge">Pagina 2</span>
+        <span class="menu-zoom-hint">Tik om te vergroten</span>
       </div>
     </div>
   </div>
+
+  {% if menukaart %}
+  <details class="menu-text" id="menukaart-tekst">
+    <summary>{{ icon('utensils', 20) }} Menukaart als tekst</summary>
+    <p class="menu-text-note">Overgenomen van de gedrukte kaart. Prijzen in euro.</p>
+    <div class="menu-text-grid">
+      {% for sectie in menukaart %}
+      <section class="menu-text-section">
+        <h3>{{ sectie.titel }}</h3>
+        {% if sectie.intro %}<p class="menu-text-intro">{{ sectie.intro }}</p>{% endif %}
+        <dl>
+          {% for naam, omschrijving, prijs in sectie.regels %}
+          <div class="menu-text-row{% if not prijs %} menu-text-row--sub{% endif %}">
+            <dt>{{ naam }}{% if omschrijving %}<span>{{ omschrijving }}</span>{% endif %}</dt>
+            <dd>{{ prijs }}</dd>
+          </div>
+          {% endfor %}
+        </dl>
+      </section>
+      {% endfor %}
+    </div>
+  </details>
+  {% endif %}
 
   <!-- CTA -->
   <div class="menu-cta-bar">
