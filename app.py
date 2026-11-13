@@ -652,7 +652,7 @@ OUDE_URLS = {
     "/contact": "/#contact",
     "/cadeaubon": "/#cadeaubon",
 }
-_PAGINAS = {"/menu", "/high-tea", "/shop", "/bestellen", "/jobs", "/reserveren"}
+_PAGINAS = {"/menu", "/high-tea", "/shop", "/bestellen", "/jobs", "/reserveren", "/privacy"}
 _CANON_HOST = urlsplit(os.environ["SITE_URL"]).netloc.lower() if os.environ.get("SITE_URL") else ""
 
 @app.before_request
@@ -1118,6 +1118,14 @@ def high_tea():
     if not regels:
         abort(404)
     return render_template("high_tea.html", bedrijf=BEDRIJF, high_tea=regels)
+
+
+@app.route("/privacy")
+def privacy():
+    # CONCEPT: noindex en buiten de sitemap tot de klant de tekst heeft goedgekeurd.
+    resp = app.make_response(render_template("privacy.html", bedrijf=BEDRIJF))
+    resp.headers["X-Robots-Tag"] = "noindex"
+    return resp
 
 
 @app.route("/jobs")

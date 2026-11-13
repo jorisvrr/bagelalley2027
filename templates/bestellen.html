@@ -105,6 +105,8 @@
 
     /* STEP NAV BUTTONS */
     .step-nav { display: flex; justify-content: space-between; gap: 1rem; margin-top: .5rem; }
+    .privacy-note { font-size: var(--fs-sm); color: var(--muted); line-height: 1.6; margin: .2rem 0 1rem; }
+    .privacy-note a { color: var(--purple3); display: inline-block; padding: .7rem 0; margin: -.7rem 0; }
     .btn-prev { display: inline-flex; align-items: center; gap: .35rem; background: transparent; color: var(--muted); border: 1.5px solid rgba(135,88,206,.2); padding: .9rem 1.6rem; font-size: var(--fs-md); font-weight: 500; border-radius: var(--r-field); cursor: pointer; transition: background-color .2s, border-color .2s, color .2s, transform .2s, box-shadow .2s; font-family: 'DM Sans', sans-serif; }
     @media (hover: hover) and (pointer: fine) { .btn-prev:hover { border-color: var(--purple); color: var(--purple); } }
     .btn-next, .btn-submit { display: inline-flex; align-items: center; gap: .35rem; background: var(--purple); color: white; border: none; padding: .9rem 1.8rem; font-size: var(--fs-md); font-weight: 500; border-radius: var(--r-field); cursor: pointer; transition: background .2s, transform .15s; font-family: 'DM Sans', sans-serif; letter-spacing: normal; margin-left: auto; }
@@ -326,6 +328,7 @@
             <a href="tel:+31705146116">Bel 070-514 61 16</a>
           </div>
         </div>
+        <p class="privacy-note">We gebruiken je gegevens alleen voor deze bestelling. Lees meer in onze <a href="/privacy">privacyverklaring</a>.</p>
         <div class="step-nav" id="step4Nav">
           <button class="btn-prev" onclick="goToStep(3)">{{ icon('chevron-left', 20) }} Vorige</button>
           <button class="btn-submit" id="orderSubmit" onclick="plaatsBestelling()">Bestelling versturen</button>
