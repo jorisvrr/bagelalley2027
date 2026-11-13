@@ -617,6 +617,10 @@ def build_restaurant_schema() -> str:
             "longitude": GEO["lng"],
         },
         "openingHoursSpecification": spec,
+        "amenityFeature": [
+            {"@type": "LocationFeatureSpecification", "name": "Terras (aan de overkant, Langstraat 43)", "value": True},
+            {"@type": "LocationFeatureSpecification", "name": "Wifi voor gasten", "value": True},
+        ],
     }
     if SOCIAL:
         schema["sameAs"] = SOCIAL
