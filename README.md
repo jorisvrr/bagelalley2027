@@ -1,6 +1,6 @@
 # Bagel Alley website
 
-Website van Bagel Alley, bagel- en koffiezaak in Wassenaar. Pagina's: home, menu, taarten bestellen (afhalen), shop, vacatures en reserveren (telefonisch). Gebouwd met Flask en Jinja, gehost op Vercel.
+Website van Bagel Alley, bagel- en koffiezaak in Wassenaar. Pagina's: home, menu, high tea, taarten bestellen (afhalen), shop, vacatures, reserveren (telefonisch) en privacy. Gebouwd met Flask en Jinja, gehost op Vercel.
 
 ## Lokaal draaien
 
@@ -57,6 +57,12 @@ De sitemap haalt `lastmod` uit `SITEMAP` in `app.py`: zet daar de datum als de i
 `vercel.json` zet de browsercache voor `/static/`: lettertypes een jaar (een nieuw lettertype krijgt dus een nieuwe bestandsnaam), de rest een dag.
 
 De originele bronfoto's staan niet in de repo. Alleen de verkleinde varianten in `public/static/opt/` worden gebruikt.
+
+## Beveiliging en privacy
+
+- De Content-Security-Policy staat in `CSP` in `app.py`. Komt er een externe dienst bij (bijvoorbeeld analytics), voeg het domein daar toe.
+- De site zet geen cookies en heeft daarom geen cookiemelding. Google Maps laadt pas na een tik op "Toon kaart".
+- `/privacy` is nog een concept: de pagina heeft `noindex` en staat niet in de sitemap. Na goedkeuring door de klant: de conceptmelding en `seo_noindex` uit `templates/privacy.html` halen, de `X-Robots-Tag` uit de route `privacy()` halen en `/privacy` toevoegen aan `SITEMAP`.
 
 ## Chatbot
 
