@@ -727,6 +727,8 @@ def link(tekst, url):
 _TEL = link("070-514 61 16", "tel:+31705146116")
 _MAIL = link("vrcbagel@gmail.com", "mailto:vrcbagel@gmail.com")
 _ROUTE = "https://www.google.com/maps/search/?api=1&query=Bagel%20Alley%20Langstraat%2042%20Wassenaar"
+_PARKEREN = "https://www.google.com/maps/search/?api=1&query=52.143773331281174%2C4.392209959142655"
+_INSTAGRAM = "https://www.instagram.com/bagelalleywassenaar/"
 _ALLERGIE_SLOT = f'Heb je een allergie? Bel {link("ons even", "tel:+31705146116")}, dan vertellen we precies wat erin zit.'
 
 # Nog niet bevestigde feiten. Zolang de waarde None is, geeft de chat een veilig antwoord
@@ -734,15 +736,15 @@ _ALLERGIE_SLOT = f'Heb je een allergie? Bel {link("ons even", "tel:+31705146116"
 # de klant het bevestigt (zie CLIENT-TODO.md in de projectdocumenten buiten de repo, "Chatbot: veilige antwoorden").
 CHAT_FEITEN = {
     "feestdagen":       None,   # openingstijden rond kerst, oud en nieuw, pasen, koningsdag ...
-    "parking":          None,   # waar parkeren, betaald of blauwe zone?
+    "parking":          f'Je kunt parkeren naast de Langstraat, vlak bij de zaak. De parkeerplek zie je {link("hier op de kaart", _PARKEREN)}.',
     "huisdieren":       None,   # honden/huisdieren binnen en op het terras?
     "kinderstoel":      None,   # kinderstoel aanwezig?
     "betalen":          None,   # pin, contant, creditcard, tikkie, apple pay?
-    "wifi_laptop":      None,   # wifi voor gasten, stopcontacten, laptop welkom?
-    "terras":           None,   # terras, buiten zitten?
+    "wifi_laptop":      "Ja, we hebben wifi voor gasten.",
+    "terras":           "Ja, we hebben een terras aan de overkant van de straat, op Langstraat 43.",
     "toegankelijkheid": None,   # rolstoel, drempel, mindervalidentoilet?
     "toilet":           None,   # toilet, verschoontafel?
-    "instagram_social": None,   # instagram / facebook handle?
+    "instagram_social": f'Je vindt ons op Instagram: {link("@bagelalleywassenaar", _INSTAGRAM)}.',
     "drukte":           None,   # drukke momenten, wachttijd?
 }
 _ONDERWERP = {
