@@ -12,27 +12,19 @@
   {% set seo_path = "/reserveren" %}
   {% set seo_crumb = "Reserveren" %}
   {% include "_seo.html" ignore missing %}
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  {% include "_tokens.html" ignore missing %}
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    :root {
-      --cream: #F5F0E8; --cream2: #EDE6D6;
-      --dark: #1A1018; --dark2: #241E2A;
-      --purple: #8758CE; --purple2: #9B6EE0; --purple3: #6E42B0; --purple-light: #B394EC;
-      --text: #1E1828; --muted: #6B5F7A; --white: #FDFAF5;
-    }
     html { scroll-behavior: smooth; }
     body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--text); min-height: 100vh; }
 
     /* NAV */
     nav { display: flex; justify-content: space-between; align-items: center; padding: 1rem 4rem; background: var(--dark2); border-bottom: 2px solid var(--purple); }
     .nav-logo { display: flex; align-items: center; gap: .75rem; text-decoration: none; }
-    .nav-logo-text { font-family: 'Playfair Display', serif; font-size: 1.2rem; font-weight: 700; color: var(--cream); }
+    .nav-logo-text { font-family: 'Playfair Display', serif; font-size: var(--fs-lg); font-weight: 700; color: var(--cream); }
     .nav-logo-text span { color: var(--purple2); }
-    .nav-back { font-size: .8rem; color: rgba(245,240,232,.62); text-decoration: none; letter-spacing: .06em; text-transform: uppercase; transition: color .2s; display: flex; align-items: center; gap: .4rem; }
-    .nav-back:hover { color: var(--purple2); }
+    .nav-back { font-size: var(--fs-sm); color: rgba(245,240,232,.62); text-decoration: none; letter-spacing: var(--track-button); text-transform: uppercase; transition: color .2s; display: flex; align-items: center; gap: .4rem; }
+    @media (hover: hover) and (pointer: fine) { .nav-back:hover { color: var(--purple2); } }
 
     /* HERO STRIP */
     .booking-hero {
@@ -41,89 +33,98 @@
       text-align: center;
       border-bottom: 1px solid rgba(135,88,206,.15);
     }
-    .booking-hero-label { font-size: .75rem; font-weight: 500; letter-spacing: .18em; text-transform: uppercase; color: var(--purple-light); display: block; margin-bottom: .8rem; }
+    .booking-hero-label { font-size: var(--fs-xs); font-weight: 500; letter-spacing: var(--track-label); text-transform: uppercase; color: var(--purple-light); display: block; margin-bottom: .8rem; }
     .booking-hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(2.2rem, 4vw, 3.5rem); font-weight: 700; color: var(--cream); line-height: 1.1; margin-bottom: 1rem; }
     .booking-hero h1 em { font-style: italic; color: var(--purple2); }
-    .booking-hero-sub { font-size: 1rem; color: rgba(245,240,232,.62); max-width: 480px; margin: 0 auto 2.5rem; line-height: 1.7; }
+    .booking-hero-sub { font-size: var(--fs-base); color: rgba(245,240,232,.62); max-width: 480px; margin: 0 auto 2.5rem; line-height: 1.7; }
     .booking-hero-tabs {
       display: flex; justify-content: center; gap: 0;
       border-top: 1px solid rgba(135,88,206,.15);
       margin-top: 0;
     }
-    .booking-hero-tab { padding: 1rem 2rem; font-size: .8rem; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; color: rgba(245,240,232,.62); border-top: 3px solid transparent; margin-top: -1px; }
+    .booking-hero-tab { padding: 1rem 2rem; font-size: var(--fs-sm); font-weight: 500; letter-spacing: var(--track-button); text-transform: uppercase; color: rgba(245,240,232,.62); border-top: 3px solid transparent; margin-top: -1px; }
     .booking-hero-tab.active { color: var(--purple-light); border-top-color: var(--purple); }
 
     /* MAIN LAYOUT */
     .booking-main { max-width: 1100px; margin: 0 auto; padding: 3rem 2rem 5rem; display: grid; grid-template-columns: 1fr 380px; gap: 3rem; align-items: start; }
 
     /* FORM CARD */
-    .booking-card { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 40px rgba(135,88,206,.08); }
+    .booking-card { background: white; border-radius: var(--r-card); overflow: hidden; box-shadow: var(--shadow-card); }
     .booking-card-header { background: var(--purple); padding: 1.4rem 2rem; }
-    .booking-card-header h2 { font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 700; color: white; }
-    .booking-card-header p { font-size: .82rem; color: #fff; margin-top: .3rem; }
+    .booking-card-header h2 { font-family: 'Playfair Display', serif; font-size: var(--fs-xl); font-weight: 700; color: white; }
+    .booking-card-header p { font-size: var(--fs-sm); color: #fff; margin-top: .3rem; }
     .booking-card-body { padding: 2rem; display: flex; flex-direction: column; gap: 1.2rem; }
 
     .form-group { display: flex; flex-direction: column; gap: .45rem; }
-    .form-label { font-size: .78rem; font-weight: 500; color: var(--muted); letter-spacing: .06em; text-transform: uppercase; }
+    .form-label { font-size: var(--fs-sm); font-weight: 500; color: var(--muted); letter-spacing: var(--track-button); text-transform: uppercase; }
     .form-label span { color: var(--purple); }
     .form-input, .form-select {
-      padding: .75rem 1rem; font-size: .92rem;
-      border: 1.5px solid rgba(135,88,206,.2); border-radius: 8px;
+      padding: .75rem 1rem; font-size: var(--fs-base);
+      border: 1.5px solid rgba(135,88,206,.2); border-radius: var(--r-field);
       font-family: 'DM Sans', sans-serif; color: var(--text);
       background: #fafafa; outline: none; width: 100%;
       transition: border-color .2s, box-shadow .2s;
     }
-    .form-input:focus, .form-select:focus { border-color: var(--purple); background: white; box-shadow: 0 0 0 3px rgba(135,88,206,.08); }
+    .form-input:focus, .form-select:focus { border-color: var(--purple); background: white; box-shadow: var(--focus-ring); }
     .form-input::placeholder { color: #736b7a; }
     .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
 
     /* TIJDSLOT GRID */
-    .slot-label { font-size: .78rem; font-weight: 500; color: var(--muted); letter-spacing: .06em; text-transform: uppercase; margin-top: .2rem; }
+    .slot-label { font-size: var(--fs-sm); font-weight: 500; color: var(--muted); letter-spacing: var(--track-button); text-transform: uppercase; margin-top: .2rem; }
     .slot-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: .6rem; }
-    .slot { padding: .55rem .4rem; border: 1.5px solid rgba(135,88,206,.2); border-radius: 8px; font-size: .82rem; text-align: center; cursor: pointer; color: var(--text); transition: all .15s; font-family: 'DM Sans', sans-serif; }
-    .slot:hover { border-color: var(--purple); background: rgba(135,88,206,.06); }
+    .slot { padding: .55rem .4rem; border: 1.5px solid rgba(135,88,206,.2); border-radius: var(--r-field); font-size: var(--fs-sm); text-align: center; cursor: pointer; color: var(--text); transition: background-color .15s, border-color .15s, color .15s, transform .15s, box-shadow .15s; font-family: 'DM Sans', sans-serif; }
+    @media (hover: hover) and (pointer: fine) { .slot:hover { border-color: var(--purple); background: rgba(135,88,206,.06); } }
     .slot.gekozen { background: var(--purple) !important; color: white !important; border-color: var(--purple) !important; font-weight: 500; }
     .slot.vol { background: #f5f5f5; color: #ccc; cursor: not-allowed; border-color: #e8e8e8; text-decoration: line-through; }
-    .slot-dinsdag-msg { grid-column: 1/-1; text-align: center; color: rgba(135,88,206,.6); font-size: .85rem; padding: 1rem; background: rgba(135,88,206,.06); border-radius: 8px; }
+    .slot-dinsdag-msg { grid-column: 1/-1; text-align: center; color: rgba(135,88,206,.6); font-size: var(--fs-md); padding: 1rem; background: rgba(135,88,206,.06); border-radius: var(--r-field); }
 
     /* ERROR / SUCCESS */
-    .form-error { background: #fff2f2; color: #c33; border: 1px solid #fcc; border-radius: 8px; padding: .75rem 1rem; font-size: .85rem; display: none; }
-    .form-success { background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; border-radius: 8px; padding: 1.2rem 1.5rem; font-size: .9rem; display: none; }
-    .form-success strong { display: block; font-size: 1.05rem; margin-bottom: .4rem; }
+    .form-error { background: #fff2f2; color: #c33; border: 1px solid #fcc; border-radius: var(--r-field); padding: .75rem 1rem; font-size: var(--fs-md); display: none; }
+    .form-success { background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; border-radius: var(--r-field); padding: 1.2rem 1.5rem; font-size: var(--fs-md); display: none; }
+    .form-success strong { display: block; font-size: var(--fs-base); margin-bottom: .4rem; }
 
     /* SUBMIT BTN */
-    .btn-submit { background: var(--purple); color: white; border: none; padding: 1rem 2rem; font-size: .92rem; font-weight: 500; border-radius: 8px; cursor: pointer; transition: background .2s, transform .15s; width: 100%; font-family: 'DM Sans', sans-serif; letter-spacing: .04em; }
-    .nieuwsbrief-optin { display: flex; align-items: flex-start; gap: .6rem; margin: 0 0 1rem; padding: .85rem 1rem; background: rgba(135,88,206,.06); border: 1px solid rgba(135,88,206,.18); border-radius: 8px; cursor: pointer; font-size: .82rem; color: #5a5560; line-height: 1.5; }
+    .btn-submit { background: var(--purple); color: white; border: none; padding: 1rem 2rem; font-size: var(--fs-base); font-weight: 500; border-radius: var(--r-field); cursor: pointer; transition: background .2s, transform .15s; width: 100%; font-family: 'DM Sans', sans-serif; letter-spacing: var(--track-button); }
+    .nieuwsbrief-optin { display: flex; align-items: flex-start; gap: .6rem; margin: 0 0 1rem; padding: .85rem 1rem; background: rgba(135,88,206,.06); border: 1px solid rgba(135,88,206,.18); border-radius: var(--r-field); cursor: pointer; font-size: var(--fs-sm); color: #5a5560; line-height: 1.5; }
     .nieuwsbrief-optin input { margin-top: .15rem; width: 16px; height: 16px; accent-color: var(--purple); flex-shrink: 0; cursor: pointer; }
     .nieuwsbrief-optin strong { color: var(--purple3); font-weight: 600; }
-    .btn-submit:hover { background: var(--purple3); transform: translateY(-1px); }
+    @media (hover: hover) and (pointer: fine) { .btn-submit:hover { background: var(--purple3); transform: translateY(-1px); } }
     .btn-submit:disabled { opacity: .6; cursor: not-allowed; transform: none; }
 
     /* SIDEBAR */
     .booking-sidebar { display: flex; flex-direction: column; gap: 1.5rem; }
-    .sidebar-card { background: var(--dark2); border-radius: 12px; padding: 1.6rem; }
-    .sidebar-card-title { font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 700; color: var(--cream); margin-bottom: 1.2rem; }
+    .sidebar-card { background: var(--dark2); border-radius: var(--r-card); padding: 1.6rem; }
+    .sidebar-card-title { font-family: 'Playfair Display', serif; font-size: var(--fs-lg); font-weight: 700; color: var(--cream); margin-bottom: 1.2rem; }
     .sidebar-info-list { display: flex; flex-direction: column; gap: .9rem; }
     .sidebar-info-item { display: flex; align-items: flex-start; gap: .75rem; }
     .sidebar-info-item svg { width: 16px; height: 16px; stroke: var(--purple2); fill: none; stroke-width: 1.8; flex-shrink: 0; margin-top: 2px; }
-    .sidebar-info-label { font-size: .75rem; color: rgba(245,240,232,.62); text-transform: uppercase; letter-spacing: .08em; margin-bottom: .1rem; }
-    .sidebar-info-value { font-size: .9rem; color: var(--cream); font-weight: 500; line-height: 1.4; }
+    .sidebar-info-label { font-size: var(--fs-xs); color: rgba(245,240,232,.62); text-transform: uppercase; letter-spacing: var(--track-button); margin-bottom: .1rem; }
+    .sidebar-info-value { font-size: var(--fs-md); color: var(--cream); font-weight: 500; line-height: 1.4; }
 
     /* Openingstijden tabel sidebar */
     .hours-mini { width: 100%; border-collapse: collapse; margin-top: .5rem; }
     .hours-mini tr { border-bottom: 1px solid rgba(135,88,206,.08); }
     .hours-mini tr:last-child { border-bottom: none; }
-    .hours-mini td { padding: .55rem 0; font-size: .82rem; }
+    .hours-mini td { padding: .55rem 0; font-size: var(--fs-sm); }
     .hours-mini td:first-child { color: rgba(245,240,232,.62); }
     .hours-mini td:last-child { color: var(--cream); text-align: right; font-weight: 500; }
     .hours-mini tr.closed td { color: rgba(245,240,232,.62) !important; }
     .hours-mini tr.closed td:last-child { color: var(--purple-light) !important; }
 
-    .sidebar-img { border-radius: 8px; overflow: hidden; height: 180px; }
+    .sidebar-img { border-radius: var(--r-field); overflow: hidden; height: 180px; }
     .sidebar-img img { width: 100%; height: 100%; object-fit: cover; }
 
     /* VANDAAG VERWACHT: hidden van klantview */
     /* (Klanten zien geen bezettingsdata) */
+
+    .phone-card-body { align-items: flex-start; }
+    .phone-cta { text-decoration: none; text-align: center; display: flex; align-items: center; justify-content: center; gap: .5rem; width: 100%; min-height: 48px; }
+    .phone-note { font-size: var(--fs-md); color: var(--muted); line-height: 1.7; }
+    .phone-note--small { font-size: var(--fs-sm); }
+    .inline-tel { color: inherit; text-decoration: none; display: inline-block; padding: .35rem 0; }
+    .sidebar-card--photo { padding: 0; overflow: hidden; }
+    .sidebar-photo-text { padding: 1.2rem 1.6rem 1.4rem; font-size: var(--fs-sm); color: var(--on-dark-muted); line-height: 1.6; }
+    .sidebar-photo-text a { color: var(--purple-light); font-weight: 600; text-decoration: none; display: inline-block; padding: .35rem 0; }
 
     @media (max-width: 900px) {
       nav { padding: 1rem 1.5rem; }
@@ -244,11 +245,11 @@
       <h2>Reserveren via de telefoon</h2>
       <p>Bel ons tijdens openingstijden, dan regelen we het meteen</p>
     </div>
-    <div class="booking-card-body" style="align-items:flex-start;">
-      <a href="tel:+31705146116" class="btn-submit" style="text-decoration:none;text-align:center;display:block;width:100%;">Bel 070-514 61 16</a>
-      <p style="font-size:.92rem;color:var(--muted);line-height:1.7;">Wij zijn bereikbaar op maandag en woensdag tot en met zondag van 08:00 tot 16:00. Op dinsdag zijn we gesloten.</p>
-      <p style="font-size:.92rem;color:var(--muted);line-height:1.7;">Geef bij het bellen je naam, de datum, het tijdstip en het aantal personen door. Ook voor High Tea, groepen en arrangementen kun je ons bellen.</p>
-      <p style="font-size:.85rem;color:var(--muted);line-height:1.7;">Online reserveren komt binnenkort.</p>
+    <div class="booking-card-body phone-card-body">
+      <a href="tel:+31705146116" class="btn-submit phone-cta">Bel 070-514 61 16</a>
+      <p class="phone-note">Wij zijn bereikbaar op maandag en woensdag tot en met zondag van 08:00 tot 16:00. Op dinsdag zijn we gesloten.</p>
+      <p class="phone-note">Geef bij het bellen je naam, de datum, het tijdstip en het aantal personen door. Ook voor High Tea, groepen en arrangementen kun je ons bellen.</p>
+      <p class="phone-note phone-note--small">Online reserveren komt binnenkort.</p>
     </div>
   </div>
   {% endif %}
@@ -270,7 +271,7 @@
           <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
           <div>
             <div class="sidebar-info-label">Telefoon</div>
-            <div class="sidebar-info-value"><a href="tel:+31705146116" style="color:inherit;text-decoration:none;">070-514 61 16</a></div>
+            <div class="sidebar-info-value"><a href="tel:+31705146116" class="inline-tel">070-514 61 16</a></div>
           </div>
         </div>
         <div class="sidebar-info-item">
@@ -296,12 +297,12 @@
       </table>
     </div>
 
-    <div class="sidebar-card" style="padding:0;overflow:hidden">
+    <div class="sidebar-card sidebar-card--photo">
       <div class="sidebar-img">
         <img src="{{ url_for('static', filename='fotos/pexels-anchornhaven-43716305-29445728.jpg') }}" alt="Bagel Alley" loading="lazy">
       </div>
-      <div style="padding:1.2rem 1.6rem 1.4rem">
-        <div style="font-size:.82rem;color:rgba(245,240,232,.62);line-height:1.6">Heb je een groep of speciale wens? Bel ons op <a href="tel:+31705146116" style="color:var(--purple-light);font-weight:600;text-decoration:none;">070-514 61 16</a> voor maatwerk.</div>
+      <div class="sidebar-photo-text">
+        <p>Heb je een groep of speciale wens? Bel ons op <a href="tel:+31705146116">070-514 61 16</a> voor maatwerk.</p>
       </div>
     </div>
 

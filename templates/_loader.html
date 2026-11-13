@@ -14,7 +14,7 @@
   </div>
 </div>
 <style>
-  #ba-loader { position: fixed; inset: 0; z-index: 9999; display: flex; align-items: center; justify-content: center;
+  #ba-loader { position: fixed; inset: 0; z-index: var(--z-loader); display: flex; align-items: center; justify-content: center;
     background: radial-gradient(circle at 50% 42%, #271b30 0%, #1A1018 62%);
     animation: baLoaderOut .6s ease 1.35s forwards; }
   .ba-loader-inner { text-align: center; }
@@ -24,8 +24,8 @@
   .ba-logo { position: absolute; top: 50%; left: 50%; width: 78px; height: 78px;
     transform: translate(-50%, -50%); border-radius: 50%;
     filter: drop-shadow(0 0 16px rgba(135,88,206,.55)); animation: baPulse 1.7s ease-in-out infinite; }
-  .ba-loader-word { margin-top: 22px; font-family: 'Playfair Display', Georgia, serif; font-size: 1.5rem;
-    color: #F5F0E8; letter-spacing: .01em; opacity: 0; animation: baWordIn .6s ease .2s forwards; }
+  .ba-loader-word { margin-top: 22px; font-family: 'Playfair Display', Georgia, serif; font-size: var(--fs-2xl);
+    color: #F5F0E8; letter-spacing: normal; opacity: 0; animation: baWordIn .6s ease .2s forwards; }
   .ba-loader-word span { color: #9B6EE0; font-style: italic; }
   #ba-loader.ba-hide { opacity: 0; visibility: hidden; transition: opacity .5s ease; }
   @keyframes baSpin { to { transform: rotate(360deg); } }

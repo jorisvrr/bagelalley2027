@@ -4,31 +4,31 @@
     position: fixed;
     right: clamp(1rem, 3vw, 2rem);
     bottom: clamp(1rem, 3vw, 2rem);
-    z-index: 60;
+    z-index: var(--z-ident);
     display: inline-flex; align-items: center; gap: 0;
     text-decoration: none;
     color: #9a9ca1;                 /* kleur van "jorisvrr" op donkere footer */
     opacity: 0; transform: translateY(12px); pointer-events: none;
     transition: opacity .4s ease, transform .4s ease, color .35s ease;
   }
-  #ident.show { opacity: .4; transform: none; pointer-events: auto; }          /* subtiel */
-  #ident:hover, #ident:focus-visible { opacity: .95; color: #ececef; }         /* duidelijker */
+  #ident.show { opacity: .4; transform: none; pointer-events: auto; }          #ident:focus-visible { opacity: .95; color: #ececef; }          @media (hover: hover) and (pointer: fine) { /* subtiel */
+  #ident:hover { opacity: .95; color: #ececef; } }         /* duidelijker */
 
   .ident__cur {
     display: block; height: 40px; width: auto;
     filter: grayscale(1);           /* logo blijft grijs; bij een donker logo: brightness(1.7) */
     transition: filter .35s ease;
   }
-  #ident:hover .ident__cur { filter: grayscale(1) brightness(1.15); }
+  @media (hover: hover) and (pointer: fine) { #ident:hover .ident__cur { filter: grayscale(1) brightness(1.15); } }
 
   .ident__name {
     font-family: ui-monospace, "Space Mono", monospace;
-    font-size: .75rem; letter-spacing: .1em; white-space: nowrap;
+    font-size: var(--fs-xs); letter-spacing: var(--track-label); white-space: nowrap;
     max-width: 0; opacity: 0; overflow: hidden;
     transition: max-width .4s ease, opacity .35s ease, margin .4s ease;
   }
-  #ident:hover .ident__name,
   #ident:focus-visible .ident__name { max-width: 140px; opacity: 1; margin-right: .55rem; }
+  @media (hover: hover) and (pointer: fine) { #ident:hover .ident__name { max-width: 140px; opacity: 1; margin-right: .55rem; } }
 
   /* soepele wissel met de chat-widget (alleen relevant op pagina's met chat) */
   #chatWrapper { transition: opacity .35s ease; }
