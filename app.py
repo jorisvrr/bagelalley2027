@@ -29,12 +29,30 @@ app.config.update(
     MAX_CONTENT_LENGTH=64 * 1024,  # alleen kleine JSON-berichten, geen uploads
 )
 
+# Content-Security-Policy. 'unsafe-inline' is nodig voor de inline scripts en onclick-handlers.
+# Google Maps mag alleen als iframe (laadt pas na een tik). Nieuwe externe dienst? Hier toevoegen.
+CSP = "; ".join([
+    "default-src 'self'",
+    "script-src 'self' 'unsafe-inline'",
+    "style-src 'self' 'unsafe-inline'",
+    "img-src 'self' data:",
+    "font-src 'self'",
+    "connect-src 'self'",
+    "frame-src https://www.google.com",
+    "frame-ancestors 'self'",
+    "base-uri 'self'",
+    "form-action 'self'",
+    "object-src 'none'",
+    "manifest-src 'self'",
+])
+
 @app.after_request
 def _security_headers(resp):
     resp.headers.setdefault("X-Content-Type-Options", "nosniff")
     resp.headers.setdefault("X-Frame-Options", "SAMEORIGIN")
     resp.headers.setdefault("Referrer-Policy", "strict-origin-when-cross-origin")
     resp.headers.setdefault("Permissions-Policy", "camera=(), microphone=(), geolocation=()")
+    resp.headers.setdefault("Content-Security-Policy", CSP)
     if os.environ.get("VERCEL"):
         resp.headers.setdefault("Strict-Transport-Security", "max-age=31536000")
     return resp
