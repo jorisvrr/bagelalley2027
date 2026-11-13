@@ -6,35 +6,42 @@ Regelnummers gelden voor branch `polish-2027`. Na antwoord: tekst aanpassen op d
 ## 1. Naam van de chatbot (Sonja)
 De chat heet "Sonja" en zegt nu "de automatische hulp van Bagel Alley" (niet meer "de eigenares").
 Vraag: mag de naam Sonja blijven, of liever geen naam?
-- `app.py:507` `"avatar_naam": "Sonja"` (ook de initialen `"avatar_initialen": "SO"` op de regel eronder)
-- `templates/index.html:1417` welkomstbericht
+- `app.py:510` `"avatar_naam": "Sonja"` (ook de initialen `"avatar_initialen": "SO"` op de regel eronder). De chat noemt zich nu "de automatische hulp".
+- `templates/index.html:1423` welkomstbericht
 
 ## 2. "Donderdag open!"
 Vraag: is dit nog nieuws, of mag het weg (of vervangen door bijv. "Keuken open tot 15:30")?
-- `templates/index.html:634` infostrook op de homepage
+- `templates/index.html:636` infostrook op de homepage
 
-## 3. Feiten voor de chatbot
-De chat antwoordt nu "Dat weet ik niet. Bel ons op 070-514 61 16" op deze vragen. Vraag per punt: ja/nee en eventuele details.
-- Pinnen (alleen pin, ook contant?)
-- Wifi voor gasten?
-- Rolstoeltoegankelijk (drempel, toilet)?
-- Vegan opties (nu krijgt "vegan?" het allergie-antwoord; op de kaart staan twee vegan soepen)
-- Parkeren: waar precies, betaald/blauwe zone? (nu: "parkeerplekken in de omgeving van de Langstraat")
+## 3. Chatbot: veilige antwoorden
+Voor deze onderwerpen herkent de chat de vraag, maar zegt hij nog: "Goede vraag over ..., dat vertellen we je graag even persoonlijk: bel 070-514 61 16."
+Invullen op één plek: `app.py:679` (`CHAT_FEITEN`). Zet daar het bevestigde antwoord (kort, 1 tot 3 zinnen) in plaats van `None`; de chat gebruikt het dan meteen.
 
-Plekken:
-- `app.py:684` antwoord parkeren
-- `app.py:770` vegan valt nu onder het allergie-antwoord
-- `app.py:806` standaardantwoord voor onbekende vragen; nieuwe antwoorden toevoegen in `KENNISBANK` en `reageer_zonder_ai()`
+| intent | vraag aan de klant |
+|---|---|
+| `feestdagen` | Zijn jullie open met kerst, oud en nieuw, pasen, pinksteren, koningsdag, hemelvaart? Welke tijden? (nu: "Op feestdagen kunnen onze tijden afwijken" plus bellen) |
+| `parking` | Waar kun je parkeren, betaald of blauwe zone? (nu: bellen plus routelink) |
+| `huisdieren` | Mogen honden en andere huisdieren mee, binnen en op het terras? (eerder in de chat genoemd: "toegestaan binnen en op het terras"; volgens de laatste opdracht nog onbevestigd) |
+| `kinderstoel` | Is er een kinderstoel? |
+| `betalen` | Pin, contant, creditcard, Tikkie, Apple Pay? |
+| `wifi_laptop` | Wifi voor gasten? Stopcontacten? Is werken met een laptop welkom? |
+| `terras` | Is er een terras of kun je buiten zitten? |
+| `toegankelijkheid` | Rolstoeltoegankelijk, drempel, aangepast toilet? |
+| `toilet` | Toilet voor gasten, verschoontafel? |
+| `instagram_social` | Instagram/Facebook-account (zie ook punt 4)? |
+| `drukte` | Wanneer is het druk, hoe lang is de wachttijd? |
+
+Ook nog: **vegan** krijgt nu alleen wat op de kaart staat (vegetarische bagels, twee vegan soepen). Zijn er meer vegan opties?
 
 ## 4. Instagram
 Vraag: klopt `@bagelalleywassenaar`? Dan zetten we hem ook op de site en in de structured data.
-- `app.py:228` e-mailfooter
-- `app.py:541` `SOCIAL = [...]` (leeg; voor schema.org `sameAs`)
+- `app.py:231` e-mailfooter
+- `app.py:544` `SOCIAL = [...]` (leeg; voor schema.org `sameAs`)
 
 ## 5. Privacyverklaring
 Er is geen privacyverklaring. Het bestelformulier vraagt naam, e-mail en telefoon. De technische kant is gedaan (lettertypes zelf gehost, Google Maps pas na een tik).
 Vraag: wie levert de tekst? Daarna een link in de footer en in de cookiemelding.
-- `templates/index.html:902` footer-onderkant (link toevoegen)
+- `templates/index.html:904` footer-onderkant (link toevoegen)
 - `templates/_cookie.html:4` tekst cookiemelding
 
 ## 6. Vacatures en het 06-nummer
@@ -49,7 +56,7 @@ Vraag: wordt er nog gezocht, en kloppen deze punten? Van wie is 06-513 43 359 en
 ## 7. Overige [bevestigen]-punten uit AUDIT.md
 - **Menu-intro "Elke dag wisselend aanbod"** (copy 27): klopt dat naast een vaste kaart? `templates/menu.html:258`
 - **"Online reserveren komt binnenkort."** (copy 35): weghalen? `templates/booking.html:261`
-- **Favorieten in de reserveringsmail** (copy 38, E1): "New York Classic" en "Smoked Salmon Deluxe" staan niet op de kaart (wel "Roomkaas" en "Bagel zalm"). Echte namen? `app.py:314-315` en `app.py:390` (nieuwsbrief). Wordt pas verstuurd als online reserveren aan gaat.
+- **Favorieten in de reserveringsmail** (copy 38, E1): "New York Classic" en "Smoked Salmon Deluxe" staan niet op de kaart (wel "Roomkaas" en "Bagel zalm"). Echte namen? `app.py:317-318` en `app.py:393` (nieuwsbrief). Wordt pas verstuurd als online reserveren aan gaat.
 
 ## 8. Menukaart (afbeeldingen en tekstversie)
 De tekstversie op /menu (`menukaart.py`) is letterlijk van de gedrukte kaart overgenomen. Bewust weggelaten of onzeker:
