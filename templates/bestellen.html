@@ -119,6 +119,16 @@
     .btn-next:hover, .btn-submit:hover { background: var(--purple3); transform: translateY(-1px); }
     .btn-next:disabled, .btn-submit:disabled { opacity: .5; cursor: not-allowed; transform: none; }
 
+    button.size-opt, button.slot, button.toggle-card { font: inherit; color: inherit; background: transparent; -webkit-appearance: none; appearance: none; }
+    button.toggle-card { width: 100%; text-align: left; }
+    .size-opt:focus-visible, .slot:focus-visible, .toggle-card:focus-visible { outline: 2px solid var(--purple); outline-offset: 2px; }
+    .order-result { border-radius: 10px; padding: 1.2rem 1.4rem; font-size: .9rem; line-height: 1.6; }
+    .order-result strong { display: block; font-family: 'Playfair Display', serif; font-size: 1.1rem; margin-bottom: .4rem; }
+    .order-ok { background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; }
+    .order-fail { background: #fff8eb; color: #5c3b00; border: 1px solid #f3d9a4; }
+    .order-fail pre { white-space: pre-wrap; font-family: inherit; font-size: .85rem; background: #fff; border: 1px solid #f3d9a4; border-radius: 8px; padding: .8rem 1rem; margin: .8rem 0; max-height: 260px; overflow: auto; color: var(--text); }
+    .order-actions { display: flex; flex-wrap: wrap; gap: .6rem; margin-top: .4rem; }
+    .order-actions a, .order-actions button { display: inline-flex; align-items: center; gap: .45rem; min-height: 44px; padding: .55rem 1rem; border-radius: 8px; border: 1.5px solid rgba(92,59,0,.25); background: #fff; color: #5c3b00; font: inherit; font-size: .88rem; font-weight: 500; text-decoration: none; cursor: pointer; }
     .form-error { background: #fff2f2; color: #c33; border: 1px solid #fcc; border-radius: 8px; padding: .75rem 1rem; font-size: .85rem; display: none; }
     .form-success { background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; border-radius: 8px; padding: 1.4rem 1.6rem; font-size: .9rem; text-align: center; }
     .form-success strong { display: block; font-size: 1.1rem; margin-bottom: .5rem; font-family: 'Playfair Display', serif; }
@@ -219,13 +229,13 @@
 
       <!-- STAP 2: EXTRA OPTIES -->
       <div class="step-panel" data-panel="2">
-        <div class="toggle-card" id="tekstToggleCard" onclick="toggleTekst()">
+        <button type="button" class="toggle-card" id="tekstToggleCard" role="switch" aria-checked="false" onclick="toggleTekst()">
           <div class="toggle-card-text">
             <strong>Tekst op taart</strong>
             <span>+ €6,00, bijv. "Gefeliciteerd Anne!"</span>
           </div>
           <div class="toggle-switch" id="tekstToggle"></div>
-        </div>
+        </button>
         <div class="form-group" id="tekstVeldWrap" style="display:none;">
           <label class="form-label" for="tekstOpTaart">Gewenste tekst <span>*</span></label>
           <input type="text" id="tekstOpTaart" class="form-input" placeholder="Bijv. Gefeliciteerd Anne!" maxlength="40">
@@ -281,16 +291,26 @@
           <label class="form-label" for="opmerkingen">Aanvullende opmerkingen</label>
           <textarea id="opmerkingen" class="form-textarea" placeholder="Eventuele allergieën, wensen of andere opmerkingen…"></textarea>
         </div>
-        <div class="form-success" id="successBox" style="display:none;" role="status">
-          <strong>Bijna klaar: verstuur de e-mail</strong>
-          Je e-mailprogramma opent met je bestelling erin. Verstuur die e-mail naar
-          <a href="mailto:info@bagelalley.nl" id="orderMailLink" style="color:inherit;font-weight:600;">info@bagelalley.nl</a>,
-          dan bevestigen we je bestelling zo snel mogelijk. Opent er niets? Bel ons op
-          <a href="tel:+31705146116" style="color:inherit;font-weight:600;">070-514 61 16</a>.
+        <div class="form-error" id="error4" role="alert"></div>
+        <div class="order-result order-ok" id="orderOk" hidden role="status" tabindex="-1">
+          <strong>Bedankt, je bestelling is verstuurd</strong>
+          We hebben je bestelling ontvangen en bevestigen hem zo snel mogelijk per e-mail.
+          Vragen? Bel ons op <a href="tel:+31705146116" style="color:inherit;font-weight:600;">070-514 61 16</a>.
+        </div>
+        <div class="order-result order-fail" id="orderFail" hidden role="alert" tabindex="-1">
+          <strong>Nog niet verstuurd</strong>
+          Je bestelling kon niet automatisch naar ons worden verstuurd. Stuur hem op een van deze manieren, dan bevestigen we hem zo snel mogelijk:
+          <pre id="orderText"></pre>
+          <div class="order-actions">
+            <button type="button" id="orderCopy">Kopieer bestelling</button>
+            <a id="orderWhatsApp" href="#" target="_blank" rel="noopener">WhatsApp 06-513 43 359</a>
+            <a id="orderMail" href="mailto:info@bagelalley.nl">Mail naar info@bagelalley.nl</a>
+            <a href="tel:+31705146116">Bel 070-514 61 16</a>
+          </div>
         </div>
         <div class="step-nav" id="step4Nav">
           <button class="btn-prev" onclick="goToStep(3)">← Vorige</button>
-          <button class="btn-submit" onclick="plaatsBestelling()">Bestelling versturen per e-mail</button>
+          <button class="btn-submit" id="orderSubmit" onclick="plaatsBestelling()">Bestelling versturen</button>
         </div>
       </div>
 
@@ -344,8 +364,8 @@
   // ---------- PRODUCTDATA ----------
   const producten = [
     { id: 'apple',   naam: 'Apple Pie',       klein: 32.50, groot: 45.00 },
-    { id: 'choco',   naam: 'Chocolate Cake',  klein: 32.50, groot: 45.00 },
-    { id: 'oreo',    naam: 'Oreo Cake',       klein: 32.50, groot: 45.00 },
+    { id: 'choco',   naam: 'Chocoladetaart',  klein: 32.50, groot: 45.00 },
+    { id: 'oreo',    naam: 'Oreo taart',       klein: 32.50, groot: 45.00 },
     { id: 'redvel',  naam: 'Red Velvet Cake', klein: 32.50, groot: 45.00 },
     { id: 'carrot',  naam: 'Carrot Cake',     klein: null,  groot: 45.00 }, // alleen groot
   ];
@@ -363,9 +383,9 @@
 
     let sizesHtml = '<div class="size-options">';
     if (p.klein !== null) {
-      sizesHtml += `<div class="size-opt" data-formaat="klein" data-id="${p.id}">Klein<span class="size-opt-price">€${p.klein.toFixed(2).replace('.', ',')}</span></div>`;
+      sizesHtml += `<button type="button" class="size-opt" aria-pressed="false" data-formaat="klein" data-id="${p.id}" aria-label="${p.naam}, klein, €${p.klein.toFixed(2).replace('.', ',')}">Klein<span class="size-opt-price">€${p.klein.toFixed(2).replace('.', ',')}</span></button>`;
     }
-    sizesHtml += `<div class="size-opt" data-formaat="groot" data-id="${p.id}">Groot<span class="size-opt-price">€${p.groot.toFixed(2).replace('.', ',')}</span></div>`;
+    sizesHtml += `<button type="button" class="size-opt" aria-pressed="false" data-formaat="groot" data-id="${p.id}" aria-label="${p.naam}, groot, €${p.groot.toFixed(2).replace('.', ',')}">Groot<span class="size-opt-price">€${p.groot.toFixed(2).replace('.', ',')}</span></button>`;
     sizesHtml += '</div>';
 
     card.innerHTML = `
@@ -391,13 +411,14 @@
       // zelfde taart + formaat nogmaals aangeklikt → weer deselecteren
       delete gekozenProducten[id];
       card.classList.remove('gekozen');
-      card.querySelectorAll('.size-opt').forEach(o => o.classList.remove('gekozen'));
+      card.querySelectorAll('.size-opt').forEach(o => { o.classList.remove('gekozen'); o.setAttribute('aria-pressed', 'false'); });
     } else {
       // taart toevoegen of het formaat wisselen (meerdere taarten mogelijk)
       gekozenProducten[id] = { id, naam: product.naam, formaat, prijs };
       card.classList.add('gekozen');
-      card.querySelectorAll('.size-opt').forEach(o => o.classList.remove('gekozen'));
+      card.querySelectorAll('.size-opt').forEach(o => { o.classList.remove('gekozen'); o.setAttribute('aria-pressed', 'false'); });
       opt.classList.add('gekozen');
+      opt.setAttribute('aria-pressed', 'true');
     }
 
     document.getElementById('error1').style.display = 'none';
@@ -408,6 +429,7 @@
   function toggleTekst() {
     tekstAan = !tekstAan;
     document.getElementById('tekstToggle').classList.toggle('aan', tekstAan);
+    document.getElementById('tekstToggleCard').setAttribute('aria-checked', String(tekstAan));
     document.getElementById('tekstVeldWrap').style.display = tekstAan ? 'flex' : 'none';
     if (!tekstAan) {
       document.getElementById('tekstOpTaart').value = '';
@@ -421,12 +443,16 @@
   const tijdsloten = ['10:00','10:30','11:00','11:30','12:00','12:30','13:00','13:30','14:00','14:30','15:00','15:30'];
   const slotGrid = document.getElementById('slotGrid');
   tijdsloten.forEach(tijd => {
-    const el = document.createElement('div');
+    const el = document.createElement('button');
+    el.type = 'button';
     el.className = 'slot';
     el.textContent = tijd;
+    el.setAttribute('aria-pressed', 'false');
+    el.setAttribute('aria-label', 'Afhalen om ' + tijd);
     el.addEventListener('click', () => {
-      document.querySelectorAll('.slot').forEach(s => s.classList.remove('gekozen'));
+      document.querySelectorAll('.slot').forEach(s => { s.classList.remove('gekozen'); s.setAttribute('aria-pressed', 'false'); });
       el.classList.add('gekozen');
+      el.setAttribute('aria-pressed', 'true');
       gekozenSlot = tijd;
       document.getElementById('error3').style.display = 'none';
     });
@@ -537,36 +563,86 @@
     document.getElementById('summaryTotal').textContent = '€' + total.toFixed(2).replace('.', ',');
   }
 
-  // ---------- BESTELLING VERSTUREN (via e-mail naar de zaak) ----------
-  // Er is (nog) geen backend voor bestellingen: de klant verstuurt de bestelling
-  // zelf per e-mail, zodat er nooit een bestelling verloren gaat.
+  // ---------- BESTELLING VERSTUREN ----------
+  // De server verstuurt de bestelling per mail naar de zaak. "Bedankt" verschijnt
+  // alleen als de server bevestigt dat de mail is verstuurd. Lukt dat niet, dan
+  // krijgt de klant de bestelling als tekst met andere manieren om hem te sturen.
   const BESTEL_EMAIL = 'info@bagelalley.nl';
+  const BESTEL_WHATSAPP = '31651343359';
   const euro = n => '€' + n.toFixed(2).replace('.', ',');
+  const veld = id => document.getElementById(id).value.trim();
 
-  function plaatsBestelling() {
-    if (!valideerStap1()) { goToStep(1); return; }
-    if (!valideerStap2()) { goToStep(2); return; }
-    if (!valideerStap3()) { goToStep(3); return; }
-
-    const v = id => document.getElementById(id).value.trim();
+  function bestellingTekst() {
     const regels = Object.values(gekozenProducten).map(p =>
       `- ${p.naam} (${p.formaat === 'klein' ? 'Klein' : 'Groot'}): ${euro(p.prijs)}`);
     let totaal = Object.values(gekozenProducten).reduce((t, p) => t + p.prijs, 0);
-    if (tekstAan) { regels.push(`- Tekst op taart: "${v('tekstOpTaart')}" (${euro(6)})`); totaal += 6; }
-    const body = [
-      'Hallo Bagel Alley,', '', 'Ik wil graag de volgende bestelling plaatsen:', '',
+    if (tekstAan) { regels.push(`- Tekst op taart: "${veld('tekstOpTaart')}" (${euro(6)})`); totaal += 6; }
+    return [
+      'Taartbestelling Bagel Alley', '',
       ...regels, '', `Totaal: ${euro(totaal)}`, '',
-      `Afhalen op: ${v('afhaaldatum')} om ${gekozenSlot}`,
-      `Naam: ${v('naam')}`, `E-mail: ${v('email')}`, `Telefoon: ${v('telefoon')}`,
-      '', `Opmerkingen: ${v('opmerkingen') || '-'}`,
+      `Afhalen op: ${veld('afhaaldatum')} om ${gekozenSlot}`,
+      `Naam: ${veld('naam')}`, `E-mail: ${veld('email')}`, `Telefoon: ${veld('telefoon')}`,
+      `Opmerkingen: ${veld('opmerkingen') || '-'}`,
     ].join('\n');
-    const href = `mailto:${BESTEL_EMAIL}?subject=${encodeURIComponent('Taartbestelling ' + v('naam') + ' (afhalen ' + v('afhaaldatum') + ')')}&body=${encodeURIComponent(body)}`;
+  }
 
-    document.getElementById('orderMailLink').href = href;
-    document.getElementById('step4Nav').style.display = 'none';
-    document.getElementById('successBox').style.display = 'block';
-    document.querySelector('.order-card-body').scrollIntoView({ behavior: 'smooth', block: 'start' });
-    window.location.href = href;
+  function toonNietVerstuurd() {
+    const tekst = bestellingTekst();
+    document.getElementById('orderText').textContent = tekst;
+    document.getElementById('orderWhatsApp').href = `https://wa.me/${BESTEL_WHATSAPP}?text=${encodeURIComponent(tekst)}`;
+    document.getElementById('orderMail').href =
+      `mailto:${BESTEL_EMAIL}?subject=${encodeURIComponent('Taartbestelling ' + veld('naam'))}&body=${encodeURIComponent(tekst)}`;
+    const box = document.getElementById('orderFail');
+    box.hidden = false;
+    box.focus({ preventScroll: true });
+    box.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  document.getElementById('orderCopy').addEventListener('click', async (e) => {
+    const knop = e.currentTarget, tekst = document.getElementById('orderText').textContent;
+    try { await navigator.clipboard.writeText(tekst); }
+    catch {
+      const r = document.createRange(); r.selectNodeContents(document.getElementById('orderText'));
+      const sel = getSelection(); sel.removeAllRanges(); sel.addRange(r); document.execCommand('copy');
+    }
+    knop.textContent = 'Gekopieerd';
+    setTimeout(() => { knop.textContent = 'Kopieer bestelling'; }, 2500);
+  });
+
+  async function plaatsBestelling() {
+    if (!valideerStap1()) { goToStep(1); return; }
+    if (!valideerStap2()) { goToStep(2); return; }
+    if (!valideerStap3()) { goToStep(3); return; }
+    const knop = document.getElementById('orderSubmit');
+    const fout = document.getElementById('error4');
+    fout.style.display = 'none';
+    document.getElementById('orderFail').hidden = true;
+    knop.disabled = true; knop.textContent = 'Bezig met versturen…';
+    const payload = {
+      taarten: Object.values(gekozenProducten).map(p => ({ id: p.id, formaat: p.formaat })),
+      tekst: tekstAan ? veld('tekstOpTaart') : '',
+      afhaaldatum: veld('afhaaldatum'), afhaaltijd: gekozenSlot,
+      naam: veld('naam'), email: veld('email'), telefoon: veld('telefoon'), opmerkingen: veld('opmerkingen'),
+    };
+    let data = null;
+    try {
+      const r = await fetch('/bestellen/verstuur', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+      data = await r.json().catch(() => null);
+    } catch { data = null; }
+    knop.disabled = false; knop.textContent = 'Bestelling versturen';
+    if (data && data.succes === true) {
+      document.getElementById('step4Nav').style.display = 'none';
+      const ok = document.getElementById('orderOk');
+      ok.hidden = false; ok.focus({ preventScroll: true });
+      ok.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      return;
+    }
+    if (data && data.reden === 'ongeldig') {
+      fout.textContent = data.fout || 'Controleer je gegevens.';
+      fout.style.display = 'block';
+      return;
+    }
+    toonNietVerstuurd();
   }
 </script>
 

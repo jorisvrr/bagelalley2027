@@ -5,7 +5,8 @@ import json
 import re
 import requests
 import sqlite3
-from datetime import datetime, date
+from datetime import datetime, date, timedelta
+import html as _html
 # endregion
 
 # Statische bestanden staan in public/static: Vercel serveert public/ via zijn CDN
@@ -334,52 +335,44 @@ def newsletter_html(naam: str = "") -> str:
 </body></html>"""
 
 
-def stuur_bevestigingsmail(naam: str, email: str, datum: str, tijd: str, gasten: int):
-    """Stuurt HTML bevestigingsmail via SendGrid REST API."""
+def sendgrid_verstuur(naar: str, onderwerp: str, html_inhoud: str, antwoord_naar: str = "info@bagelalley.nl") -> bool:
+    """Verstuurt een HTML-mail via SendGrid. Geeft alleen True terug als SendGrid
+    de mail heeft geaccepteerd (status 200/202). Zonder API-key: False."""
+    if not SENDGRID_API_KEY:
+        print("[MAIL] SENDGRID_API_KEY ontbreekt, mail niet verstuurd")
+        return False
     try:
-        import requests as req_lib
-        datum_display = datum_nl(datum)
         payload = {
-            "personalizations": [{"to": [{"email": email}]}],
+            "personalizations": [{"to": [{"email": naar}]}],
             "from": {"email": MAIL_VAN, "name": MAIL_VAN_NAAM},
-            "reply_to": {"email": "info@bagelalley.nl"},
-            "subject": f"Reservering bevestigd: {datum_display} om {tijd} · Bagel Alley",
-            "content": [{"type": "text/html", "value": mail_html(naam, datum, tijd, gasten)}]
+            "reply_to": {"email": antwoord_naar},
+            "subject": onderwerp,
+            "content": [{"type": "text/html", "value": html_inhoud}],
         }
-        resp = req_lib.post(
-            "https://api.sendgrid.com/v3/mail/send",
-            json=payload,
-            headers={"Authorization": f"Bearer {SENDGRID_API_KEY}", "Content-Type": "application/json"},
-            timeout=10
-        )
-        print(f"[MAIL] Verstuurd naar {email} | status {resp.status_code}")
-        if resp.status_code not in (200, 202):
-            print(f"[MAIL FOUT] {resp.text}")
-    except Exception as e:
-        print(f"[MAIL FOUT] {e}")
-
-def stuur_newsletter(email: str, naam: str = ""):
-    """Stuurt de maandelijkse nieuwsbrief (Bagel van de Maand) via SendGrid."""
-    try:
-        import requests as req_lib
-        payload = {
-            "personalizations": [{"to": [{"email": email}]}],
-            "from": {"email": MAIL_VAN, "name": MAIL_VAN_NAAM},
-            "reply_to": {"email": "info@bagelalley.nl"},
-            "subject": f"Bagel van de maand: {BAGEL_VD_MAAND['naam']} \U0001F96F Bagel Alley",
-            "content": [{"type": "text/html", "value": newsletter_html(naam)}],
-        }
-        resp = req_lib.post(
+        resp = requests.post(
             "https://api.sendgrid.com/v3/mail/send",
             json=payload,
             headers={"Authorization": f"Bearer {SENDGRID_API_KEY}", "Content-Type": "application/json"},
             timeout=10,
         )
-        print(f"[NEWSLETTER] Verstuurd naar {email} | status {resp.status_code}")
-        if resp.status_code not in (200, 202):
-            print(f"[NEWSLETTER FOUT] {resp.text}")
+        ok = resp.status_code in (200, 202)
+        print(f"[MAIL] {onderwerp[:40]} -> status {resp.status_code}")
+        if not ok:
+            print(f"[MAIL FOUT] {resp.text[:300]}")
+        return ok
     except Exception as e:
-        print(f"[NEWSLETTER FOUT] {e}")
+        print(f"[MAIL FOUT] {e}")
+        return False
+
+
+def stuur_bevestigingsmail(naam: str, email: str, datum: str, tijd: str, gasten: int):
+    """Stuurt de reserverings-bevestiging (alleen relevant als ONLINE_RESERVEREN aan staat)."""
+    sendgrid_verstuur(email, f"Reservering bevestigd: {datum_nl(datum)} om {tijd} · Bagel Alley",
+                      mail_html(naam, datum, tijd, gasten))
+
+def stuur_newsletter(email: str, naam: str = ""):
+    """Stuurt de maandelijkse nieuwsbrief (Bagel van de Maand) via SendGrid."""
+    sendgrid_verstuur(email, f"Bagel van de maand: {BAGEL_VD_MAAND['naam']} · Bagel Alley", newsletter_html(naam))
 
 # endregion
 
@@ -464,7 +457,9 @@ BEDRIJF = {
 # region ── SEO / STRUCTURED DATA ───────────────────────────────
 # Canonieke domein. Zet desnoods de env var SITE_URL als je een ander
 # (sub)domein gebruikt, bijv. https://bagelalley.up.railway.app
-SITE_URL = os.environ.get("SITE_URL", "https://bagelalley.nl").rstrip("/")
+SITE_URL = (os.environ.get("SITE_URL")
+            or (("https://" + os.environ["VERCEL_PROJECT_PRODUCTION_URL"]) if os.environ.get("VERCEL_PROJECT_PRODUCTION_URL") else "")
+            or "https://bagelalley.nl").rstrip("/")
 
 # Online reserveren aan/uit. Standaard UIT: reserveren gaat telefonisch.
 # Weer aanzetten: env var ONLINE_RESERVEREN=1 op Railway (geen codewijziging nodig).
@@ -761,6 +756,124 @@ def menukaart_img(filename):
     from flask import send_from_directory
     menu_dir = os.path.join(app.static_folder, "menu")
     return send_from_directory(menu_dir, filename)
+
+
+# ── TAARTBESTELLING ──────────────────────────────────────────
+ORDER_MAIL_TO = os.environ.get("ORDER_MAIL_TO", "info@bagelalley.nl")
+TAARTEN = {  # id: (naam, prijs klein, prijs groot); None = formaat niet leverbaar
+    "apple":  ("Apple Pie", 32.50, 45.00),
+    "choco":  ("Chocoladetaart", 32.50, 45.00),
+    "oreo":   ("Oreo taart", 32.50, 45.00),
+    "redvel": ("Red Velvet Cake", 32.50, 45.00),
+    "carrot": ("Carrot Cake", None, 45.00),
+}
+TEKST_OP_TAART_PRIJS = 6.00
+AFHAAL_SLOTS = ["10:00", "10:30", "11:00", "11:30", "12:00", "12:30",
+                "13:00", "13:30", "14:00", "14:30", "15:00", "15:30"]
+_TEL_RE = re.compile(r"^\+?[0-9][0-9 ()\-]{7,19}$")
+
+
+def nu_amsterdam() -> datetime:
+    """Huidige tijd in Nederland (val terug op servertijd als tzdata ontbreekt)."""
+    try:
+        from zoneinfo import ZoneInfo
+        return datetime.now(ZoneInfo("Europe/Amsterdam"))
+    except Exception:
+        return datetime.now()
+
+
+def _euro(bedrag: float) -> str:
+    return "€" + f"{bedrag:.2f}".replace(".", ",")
+
+
+def valideer_bestelling(data: dict):
+    """Controleert een taartbestelling. Geeft (bestelling, None) of (None, foutmelding)."""
+    taarten_in = data.get("taarten")
+    if not isinstance(taarten_in, list) or not 1 <= len(taarten_in) <= len(TAARTEN):
+        return None, "Kies minimaal één taart."
+    regels, totaal, gezien = [], 0.0, set()
+    for t in taarten_in:
+        if not isinstance(t, dict):
+            return None, "Ongeldige taart."
+        tid = _clean_str(t.get("id"), 20)
+        formaat = _clean_str(t.get("formaat"), 10)
+        if tid not in TAARTEN or tid in gezien or formaat not in ("klein", "groot"):
+            return None, "Ongeldige taart of formaat."
+        naam, klein, groot = TAARTEN[tid]
+        prijs = klein if formaat == "klein" else groot
+        if prijs is None:
+            return None, f"{naam} is alleen in groot formaat leverbaar."
+        gezien.add(tid)
+        regels.append((naam, "Klein" if formaat == "klein" else "Groot", prijs))
+        totaal += prijs
+    tekst = _clean_str(data.get("tekst"), 40)
+    if tekst:
+        totaal += TEKST_OP_TAART_PRIJS
+    datum = _valid_iso_date(data.get("afhaaldatum"))
+    vandaag = nu_amsterdam().date()
+    if datum is None or datum <= vandaag or datum > vandaag + timedelta(days=365):
+        return None, "Kies een afhaaldatum vanaf morgen."
+    if datum.weekday() == 1:
+        return None, "Op dinsdag zijn we gesloten. Kies een andere afhaaldatum."
+    tijd = _clean_str(data.get("afhaaltijd"), 5)
+    if tijd not in AFHAAL_SLOTS:
+        return None, "Kies een afhaaltijd."
+    naam = _clean_str(data.get("naam"), 100)
+    email = _clean_str(data.get("email"), 150)
+    telefoon = _clean_str(data.get("telefoon"), 30)
+    opmerkingen = _clean_str(data.get("opmerkingen"), 1000)
+    if not naam:
+        return None, "Vul je naam in."
+    if not _EMAIL_RE.match(email):
+        return None, "Vul een geldig e-mailadres in."
+    if not _TEL_RE.match(telefoon):
+        return None, "Vul een geldig telefoonnummer in."
+    return {"regels": regels, "tekst": tekst, "totaal": totaal, "datum": datum, "tijd": tijd,
+            "naam": naam, "email": email, "telefoon": telefoon, "opmerkingen": opmerkingen}, None
+
+
+def bestelling_mail_html(b: dict) -> str:
+    e = _html.escape
+    rijen = "".join(
+        f"<tr><td style='padding:6px 0;'>{e(n)} ({f})</td><td style='padding:6px 0;text-align:right;'>{_euro(p)}</td></tr>"
+        for n, f, p in b["regels"])
+    if b["tekst"]:
+        rijen += (f"<tr><td style='padding:6px 0;'>Tekst op taart: &ldquo;{e(b['tekst'])}&rdquo;</td>"
+                  f"<td style='padding:6px 0;text-align:right;'>{_euro(TEKST_OP_TAART_PRIJS)}</td></tr>")
+    return f"""<!DOCTYPE html><html lang="nl"><head><meta charset="UTF-8"></head>
+<body style="margin:0;padding:24px;background:#F5F0E8;font-family:Arial,sans-serif;color:#1E1828;">
+<table width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;margin:0 auto;background:#ffffff;border-radius:12px;">
+<tr><td style="padding:24px 28px;">
+<h1 style="font-family:Georgia,serif;font-size:22px;margin:0 0 4px;">Nieuwe taartbestelling</h1>
+<p style="margin:0 0 18px;color:#6B5F7A;font-size:14px;">Via het bestelformulier op de website.</p>
+<table width="100%" cellpadding="0" cellspacing="0" style="font-size:14px;border-top:1px solid #EDE6D6;border-bottom:1px solid #EDE6D6;">{rijen}
+<tr><td style="padding:10px 0;font-weight:bold;">Totaal</td><td style="padding:10px 0;text-align:right;font-weight:bold;">{_euro(b['totaal'])}</td></tr></table>
+<p style="font-size:14px;line-height:1.7;margin:18px 0 0;">
+<strong>Afhalen:</strong> {e(datum_nl(b['datum'].isoformat()))} om {e(b['tijd'])}<br>
+<strong>Naam:</strong> {e(b['naam'])}<br>
+<strong>E-mail:</strong> {e(b['email'])}<br>
+<strong>Telefoon:</strong> {e(b['telefoon'])}<br>
+<strong>Opmerkingen:</strong> {e(b['opmerkingen']) or '-'}</p>
+<p style="font-size:13px;color:#6B5F7A;margin:18px 0 0;">Beantwoord deze mail om de klant te bevestigen.</p>
+</td></tr></table></body></html>"""
+
+
+@app.route("/bestellen/verstuur", methods=["POST"])
+@limiter.limit("5 per minute")
+def bestelling_verstuur():
+    data = request.get_json(silent=True) or {}
+    bestelling, fout = valideer_bestelling(data)
+    if fout:
+        return jsonify({"succes": False, "reden": "ongeldig", "fout": fout}), 400
+    if not SENDGRID_API_KEY:
+        return jsonify({"succes": False, "reden": "niet_verstuurd",
+                        "fout": "De bestelling kon niet automatisch worden verstuurd."}), 503
+    onderwerp = f"Taartbestelling {bestelling['naam']} (afhalen {bestelling['datum'].strftime('%d-%m-%Y')} {bestelling['tijd']})"
+    if not sendgrid_verstuur(ORDER_MAIL_TO, onderwerp, bestelling_mail_html(bestelling), antwoord_naar=bestelling["email"]):
+        return jsonify({"succes": False, "reden": "niet_verstuurd",
+                        "fout": "De bestelling kon niet automatisch worden verstuurd."}), 502
+    print(f"[BESTELLING] {bestelling['naam']} | {bestelling['datum']} {bestelling['tijd']} | {_euro(bestelling['totaal'])}")
+    return jsonify({"succes": True})
 
 
 @app.route("/chat", methods=["POST"])
