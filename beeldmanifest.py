@@ -1,7 +1,6 @@
-"""Afbeeldingsmanifest voor pic() in app.py: per origineel pad de WebP/AVIF-varianten.
-Gegenereerd uit public/static/opt/manifest.json. Staat als Python-module naast app.py,
-omdat Vercel de map public/ niet in de Python-functie meeneemt (die serveert hij via de CDN).
-Opnieuw genereren na nieuwe afbeeldingen."""
+"""Afbeeldingsmanifest voor pic() in app.py: per bronpad de WebP/AVIF-varianten in public/static/opt/.
+Staat als Python-module naast app.py, omdat Vercel de map public/ niet in de Python-functie meeneemt.
+De originelen staan buiten de repo (beeldbronnen); daar staat ook het script om dit bestand opnieuw te maken."""
 
 BEELDEN = {'fotos/pexels-amar-28056733.jpg': {'avif': [['opt/fotos-pexels-amar-28056733-800.avif', 800]],
                                     'h': 1200,

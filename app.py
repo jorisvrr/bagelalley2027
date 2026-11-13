@@ -160,7 +160,7 @@ except Exception as e:
     print(f"[MENU] tekstversie niet geladen: {e}")
     MENUKAART = []
 
-# Responsieve afbeeldingen: public/static/opt/manifest.json (WebP/AVIF-varianten).
+# Responsieve afbeeldingen: beeldmanifest.py (WebP/AVIF-varianten in public/static/opt/).
 # pic() geeft een <picture> met srcset, width/height en lazy loading. Zonder manifest
 # valt hij terug op het originele bestand.
 from markupsafe import Markup
