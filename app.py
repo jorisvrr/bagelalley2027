@@ -662,38 +662,287 @@ def link(tekst, url):
     """Maakt een klikbare HTML link met huisstijl. Eigen pagina's (/...) openen in hetzelfde tabblad."""
     extern = url.startswith("http")
     doel = ' target="_blank" rel="noopener"' if extern else ""
-    return f'<a href="{url}"{doel} style="color:#8758ce;font-weight:600;text-decoration:none;border-bottom:1px solid #c9a8f0;">{tekst}</a>'
+    return f'<a href="{url}"{doel} class="chat-link">{tekst}</a>'
 # endregion
 
-# region ── KENNISBANK ──────────────────────────────────────────
-# Alle antwoorden van de chatbot, vul per bedrijf in
+# region ── CHATBOT: KENNIS EN INTENTS ─────────────────────────
+# Antwoorden komen alleen uit: de eigen pagina's, de gedrukte kaart (public/static/menu/),
+# BEDRIJF / BAGEL_VD_MAAND hierboven, en bevestigde antwoorden van de klant.
 _TEL = link("070-514 61 16", "tel:+31705146116")
 _MAIL = link("vrcbagel@gmail.com", "mailto:vrcbagel@gmail.com")
 _ROUTE = "https://www.google.com/maps/search/?api=1&query=Bagel%20Alley%20Langstraat%2042%20Wassenaar"
+_ALLERGIE_SLOT = f'Heb je een allergie? Bel {link("ons even", "tel:+31705146116")}, dan vertellen we precies wat erin zit.'
 
-KENNISBANK = {
-    "openingstijden": "We zijn open op maandag en woensdag t/m zondag van 08:00 tot 16:00. Op dinsdag zijn we gesloten. De keuken sluit om 15:30.",
-    "adres":          f'Je vindt ons aan de Langstraat 42, 2242 KM Wassenaar. Plan je route {link("hier", _ROUTE)}.',
-    "contact":        f"Bel ons op {_TEL} of mail naar {_MAIL}.",
-    "menu":           f'Op de kaart staan bagels, ontbijt, soepen, salades, high tea en tapas. Bekijk {link("de hele kaart", "/menu")}.',
-    "bagels":         f'Een bagel naar keuze kost €2,95, belegd vanaf €4,95. De hele kaart vind je {link("hier", "/menu")}.',
-    "high_tea":       f"High tea kan vanaf 2 personen: Afternoon tea €17,95, Dream tea €27,50, Alley's tea €32,50. Bel {_TEL} om te reserveren.",
-    "tapas":          f'Tapas bagels voor 2 personen: drie gesneden bagels met zes dips, voor €24,95. Bekijk {link("de kaart", "/menu")}.',
-    "takeaway":       f'Alles van de kaart kun je meenemen; bestel aan de kassa. Een hele taart bestel je {link("hier", "/bestellen")}.',
-    "taart":          f'Een hele taart bestel je via {link("het bestelformulier", "/bestellen")}. Je haalt hem op in de zaak aan de Langstraat; bezorgen is niet mogelijk.',
-    "bruidstaart":    f"Gaan jullie trouwen of iets groots vieren? We maken een bruidstaart op maat. Mail ons wat jullie in gedachten hebben via {_MAIL}, of bel {_TEL} voor een direct antwoord.",
-    "koffie":         f'We schenken koffie van La Garanta, met bonen uit Colombia. Koffie kost vanaf €2,75; de hele kaart vind je {link("hier", "/menu")}.',
-    "cadeaubon":      "Cadeaubonnen zijn verkrijgbaar vanaf €5,00, af te halen in de zaak.",
-    "parking":        f'In Wassenaar zijn er parkeerplekken in de omgeving van de Langstraat. Bekijk de route {link("hier", _ROUTE)}.',
-    "allergieen":     f"We hebben een glutenvrije bagel, en haver- of sojamelk voor je koffie. Heb je een allergie? Bel ons even op {_TEL}, dan vertellen we precies wat erin zit.",
-    "groepen":        f"Voor groepen of speciale gelegenheden bel je ons op {_TEL}.",
-    "vacatures":      f'We zoeken mensen voor bediening en keuken. Kijk {link("hier", "/jobs")}.',
-    "keuken":         "De keuken sluit om 15:30.",
-    "kinderen":       "Kinderen zijn van harte welkom; we hebben een kindvriendelijke omgeving.",
-    "huisdieren":     f"Huisdieren zijn toegestaan binnen en op het terras! Voor meer info over huisdieren, bel {_TEL}.",
-    "reserveren":     f"Reserveren gaat op dit moment telefonisch. Bel ons op {_TEL}, dan zetten we een tafel voor je klaar. "
-                      "We zijn bereikbaar op ma en wo t/m zo van 08:00 tot 16:00.",
+# Nog niet bevestigde feiten. Zolang de waarde None is, geeft de chat een veilig antwoord
+# dat het onderwerp herkent en naar de telefoon verwijst. Vul hier het antwoord in zodra
+# de klant het bevestigt (zie CLIENT-TODO.md, "Chatbot: veilige antwoorden").
+CHAT_FEITEN = {
+    "feestdagen":       None,   # openingstijden rond kerst, oud en nieuw, pasen, koningsdag ...
+    "parking":          None,   # waar parkeren, betaald of blauwe zone?
+    "huisdieren":       None,   # honden/huisdieren binnen en op het terras?
+    "kinderstoel":      None,   # kinderstoel aanwezig?
+    "betalen":          None,   # pin, contant, creditcard, tikkie, apple pay?
+    "wifi_laptop":      None,   # wifi voor gasten, stopcontacten, laptop welkom?
+    "terras":           None,   # terras, buiten zitten?
+    "toegankelijkheid": None,   # rolstoel, drempel, mindervalidentoilet?
+    "toilet":           None,   # toilet, verschoontafel?
+    "instagram_social": None,   # instagram / facebook handle?
+    "drukte":           None,   # drukke momenten, wachttijd?
 }
+_ONDERWERP = {
+    "feestdagen": "de feestdagen", "parking": "parkeren", "huisdieren": "huisdieren",
+    "kinderstoel": "een kinderstoel", "betalen": "betalen", "wifi_laptop": "wifi en werken met je laptop",
+    "terras": "het terras", "toegankelijkheid": "toegankelijkheid", "toilet": "het toilet",
+    "instagram_social": "onze social media", "drukte": "hoe druk het is",
+}
+
+
+def _veilig(intent: str) -> str:
+    """Bevestigd antwoord uit CHAT_FEITEN, anders het veilige antwoord met het onderwerp."""
+    if CHAT_FEITEN.get(intent):
+        return CHAT_FEITEN[intent]
+    extra = {
+        "feestdagen": "Op feestdagen kunnen onze tijden afwijken. ",
+        "parking": "",
+    }.get(intent, "")
+    tekst = f"{extra}Goede vraag over {_ONDERWERP[intent]}, dat vertellen we je graag even persoonlijk: bel {_TEL}."
+    if intent == "parking":
+        tekst += f' Je route plan je {link("hier", _ROUTE)}.'
+    return tekst
+
+
+_DAGNAMEN = ["maandag", "dinsdag", "woensdag", "donderdag", "vrijdag", "zaterdag", "zondag"]
+_DAG_EN = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"]
+
+
+def _tijden(dag: int):
+    return BEDRIJF["openingstijden"].get(dag)
+
+
+def _volgende_open(vanaf: int) -> int:
+    for i in range(1, 8):
+        d = (vanaf + i) % 7
+        if _tijden(d):
+            return d
+    return vanaf
+
+
+def antwoord_vandaag_open(tekst: str, nu=None) -> str:
+    """Rekent het antwoord uit met de echte weektijden en de datum in Nederland."""
+    nu = nu or nu_amsterdam()
+    vandaag = nu.weekday()
+    for i, (nl, en) in enumerate(zip(_DAGNAMEN, _DAG_EN)):
+        if re.search(rf"\b({nl}|{en})\b", tekst):
+            t = _tijden(i)
+            if not t:
+                return f"Op {nl} zijn we gesloten. We zijn open op maandag en woensdag t/m zondag van 08:00 tot 16:00."
+            return f"Op {nl} zijn we open van {t[0]} tot {t[1]}. De keuken sluit om 15:30."
+    if re.search(r"\b(morgen|tomorrow)\b", tekst):
+        d = (vandaag + 1) % 7
+        t = _tijden(d)
+        if not t:
+            v = _volgende_open(d)
+            return f"Morgen ({_DAGNAMEN[d]}) zijn we gesloten. Op {_DAGNAMEN[v]} zijn we weer open vanaf {_tijden(v)[0]}."
+        return f"Morgen ({_DAGNAMEN[d]}) zijn we open van {t[0]} tot {t[1]}."
+    t = _tijden(vandaag)
+    if not t:
+        v = _volgende_open(vandaag)
+        wanneer = "morgen" if v == (vandaag + 1) % 7 else f"op {_DAGNAMEN[v]}"
+        return f"Vandaag ({_DAGNAMEN[vandaag]}) zijn we gesloten, {wanneer} weer open vanaf {_tijden(v)[0]}."
+    minuten = nu.hour * 60 + nu.minute
+    open_m = int(t[0][:2]) * 60 + int(t[0][3:])
+    dicht_m = int(t[1][:2]) * 60 + int(t[1][3:])
+    if minuten < open_m:
+        return f"Vandaag ({_DAGNAMEN[vandaag]}) zijn we open van {t[0]} tot {t[1]}."
+    if minuten < dicht_m:
+        return f"Ja, we zijn nu open, tot {t[1]}. De keuken sluit om 15:30."
+    v = _volgende_open(vandaag)
+    wanneer = "morgen" if v == (vandaag + 1) % 7 else f"op {_DAGNAMEN[v]}"
+    return f"Vandaag zijn we al gesloten. {wanneer.capitalize()} zijn we weer open vanaf {_tijden(v)[0]}."
+
+
+def antwoord_bagel_vd_maand(tekst: str = "", nu=None) -> str:
+    b = bagel_vd_maand()
+    ingr = [i.lower() for i in b["ingredienten"]]
+    lijst = ", ".join(ingr[:-1]) + " en " + ingr[-1] if len(ingr) > 1 else "".join(ingr)
+    return f"De bagel van de maand ({b['maand'].lower()}) is {b['naam']}: met {lijst}. Proef hem in de zaak."
+
+
+def antwoord_reserveren(tekst: str = "", nu=None) -> str:
+    if ONLINE_RESERVEREN:
+        return f'Reserveren kan {link("online", "/reserveren")} of telefonisch via {_TEL}.'
+    return f"Reserveren gaat telefonisch: bel {_TEL} tijdens openingstijden, dan zetten we een tafel voor je klaar."
+
+
+# Vaste antwoorden. Ook gebruikt in SYSTEM_PROMPT (AI-modus) als kennisbank.
+KENNISBANK = {
+    "openingstijden":   "We zijn open op maandag en woensdag t/m zondag van 08:00 tot 16:00. Op dinsdag zijn we gesloten. De keuken sluit om 15:30.",
+    "keuken":           "De keuken sluit om 15:30, de zaak om 16:00.",
+    "adres":            f'Je vindt ons aan de Langstraat 42, 2242 KM Wassenaar. Plan je route {link("hier", _ROUTE)}.',
+    "contact":          f"Bel ons op {_TEL} of mail naar {_MAIL}.",
+    "menu":             f'Op de kaart staan bagels, ontbijt, soepen, salades, high tea, tapas en taart. Bekijk {link("de hele kaart", "/menu")}.',
+    "prijzen":          f'Een bagel kost €2,95, belegd €4,95 tot €10,50. Ontbijt kost €9,50 tot €16,50, koffie vanaf €2,75 en high tea vanaf €17,95. Alle prijzen staan op {link("de kaart", "/menu")}.',
+    "bagels":           f'Je kiest uit 25 bagelsoorten, ook glutenvrij. Een bagel naar keuze kost €2,95, belegd vanaf €4,95. Bekijk {link("de kaart", "/menu")}.',
+    "ontbijt_brunch_lunch": f'Er zijn zes ontbijtjes van €9,50 tot €16,50. Voor de lunch zijn er bagels, soep (€7,95) en salades (€13,50). Bekijk {link("de kaart", "/menu")}.',
+    "high_tea":         f"High tea kan vanaf 2 personen: Afternoon tea €17,95, Dream tea €27,50, Alley's tea €32,50. Bel {_TEL} om te reserveren.",
+    "tapas":            f'Tapas bagels voor 2 personen: drie gesneden bagels met zes dips, voor €24,95. Bekijk {link("de kaart", "/menu")}.',
+    "koffie":           "We schenken koffie van La Garanta, met bonen uit Colombia. Koffie kost vanaf €2,75 en een cappuccino vanaf €3,50; haver- of sojamelk is €0,75.",
+    "thee":             "Thee naar keuze kost €3,25, verse munt- of gemberthee €3,95 en een pot thee €7,25. Chai thee of chai latte is €4,95.",
+    "sappen_smoothies": "Vers sinaasappelsap kost €3,75 (M) of €4,75 (L). Smoothies zoals rood, groen en oranje kosten €7,95.",
+    "allergie":         f"We hebben onder meer een glutenvrije bagel, haver- en sojamelk en vegan soep. {_ALLERGIE_SLOT}",
+    "glutenvrij":       f"Je kunt je bagel ook als glutenvrije bagel kiezen. {_ALLERGIE_SLOT}",
+    "vegan_vegetarisch": f"Er zijn vegetarische bagels, zoals hummus en mozzarella, en twee vegan soepen: tomaat en courgette. {_ALLERGIE_SLOT}",
+    "lactose_plantaardige_melk": f"Voor je koffie hebben we haver- of sojamelk (€0,75). {_ALLERGIE_SLOT}",
+    "noten_sesam":      f"Sommige gerechten bevatten noten of zaden, zoals de pijnboompitjes mix, walnoten en de sesambagel. {_ALLERGIE_SLOT}",
+    "takeaway":         f'Alles van de kaart kun je meenemen; bestel aan de kassa. Bezorgen doen we niet. Een hele taart bestel je {link("hier", "/bestellen")}.',
+    "taart_bestellen":  f'Een hele taart bestel je via {link("het bestelformulier", "/bestellen")}, minimaal 24 uur van tevoren. Je haalt hem op in de zaak (dinsdag gesloten). Klein vanaf €32,50, groot €45,00.',
+    "shop":             f'Hele taarten bestel je via {link("ons bestelformulier", "/bestellen")}; de oude webshop bestaat niet meer. Ander eten bestel je aan de kassa.',
+    "bruidstaart":      f"Gaan jullie trouwen of iets groots vieren? We maken een bruidstaart op maat. Mail ons wat jullie in gedachten hebben via {_MAIL}, of bel {_TEL} voor een direct antwoord.",
+    "bezorgen":         "Bezorgen doen we niet. Je haalt je bestelling op in de zaak aan de Langstraat 42 in Wassenaar.",
+    "zakelijk_catering": f"Voor catering of een grote bestelling bel je ons op {_TEL}, dan bespreken we het samen.",
+    "cadeaubon":        "Cadeaubonnen zijn er vanaf €5,00 en haal je in de zaak.",
+    "groepen":          f"Voor groepen en speciale gelegenheden bel je ons op {_TEL}, dan regelen we het.",
+    "kinderen":         "Kinderen zijn van harte welkom; we hebben een kindvriendelijke omgeving.",
+    "jobs":             f'We zoeken mensen voor bediening en keuken. Kijk op {link("onze vacaturepagina", "/jobs")}.',
+    "over_chat":        f"Ik ben de automatische hulp van Bagel Alley en beantwoord vragen over tijden, de kaart en bestellen. Liever iemand spreken? Bel {_TEL}.",
+    "greeting":         "Hallo! Welkom bij Bagel Alley Wassenaar. Waarmee kan ik je helpen?",
+}
+_DYNAMISCH = {"vandaag_open": antwoord_vandaag_open, "bagel_van_de_maand": antwoord_bagel_vd_maand,
+              "reserveren": antwoord_reserveren}
+
+# Patronen werken op genormaliseerde tekst (kleine letters, geen accenten of leestekens).
+# (patroon, gewicht): gewicht 1 is gewoon, 2-3 is een sterke zin die het onderwerp vastlegt.
+_P = lambda *p: [(x, 1) for x in p]
+_S = lambda w, *p: [(x, w) for x in p]
+CHAT_INTENTS = {
+    "reserveren": _S(3, r"\breserv\w*", r"\bres+erv\w*") + _P(r"\btafel\w*", r"\bboek(en|ing)?\b", r"\bplekje\b", r"\bbook\w*", r"\breservation\w*", r"\btable\b"),
+    "allergie": _P(r"\ballergi\w*", r"\ballergeen\w*", r"\ballergenen\b", r"intoleran\w*", r"\bdieet\w*", r"\ballergy\b", r"\ballergic\b"),
+    "glutenvrij": _S(3, r"\bgluten\w*", r"\bcoeliakie\b", r"\bceliac\b"),
+    "noten_sesam": _S(3, r"\bnoot\b", r"\bnoten\w*", r"\bpinda\w*", r"\bsesam\w*", r"\bwalno\w*", r"\bnuts?\b", r"\bpijnboom\w*", r"\bpeanuts?\b"),
+    "lactose_plantaardige_melk": _S(3, r"\blactose\w*", r"\bzuivel\w*", r"\bhavermelk\b", r"\bsojamelk\b", r"\bplantaardige\s+melk\b", r"\boat\s*milk\b", r"\bsoy\s*milk\b", r"\bdairy\b") + _P(r"\bmelk\b"),
+    "vegan_vegetarisch": _S(3, r"\bvegan\w*", r"\bveganist\w*", r"\bvegetari\w*", r"\bveggie\b", r"\bgeen\s+vlees\b", r"\bvleesloos\b"),
+    "bruidstaart": _S(3, r"\bbruidstaart\w*", r"\btrouwtaart\w*", r"\bbruiloft\w*", r"\btrouw\w*", r"\bwedding\b"),
+    "feestdagen": _S(3, r"\bkerst\w*", r"\boud\s+(en|n)\s+nieuw\b", r"\boudjaar\w*", r"\bnieuwjaar\w*", r"\bpasen\b", r"\bpaas\w*", r"\bpinkster\w*", r"\bkoningsdag\b", r"\bhemelvaart\w*", r"\bfeestdag\w*", r"\bchristmas\b", r"\beaster\b", r"\bholidays?\b"),
+    "kinderstoel": _S(3, r"\bkinderstoel\w*", r"\bhigh\s*chair\b", r"\bbabystoel\w*", r"\bkinderzitje\b"),
+    "keuken": _S(3, r"\bkeuken\w*", r"\blaatste\s+bestel\w*", r"\btot\s+hoe\s+laat\s+(kan\s+ik\s+|kun\s+je\s+)?(eten|bestellen)\b", r"\bkitchen\b"),
+    "vandaag_open": [],   # wordt afgeleid: openingswoord + dag of nu/vandaag/morgen
+    "bagel_van_de_maand": _S(3, r"\bvan\s+de\s+maand\b", r"\bmaandbagel\b", r"\bspanish\s+classic\b", r"\bof\s+the\s+month\b"),
+    "high_tea": _S(3, r"\bhigh\s*tea\b", r"\bhightea\b", r"\bafternoon\s+tea\b", r"\bdream\s+tea\b", r"\balleys\s+tea\b"),
+    "bezorgen": _S(2, r"\bbezorg\w*", r"\bthuisbezorg\w*", r"\bdelivery\b", r"\bdeliver\w*", r"\buber\s*eats\b", r"\bdeliveroo\b", r"\bthuis\s+laten\s+komen\b"),
+    "zakelijk_catering": _S(2, r"\bcatering\w*", r"\bgrote\s+bestelling\w*") + _P(r"\bzakelijk\w*", r"\bkantoor\w*", r"\bbedrijf\w*", r"\bvergader\w*", r"\bbusiness\b"),
+    "taart_bestellen": _P(r"\btaart\w*", r"\bcake\w*", r"\bgebak\w*", r"\bapple\s*pie\b", r"\bappeltaart\b", r"\boreo\b", r"\bred\s*velvet\b", r"\bcarrot\b", r"\bworteltaart\b", r"\bchocoladetaart\b", r"\bbestel\w*"),
+    "shop": _S(2, r"\bonline\s+bestel\w*", r"\bwebshop\b", r"\bwebwinkel\b") + _P(r"\bshop\b", r"\bwinkel\b"),
+    "wifi_laptop": _S(2, r"\bwi\s*fi\b", r"\bwifi\b", r"\blaptop\w*", r"\bstopcontact\w*", r"\bwerkplek\w*") + _P(r"\binternet\b", r"\boplad\w*", r"\bthuiswerk\w*"),
+    "betalen": _S(2, r"\bpin(nen|apparaat|automaat)?\b", r"\btikkie\b", r"\bapple\s*pay\b", r"\bgoogle\s*pay\b", r"\bcreditcard\w*", r"\bcredit\s+card\b") + _P(r"\bbetal\w*", r"\bcontant\w*", r"\bcash\b", r"\bpay\w*", r"\bkaartbetaling\w*"),
+    "toilet": _S(2, r"\btoilet\w*", r"\bwc\b", r"\bplee\b", r"\bverschoon\w*", r"\brestroom\b", r"\bbathroom\b"),
+    "toegankelijkheid": _S(2, r"\brolstoel\w*", r"\bdrempel\w*", r"\bmindervalid\w*", r"\btoegankelijk\w*", r"\bwheelchair\b", r"\brollator\w*", r"\bgehandicapt\w*", r"\binvalide\w*"),
+    "terras": _S(2, r"\bterras\w*", r"\bbuiten\s+zitten\b", r"\bterrace\b") + _P(r"\bbuiten\b", r"\boutside\b"),
+    "huisdieren": _S(2, r"\bhond\w*", r"\bkat\b", r"\bkatten\b", r"\bhuisdier\w*", r"\bdieren\b", r"\bdogs?\b", r"\bpets?\b"),
+    "kinderen": _P(r"\bkind\b", r"\bkinderen\b", r"\bkindje\w*", r"\bkids?\b", r"\bbaby\w*", r"\bpeuter\w*", r"\bkinderwagen\b", r"\bchildren\b", r"\bkindvriendelijk\w*"),
+    "groepen": _P(r"\bgroep\w*", r"\bpersonen\b", r"\bverjaardag\w*", r"\bfeestje\w*", r"\bfeest\b", r"\bjubileum\b", r"\bgroup\b", r"\bparty\b", r"\b\d+\s+man\b"),
+    "jobs": _S(2, r"\bvacature\w*", r"\bsollicit\w*", r"\bbijbaan\w*") + _P(r"\bbaan\b", r"\bjobs?\b", r"\bpersoneel\b", r"\bwerken\s+bij\b", r"\bkomen\s+werken\b", r"\bwerk\s+zoek\w*"),
+    "parking": _S(2, r"\bparke\w*", r"\bparkeer\w*", r"\bparking\b", r"\bblauwe\s+zone\b") + _P(r"\bauto\b"),
+    "adres": _P(r"\badres\w*", r"\blocatie\b", r"\bwaar\s+(zitten|zijn|zit|ligt|is|vind\w*)\b", r"\bvinden\b", r"\broute\w*", r"\blangstraat\b", r"\baddress\b", r"\bwhere\s+are\b", r"\bhoe\s+kom\s+ik\b"),
+    "openingstijden": _P(r"\bopen\b", r"\bgeopend\b", r"\bopening\w*", r"\bhoe\s+laat\b", r"\btijden\b", r"\bdicht\b", r"\bgesloten\b", r"\bsluit\w*", r"\bopening\s+hours?\b", r"\bwanneer\s+(zijn|gaan)\s+(jullie|je)\b"),
+    "koffie": _P(r"\bkoffie\w*", r"\bespresso\w*", r"\bcappuc\w*", r"\bcapuc\w*", r"\blatte\b", r"\bflat\s+white\b", r"\bbonen\b", r"\bcoffee\b", r"\bla\s+garanta\b", r"\bijskoffie\b", r"\bamerican?o\b"),
+    "thee": _S(2, r"\bchai\b") + _P(r"\bthee\w*", r"\btea\b", r"\bmunt\w*", r"\bgember\w*"),
+    "sappen_smoothies": _P(r"\bsap\w*", r"\bsmoothie\w*", r"\bjuice\w*", r"\bjus\b", r"\bsinaasappel\w*", r"\bgeperst\w*"),
+    "tapas": _P(r"\btapas\b", r"\bborrel\w*", r"\bdips?\b"),
+    "ontbijt_brunch_lunch": _P(r"\bontbijt\w*", r"\bbrunch\w*", r"\blunch\w*", r"\bbreakfast\b", r"\bsoep\w*", r"\bsalade\w*", r"\bpannenkoek\w*", r"\bsoup\b"),
+    "bagels": _P(r"\bbagel\w*", r"\bbegel\w*", r"\bbagle\w*"),
+    "prijzen": _S(2, r"\bhoe\s+duur\b", r"\bwat\s+kost\w*", r"\bhow\s+much\b") + _P(r"\bprijs\w*", r"\bprijzen\b", r"\bkost\w*", r"\bduur\b", r"\btarie\w*", r"\bprices?\b"),
+    "takeaway": _P(r"\btake\s*away\b", r"\btakeaway\b", r"\bafhal\w*", r"\bmeenem\w*", r"\bmee\s+nemen\b", r"\bophal\w*", r"\bto\s+go\b"),
+    "cadeaubon": _P(r"\bcadeau\w*", r"\bkado\w*", r"\bgift\s*card\w*", r"\bvoucher\w*", r"\bwaardebon\w*", r"\bbon\b"),
+    "contact": _P(r"\btelefoon\w*", r"\bbellen\b", r"\bmail\w*", r"\bcontact\w*", r"\bbereik\w*", r"\bphone\b", r"\bnummer\b"),
+    "instagram_social": _S(2, r"\binsta\w*", r"\bfacebook\b", r"\btiktok\b") + _P(r"\bsocial\w*"),
+    "drukte": _S(2, r"\bdrukte\b", r"\bwachttijd\w*") + _P(r"\bdruk\b", r"\bbusy\b", r"\bwachten\b", r"\brustig\b"),
+    "over_chat": _S(2, r"\bautomatisch\w*", r"\brobot\w*", r"\bchatbot\b", r"\becht\s+(persoon|mens)\b", r"\breal\s+person\b") + _P(r"\bbot\b", r"\bai\b"),
+    "menu": _P(r"\bmenu\w*", r"\bkaart\b", r"\bmenukaart\b", r"\beten\b", r"\bgerecht\w*", r"\bwat\s+(hebben|serveren|verkopen)\s+jullie\b", r"\bfood\b"),
+}
+# Voorrang bij gelijke score: reserveren en dieet eerst, groet en afscheid als laatste.
+CHAT_VOORRANG = [
+    "reserveren", "glutenvrij", "noten_sesam", "lactose_plantaardige_melk", "vegan_vegetarisch", "allergie",
+    "bruidstaart", "feestdagen", "kinderstoel", "keuken", "vandaag_open", "bagel_van_de_maand", "high_tea",
+    "bezorgen", "zakelijk_catering", "taart_bestellen", "shop", "wifi_laptop", "betalen", "toilet",
+    "toegankelijkheid", "terras", "huisdieren", "kinderen", "groepen", "jobs", "parking", "adres",
+    "openingstijden", "koffie", "thee", "sappen_smoothies", "tapas", "ontbijt_brunch_lunch", "bagels",
+    "prijzen", "takeaway", "cadeaubon", "contact", "instagram_social", "drukte", "over_chat", "menu",
+]
+_PRODUCTEN = {"bagels", "koffie", "thee", "sappen_smoothies", "high_tea", "tapas", "taart_bestellen",
+              "ontbijt_brunch_lunch", "bagel_van_de_maand"}
+_DIEET = {"glutenvrij", "noten_sesam", "lactose_plantaardige_melk", "vegan_vegetarisch"}
+_GROET = re.compile(r"^(hoi|hallo|hey+|hee+|hi|hello|hoihoi|goedemorgen|goedemiddag|goedenavond|morgen|dag|yo)"
+                    r"(\s+(daar|allemaal|sonja|bagel\s+alley))?$")
+_AFSCHEID = re.compile(r"^((ok(e|ay)?|top|super|oke)\s+)?(doei|dag|bye|tot\s+ziens|bedankt|dankjewel|dank\s+je(\s+wel)?|"
+                       r"thanks|thank\s+you|fijne\s+dag)(\s+(hoor|he|voor\s+je\s+hulp|sonja))?$")
+_DAG_OF_NU = re.compile(r"\b(nu|vandaag|morgen|vanavond|vanmiddag|vanochtend|straks|today|tomorrow|now|"
+                        r"maandag|dinsdag|woensdag|donderdag|vrijdag|zaterdag|zondag|monday|tuesday|wednesday|"
+                        r"thursday|friday|saturday|sunday)\b")
+_ALGEMENE_VRAAG = re.compile(r"\b(heb(ben)?\s+(je|jullie)|verkopen\s+jullie|serveren\s+jullie|do\s+you\s+have)\b")
+
+
+def normaliseer(tekst: str) -> str:
+    """Kleine letters, accenten weg, leestekens weg, spaties samengevoegd."""
+    import unicodedata
+    t = unicodedata.normalize("NFKD", str(tekst or "").lower())
+    t = "".join(c for c in t if not unicodedata.combining(c))
+    t = re.sub(r"[^a-z0-9]+", " ", t)
+    return re.sub(r"\s+", " ", t).strip()
+
+
+_GECOMPILEERD = {k: [(re.compile(p), w) for p, w in v] for k, v in CHAT_INTENTS.items()}
+
+
+def bepaal_intent(bericht: str):
+    """Geeft (intent, scores). Score = som van de gewichten van de patronen die matchen."""
+    t = normaliseer(bericht)
+    if not t:
+        return "fallback", {}
+    scores = {k: sum(w for p, w in pats if p.search(t)) for k, pats in _GECOMPILEERD.items()}
+    # Contextregels voor bekende botsingen
+    if scores["wifi_laptop"]:
+        scores["jobs"] = 0                                   # "met mijn laptop werken" is geen vacature
+    if scores["reserveren"] and re.search(r"\bonline\b", t):
+        scores["shop"] = 0                                   # "online reserveren" is reserveren
+    if scores["parking"]:
+        scores["adres"] = 0                                  # "waar kan ik parkeren"
+    if scores["prijzen"]:
+        scores["openingstijden"] = 0                         # "hoe duur" is nooit een openingstijd
+        if any(scores[p] for p in _PRODUCTEN):
+            scores["prijzen"] = 0                            # prijs + product: productantwoord met prijzen
+    if any(scores[d] for d in _DIEET):
+        scores["allergie"] = 0                               # specifiek dieet gaat voor algemene allergie
+    if scores["feestdagen"]:
+        scores["groepen"] = 0
+    if scores["kinderstoel"]:
+        scores["kinderen"] = 0
+    if scores["openingstijden"] and _DAG_OF_NU.search(t) and not scores["feestdagen"]:
+        scores["vandaag_open"] = scores["openingstijden"] + 2
+    beste = max(scores.values())
+    if beste == 0:
+        if _GROET.match(t):
+            return "greeting", scores
+        if _AFSCHEID.match(t):
+            return "goodbye", scores
+        if _ALGEMENE_VRAAG.search(t):
+            return "menu", scores                            # "heb je steak": verwijs naar de kaart
+        return "fallback", scores
+    for intent in CHAT_VOORRANG:
+        if scores.get(intent) == beste:
+            return intent, scores
+    return "fallback", scores
+
+
+def chat_antwoord(intent: str, bericht: str = "", nu=None) -> str:
+    if intent == "goodbye":
+        return "STOP"
+    if intent in _DYNAMISCH:
+        return _DYNAMISCH[intent](normaliseer(bericht), nu)
+    if intent in CHAT_FEITEN:
+        return _veilig(intent)
+    if intent in KENNISBANK:
+        return KENNISBANK[intent]
+    return f"Dat weet ik niet zeker. Bel ons op {_TEL}, dan helpen we je meteen."
 # endregion
 
 # region ── CLAUDE AI INSTELLINGEN ─────────────────────────────
@@ -728,7 +977,7 @@ Regels:
 - Wees warm, informeel en enthousiast, praat als een echte eigenares die haar zaak kent
 - Kort en to-the-point (max 2-3 zinnen)
 - Voeg altijd een klikbare HTML link toe als er een relevante pagina is, gebruik dit format exact:
-  <a href="/menu" style="color:#8758ce;font-weight:600;text-decoration:none;border-bottom:1px solid #c9a8f0;">ankertekst</a>
+  <a href="/menu" class="chat-link">ankertekst</a>
   Gebruik ankerteksten zoals "hier", "ons menu", "het formulier". Schrijf NOOIT de URL uit
 - Als je iets niet weet, verwijs naar 070-514 61 16
 - Geen markdown, geen opsommingstekens, gewone tekst
@@ -765,54 +1014,11 @@ def reageer_met_ai(bericht: str) -> str:
 
 
 def reageer_zonder_ai(bericht: str) -> str:
-    """Ingebouwde antwoorden op trefwoorden (zonder API-key). Volgorde telt: specifiek eerst."""
-    b = bericht.lower()
-    has = lambda *woorden: any(w in b for w in woorden)
-    if not ONLINE_RESERVEREN and re.search(r"reserv|tafel|boek|plekje", b):
-        return KENNISBANK["reserveren"]
-    if has("bruidstaart", "trouwtaart", "bruiloft", "trouwen"):
-        return KENNISBANK["bruidstaart"]
-    if has("allergie", "allergeen", "allergenen", "gluten", "lactose", "dieet", "vegan", "vegetarisch"):
-        return KENNISBANK["allergieen"]
-    if has("high tea", "high-tea", "hightea"):
-        return KENNISBANK["high_tea"]
-    if has("taart", "gebak", "cake", " pie"):
-        return KENNISBANK["taart"]
-    if has("vacature", "werken bij", "solliciteer", "solliciteren", "baan", "bijbaan"):
-        return KENNISBANK["vacatures"]
-    if has("keuken"):
-        return KENNISBANK["keuken"]
-    if has("koffie", "espresso", "cappuccino", "latte", "bonen"):
-        return KENNISBANK["koffie"]
-    if re.search(r"\b(open|uur)\b", b) or has("tijden", "wanneer", "dicht", "gesloten", "dinsdag"):
-        return KENNISBANK["openingstijden"]
-    if has("adres", "locatie", "waar", "vinden", "route", "wassenaar"):
-        return KENNISBANK["adres"]
-    if has("telefoon", "bellen", "mail", "contact", "bereiken"):
-        return KENNISBANK["contact"]
-    if has("tapas"):
-        return KENNISBANK["tapas"]
-    if has("takeaway", "take away", "afhalen", "meenemen", "bestel"):
-        return KENNISBANK["takeaway"]
-    if re.search(r"cadeau|\bbon(nen)?\b|kado|gift", b):
-        return KENNISBANK["cadeaubon"]
-    if re.search(r"\b(kind|kinderen|kindje|kids|baby|baby's|peuter|kinderstoel|kinderstoeltje|kinderwagen)\b", b):
-        return KENNISBANK["kinderen"]
-    if has("groep", "personen", "verjaardag", "feest", "jubileum"):
-        return KENNISBANK["groepen"]
-    if has("bagel", "prijs", "kost", "duur"):
-        return KENNISBANK["bagels"]
-    if has("menu", "eten", "kaart", "lunch", "ontbijt"):
-        return KENNISBANK["menu"]
-    if re.search(r"\b(hond|honden|hondje|kat|katten|huisdier|huisdieren|dieren)\b", b):
-        return KENNISBANK["huisdieren"]
-    if has("parke", "auto"):
-        return KENNISBANK["parking"]
-    if re.search(r"\b(hallo|hoi|hey|hi|hello|goedemorgen|goedemiddag)\b", b):
-        return "Hallo! Welkom bij Bagel Alley Wassenaar. Leuk dat je er bent!"
-    if has("doei", "bye", "tot ziens", "bedankt", "dankjewel", "thanks"):
-        return "STOP"
-    return f"Dat weet ik niet. Bel ons op {_TEL}, dan helpen we je meteen."
+    """Ingebouwde antwoorden zonder AI: intent bepalen met bepaal_intent(), dan chat_antwoord()."""
+    intent, _ = bepaal_intent(bericht)
+    if intent == "fallback":
+        print("[CHAT-ONBEKEND]", str(bericht)[:200])   # alleen de tekst, geen IP of andere gegevens
+    return chat_antwoord(intent, bericht)
 # endregion
 
 # region ── FLASK ROUTES ────────────────────────────────────────
