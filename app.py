@@ -42,7 +42,7 @@ def _security_headers(resp):
 import hmac
 from werkzeug.middleware.proxy_fix import ProxyFix
 
-# Railway zit achter een reverse proxy: vertrouw 1 proxy-hop zodat we het
+# Vercel zit achter een reverse proxy: vertrouw 1 proxy-hop zodat we het
 # echte client-IP zien (nodig voor correcte rate limiting) en de juiste scheme.
 app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1)
 
@@ -68,7 +68,7 @@ try:
     def _rate_limit_exempt():
         # Statische bestanden en infra-endpoints niet limiteren (anders breken
         # asset-loads en health checks). Echte endpoints blijven wél begrensd.
-        return request.endpoint in {"static", "ping", "robots_txt", "sitemap_xml"}
+        return request.endpoint in {"static", "robots_txt", "sitemap_xml"}
 
 except ImportError:
     print("[WAARSCHUWING] Flask-Limiter niet geinstalleerd - rate limiting staat UIT. "
@@ -533,7 +533,7 @@ SITE_URL = (os.environ.get("SITE_URL")
             or "https://bagelalley.nl").rstrip("/")
 
 # Online reserveren aan/uit. Standaard UIT: reserveren gaat telefonisch.
-# Weer aanzetten: env var ONLINE_RESERVEREN=1 op Railway (geen codewijziging nodig).
+# Weer aanzetten: env var ONLINE_RESERVEREN=1 op Vercel (geen codewijziging nodig).
 ONLINE_RESERVEREN = os.environ.get("ONLINE_RESERVEREN", "0").strip().lower() in ("1", "true", "ja", "yes")
 RESERVEER_TEL_LINK = "tel:+31705146116"
 
@@ -1177,18 +1177,6 @@ def chat():
     return jsonify({"antwoord": antwoord})
 
 
-@app.route("/callback", methods=["POST"])
-@limiter.limit("10 per minute")
-def callback():
-    data = request.get_json(silent=True) or {}
-    naam = _clean_str(data.get("naam"), 100)
-    telefoon = _clean_str(data.get("telefoon"), 30)
-    if not naam or not telefoon:
-        return jsonify({"succes": False, "fout": "Naam en telefoon zijn verplicht."}), 400
-    print(f"[TERUGBELVERZOEK] {naam} - {telefoon}")
-    return jsonify({"succes": True})
-
-
 @app.route("/volle-slots", methods=["GET"])
 @limiter.limit("60 per minute")
 def volle_slots():
@@ -1397,10 +1385,6 @@ def admin_verwijder(boeking_id):
         conn.commit()
     return jsonify({"succes": True})
 # endregion
-
-@app.route("/ping")
-def ping():
-    return "ok", 200
 
 
 # region ── OPSTARTEN ───────────────────────────────────────────

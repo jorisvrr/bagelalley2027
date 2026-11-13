@@ -16,31 +16,6 @@
     html { scroll-behavior: smooth; }
     body { padding-bottom: 0; font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--text); overflow-x: hidden; }
 
-    /* VACATURE BANNER */
-    .vacature-bar {
-      background: var(--dark); border-bottom: 1px solid rgba(135,88,206,.25);
-      padding: .65rem 2rem; display: flex; align-items: center; justify-content: center;
-      gap: 1.2rem; flex-wrap: wrap;
-    }
-    .vacature-bar-badge {
-      background: var(--purple); color: white;
-      font-size: var(--fs-xs); font-weight: 700; letter-spacing: var(--track-label);
-      text-transform: uppercase; padding: .2rem .6rem; border-radius: var(--r-btn);
-      flex-shrink: 0;
-    }
-    .vacature-bar-text {
-      font-size: var(--fs-sm); color: rgba(245,240,232,.8);
-    }
-    .vacature-bar-text strong { color: white; font-weight: 600; }
-    .vacature-bar-link {
-      font-size: var(--fs-sm); font-weight: 500; color: var(--purple-light);
-      text-decoration: none; border-bottom: 1px solid rgba(155,110,224,.35);
-      letter-spacing: var(--track-button); white-space: nowrap;
-      transition: color .2s, border-color .2s;
-      flex-shrink: 0;
-    }
-    @media (hover: hover) and (pointer: fine) { .vacature-bar-link:hover { color: white; border-color: white; } }
-
 
         /* BAGEL VAN DE MAAND */
     .botm-section { background: var(--dark2); overflow: hidden; }
@@ -104,10 +79,6 @@
       .botm-title { font-size: 2rem; }
     }
 
-    /* TOPBAR */
-    .topbar { background: var(--purple); padding: .55rem 2rem; text-align: center; font-size: var(--fs-sm); color: #fff; letter-spacing: var(--track-button); }
-    .topbar strong { font-weight: 600; color: #fff; }
-
 
     /* NAV */
     nav { position: sticky; top: 0; z-index: var(--z-nav); display: flex; justify-content: space-between; align-items: center; padding: 1rem 4rem; background: rgba(245,240,232,.97); backdrop-filter: blur(14px); border-bottom: 1px solid rgba(135,88,206,.12); overflow: visible; }
@@ -170,13 +141,9 @@
     .shortcut-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(26,16,24,.85) 0%, rgba(26,16,24,.2) 60%, transparent 100%); transition: background .3s; }
     @media (hover: hover) and (pointer: fine) { .shortcut-card:hover .shortcut-overlay { background: linear-gradient(to top, rgba(26,16,24,.9) 0%, rgba(26,16,24,.4) 60%, transparent 100%); } }
     .shortcut-body { position: relative; z-index: 1; padding: 2rem 2.5rem; width: 100%; }
-    .shortcut-label { font-size: var(--fs-xs); font-weight: 500; letter-spacing: var(--track-label); text-transform: uppercase; color: var(--purple-light); margin-bottom: .4rem; display: block; }
     .shortcut-title { font-family: 'Playfair Display', serif; font-size: var(--fs-2xl); font-weight: 700; color: var(--cream); line-height: 1.1; margin-bottom: .8rem; }
     .shortcut-link { font-size: var(--fs-sm); font-weight: 500; letter-spacing: var(--track-button); text-transform: uppercase; color: rgba(245,240,232,.62); display: inline-flex; align-items: center; gap: .4rem; transition: color .2s, gap .2s; }
     @media (hover: hover) and (pointer: fine) { .shortcut-card:hover .shortcut-link { color: var(--purple2); gap: .7rem; } }
-
-    /* SECTIONS */
-    .section-label { font-size: var(--fs-sm); font-weight: 500; letter-spacing: var(--track-label); text-transform: uppercase; color: var(--purple3); display: block; margin-bottom: .8rem; }
     .section-title { font-family: 'Playfair Display', serif; font-size: clamp(2rem, 3.5vw, 3.2rem); font-weight: 700; line-height: 1.1; color: var(--text); margin-bottom: 1.5rem; }
 
     /* SFEER */
@@ -191,7 +158,7 @@
     .sfeer-text-body { font-size: var(--fs-md); color: rgba(245,240,232,.62); line-height: 1.7; }
     .sfeer-link { display: inline-flex; align-items: center; gap: .4rem; margin-top: 1.2rem; font-size: var(--fs-sm); font-weight: 500; letter-spacing: var(--track-button); text-transform: uppercase; color: var(--purple3); text-decoration: none; transition: gap .2s; }
     @media (hover: hover) and (pointer: fine) { .sfeer-link:hover { gap: .7rem; } }
-    .menu-card-dark .sfeer-link, .sfeer-text .sfeer-link, .menu-card-dark .section-label, .sfeer-text .section-label { color: var(--purple-light); }
+    .menu-card-dark .sfeer-link, .sfeer-text .sfeer-link { color: var(--purple-light); }
 
     /* MENU */
     .menu-section { padding: 7rem 6rem; background: var(--cream2); }
@@ -213,7 +180,6 @@
 
     /* OPENINGSTIJDEN */
     .hours-section { padding: 7rem 6rem; background: var(--dark); }
-    .hours-section .section-label { color: var(--purple-light); }
     .hours-section .section-title { color: var(--cream); }
     .hours-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; margin-top: 3rem; }
     .hours-table { width: 100%; border-collapse: collapse; }
@@ -231,20 +197,8 @@
     .hours-visual img { width: 100%; height: 100%; object-fit: cover; }
     .hours-visual-overlay { position: absolute; inset: 0; background: linear-gradient(135deg, rgba(135,88,206,.2), transparent 60%); }
 
-    /* GALLERY */
-    .beleving-section { padding: 7rem 6rem; background: var(--cream); }
-    .beleving-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; margin-top: 3rem; }
-    .beleving-item { position: relative; overflow: hidden; aspect-ratio: 4/5; background: var(--cream2); }
-    .beleving-item img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .6s ease; }
-    @media (hover: hover) and (pointer: fine) { .beleving-item:hover img { transform: scale(1.06); } }
-    .beleving-item-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(26,16,24,.75) 0%, transparent 55%); opacity: 0; transition: opacity .3s; }
-    @media (hover: hover) and (pointer: fine) { .beleving-item:hover .beleving-item-overlay { opacity: 1; } }
-    .beleving-item-label { position: absolute; bottom: 1.5rem; left: 1.5rem; font-family: 'Playfair Display', serif; font-size: var(--fs-lg); font-weight: 600; color: var(--cream); opacity: 0; transform: translateY(8px); transition: background-color .3s, border-color .3s, color .3s, transform .3s, box-shadow .3s; }
-    @media (hover: hover) and (pointer: fine) { .beleving-item:hover .beleving-item-label { opacity: 1; transform: translateY(0); } }
-
     /* CADEAUBON */
     .cadeaubon-section { background: var(--purple); padding: 5rem 6rem; display: flex; align-items: center; justify-content: space-between; gap: 3rem; }
-    .cadeaubon-text .section-label { color: #fff; }
     .cadeaubon-text .section-title { color: var(--white); font-size: clamp(1.8rem, 3vw, 2.8rem); }
     .cadeaubon-body { font-size: var(--fs-base); color: #fff; line-height: 1.7; max-width: 480px; margin-top: 1rem; }
     .btn-white { background: var(--white); color: var(--purple); padding: 1rem 2.4rem; font-size: var(--fs-md); font-weight: 500; letter-spacing: var(--track-button); text-transform: uppercase; border: none; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: .5rem; border-radius: var(--r-btn); flex-shrink: 0; transition: background .2s, transform .15s; }
@@ -413,18 +367,6 @@
     @media (hover: hover) and (pointer: fine) { .booking-verstuur-btn:hover { background: var(--purple3); } }
     .booking-verstuur-btn:disabled { opacity: .6; cursor: not-allowed; }
 
-    /* Rating */
-    .rating-wrapper { background: white; border-radius: var(--r-card); padding: 1rem; max-width: 280px; }
-    .rating-label { font-size: var(--fs-sm); color: var(--muted); margin-bottom: .5rem; }
-    .ster-rij { display: flex; gap: 0; margin-bottom: .6rem; }
-    .ster { display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; background: none; border: 0; padding: 0; color: #CFC7D8; cursor: pointer; transition: color var(--dur-ui), transform var(--dur-press); }
-    .ster.actief { color: var(--purple); }
-    .ster.actief svg { fill: currentColor; }
-    .ster.actief { filter: none; transform: scale(1.15); }
-    
-    .rating-bevestig { background: var(--purple); color: white; border: none; padding: .5rem 1.2rem; border-radius: var(--r-field); font-size: var(--fs-sm); cursor: pointer; transition: background .2s; }
-    @media (hover: hover) and (pointer: fine) { .rating-bevestig:hover { background: var(--purple3); } }
-
 
     /* ANIMATIONS */
     @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
@@ -527,14 +469,13 @@
       .shortcut-card { height: 220px; }
       .info-strip { flex-direction: column; }
       .info-strip-item { border-right: none; border-bottom: 1px solid rgba(135,88,206,.1); }
-      .sfeer-section, .menu-section, .hours-section, .beleving-section, .cadeaubon-section, .contact-section { padding: 4rem 1.5rem; }
+      .sfeer-section, .menu-section, .hours-section, .cadeaubon-section, .contact-section { padding: 4rem 1.5rem; }
       .sfeer-grid { grid-template-columns: 1fr; grid-template-rows: auto; }
       .sfeer-main { grid-row: 1; height: auto; }
       .sfeer-img { aspect-ratio: 4 / 3; }
       .sfeer-text { grid-column: 1; }
       .menu-grid { grid-template-columns: 1fr; }
       .hours-layout, .contact-grid { grid-template-columns: 1fr; gap: 2.5rem; }
-      .beleving-grid { grid-template-columns: 1fr 1fr; }
       .cadeaubon-section { flex-direction: column; text-align: center; }
       .footer-top { flex-direction: column; gap: 2rem; }
       .footer-links { flex-wrap: wrap; gap: 2rem; }
@@ -966,7 +907,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
 <script>
 // CONFIG
-const ICON_STAR = {{ icon('star', 24)|string|tojson }};
 const AVATAR_INITIALEN = "{{ bedrijf.avatar_initialen }}";
 const AVATAR_NAAM      = "{{ bedrijf.avatar_naam }}";
 const BEDRIJF_NAAM     = "{{ bedrijf.naam }}";
@@ -1042,9 +982,6 @@ const snelknopSets = {
     { label: "Adres",      msg: "Waar zijn jullie gevestigd?" },
     { label: "Reserveren", msg: "__booking__" },
   ],
-  einde: [
-    { label: "Geef beoordeling", msg: "__rating__" },
-  ],
 };
 
 function zetSnelknoppen(set) {
@@ -1055,7 +992,6 @@ function zetSnelknoppen(set) {
     btn.className = "snel-knop";
     btn.textContent = k.label;
     btn.onclick = () => {
-      if (k.msg === "__rating__")  { toonRating(); return; }
       if (k.msg === "__booking__") { toonBookingFormulier(); return; }
       voegJijToe(k.label);
       verstuurNaarBot(k.msg);
@@ -1135,7 +1071,7 @@ async function verstuurNaarBot(bericht) {
     const antwoord = data.antwoord || "Dat weet ik niet zeker. Bel ons op 070-514 61 16!";
     if (antwoord === "STOP") {
       await voegBotToe("Tot ziens! We zien je graag binnenkort bij Bagel Alley.");
-      zetSnelknoppen("einde");
+      zetSnelknoppen("start");
     } else {
       await voegBotToe(antwoord);
     }
@@ -1294,7 +1230,7 @@ async function verstuurBooking() {
     if (data.succes) {
       setTimeout(async () => {
         await voegBotToe(`Top ${voornaam}! Je tafel staat gereserveerd op ${datum} om ${bevestigdSlot}. We sturen een bevestigingsmail naar ${email}, check ook je spammap als je hem niet ziet. Tot dan!`);
-        zetSnelknoppen("einde");
+        zetSnelknoppen("start");
       }, 800);
     } else {
       setTimeout(async () => {
@@ -1310,35 +1246,6 @@ async function verstuurBooking() {
   }
 }
 
-// ── RATING ──
-function toonRating() {
-  const div = document.getElementById("chatvenster");
-  const w = document.createElement("div"); w.className = "bericht-wrapper-bot";
-  w.innerHTML = `<div class="msg-avatar">${AVATAR_INITIALEN}</div>`;
-  const content = document.createElement("div"); content.className = "bericht-content";
-  const naam = document.createElement("span"); naam.className = "naam"; naam.textContent = AVATAR_NAAM;
-  const bubbel = document.createElement("div"); bubbel.className = "bubble bubble-bot";
-  bubbel.textContent = "Hoe was je ervaring? We stellen je feedback op prijs!";
-  const ratingDiv = document.createElement("div");
-  ratingDiv.className = "rating-wrapper";
-  let sterScore = 0;
-  ratingDiv.innerHTML = `
-    <div class="rating-label">Klik op een ster</div>
-    <div class="ster-rij">${[1,2,3,4,5].map(i=>`<button type="button" class="ster" data-score="${i}" aria-label="${i} van 5 sterren">${ICON_STAR}</button>`).join("")}</div>
-    <button class="rating-bevestig" onclick="verstuurRating(${Date.now()})">Verstuur</button>
-  `;
-  ratingDiv.querySelectorAll(".ster").forEach(s => {
-    s.onclick = () => { sterScore=parseInt(s.dataset.score); ratingDiv.querySelectorAll(".ster").forEach((st,idx)=>st.classList.toggle("actief",idx<sterScore)); };
-  });
-  content.appendChild(naam); content.appendChild(bubbel); content.appendChild(ratingDiv);
-  w.appendChild(content); div.appendChild(w); div.scrollTop=div.scrollHeight;
-}
-function verstuurRating() {
-  document.querySelectorAll(".rating-wrapper").forEach(e=>e.remove());
-  voegJijToe("Beoordeling verstuurd");
-  voegTypingToe();
-  setTimeout(async()=>{ await voegBotToe("Dankjewel voor je beoordeling! We hopen je snel weer te zien bij Bagel Alley."); }, 800);
-}
 
 
 // ── KAART PAS NA EEN TIK ──
