@@ -3,7 +3,7 @@
 <html lang="nl">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
   {% set seo_title = "Taart bestellen | Bagel Alley Wassenaar" %}
   {% set seo_desc = "Bestel je taart online bij Bagel Alley Wassenaar. Kies een of meerdere taarten, voeg een persoonlijke tekst toe en haal vers af in Wassenaar." %}
   {% set seo_path = "/bestellen" %}
@@ -13,7 +13,7 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
-    body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--text); min-height: 100vh; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--text); min-height: 100vh; min-height: 100svh; }
 
     /* NAV */
     nav { display: flex; justify-content: space-between; align-items: center; padding: 1rem 4rem; background: var(--dark2); border-bottom: 2px solid var(--purple); }
@@ -64,7 +64,7 @@
     .product-card.gekozen .product-card-check { background: var(--purple); border-color: var(--purple); color: white; }
     .product-card-title { font-family: 'Playfair Display', serif; font-weight: 700; font-size: var(--fs-base); color: var(--dark); margin-bottom: .55rem; padding-right: 1.5rem; }
     .size-options { display: flex; gap: .5rem; margin-top: .3rem; }
-    .size-opt { flex: 1; text-align: center; padding: .5rem .3rem; border: 1.5px solid rgba(135,88,206,.18); border-radius: var(--r-field); font-size: var(--fs-sm); cursor: pointer; transition: background-color .15s, border-color .15s, color .15s, transform .15s, box-shadow .15s; }
+    .size-opt { min-height: 44px; flex: 1; text-align: center; padding: .5rem .3rem; border: 1.5px solid rgba(135,88,206,.18); border-radius: var(--r-field); font-size: var(--fs-sm); cursor: pointer; transition: background-color .15s, border-color .15s, color .15s, transform .15s, box-shadow .15s; }
     @media (hover: hover) and (pointer: fine) { .size-opt:hover { border-color: var(--purple); } }
     .size-opt.gekozen { background: var(--purple); color: white; border-color: var(--purple); font-weight: 500; }
     .size-opt-price { display: block; font-size: var(--fs-xs); opacity: .7; margin-top: .15rem; }
@@ -100,7 +100,7 @@
 
     /* SLOT GRID (afhaaltijd) */
     .slot-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: .4rem; }
-    .slot { padding: .55rem .4rem; border: 1.5px solid rgba(135,88,206,.2); border-radius: var(--r-field); font-size: var(--fs-sm); text-align: center; cursor: pointer; color: var(--text); transition: background-color .15s, border-color .15s, color .15s, transform .15s, box-shadow .15s; }
+    .slot { min-height: 44px; padding: .55rem .4rem; border: 1.5px solid rgba(135,88,206,.2); border-radius: var(--r-field); font-size: var(--fs-sm); text-align: center; cursor: pointer; color: var(--text); transition: background-color .15s, border-color .15s, color .15s, transform .15s, box-shadow .15s; }
     @media (hover: hover) and (pointer: fine) { .slot:hover { border-color: var(--purple); background: rgba(135,88,206,.06); } }
     .slot.gekozen { background: var(--purple) !important; color: white !important; border-color: var(--purple) !important; font-weight: 500; }
 
@@ -155,6 +155,18 @@
     @media (max-width: 480px) {
       .form-row { grid-template-columns: 1fr; }
       .slot-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+    /* Mobiel: veilige zones en tikdoelen */
+    nav { padding-top: max(1rem, env(safe-area-inset-top, 0px)); }
+    .nav-logo, .nav-back { min-height: 44px; }
+    .nav-cta { display: inline-flex; align-items: center; gap: .4rem; min-height: 44px; }
+    .nav-cta-short { display: none; }
+    @media (max-width: 1024px) {
+      nav { padding-left: max(1.2rem, env(safe-area-inset-left, 0px)); padding-right: max(1.2rem, env(safe-area-inset-right, 0px)); }
+    }
+    @media (max-width: 400px) {
+      .nav-cta-long { display: none; }
+      .nav-cta-short { display: inline; }
     }
   </style>
   {% include "_favicons.html" ignore missing %}
@@ -231,7 +243,7 @@
         </button>
         <div class="form-group" id="tekstVeldWrap" style="display:none;">
           <label class="form-label" for="tekstOpTaart">Gewenste tekst <span>*</span></label>
-          <input type="text" id="tekstOpTaart" class="form-input" placeholder="Bijv. Gefeliciteerd Anne!" maxlength="40">
+          <input type="text" id="tekstOpTaart" class="form-input" placeholder="Bijv. Gefeliciteerd Anne!" maxlength="40" autocomplete="off" enterkeyhint="done">
         </div>
         <div class="form-error" id="error2">Vul de gewenste tekst in, of zet de optie uit.</div>
         <div class="step-nav">
@@ -248,11 +260,11 @@
         <div class="form-row">
           <div class="form-group">
             <label class="form-label" for="afhaaldatum">Afhaaldatum <span>*</span></label>
-            <input type="date" id="afhaaldatum" class="form-input" min="">
+            <input type="date" id="afhaaldatum" class="form-input" min="" required>
           </div>
           <div class="form-group">
             <label class="form-label" for="naam">Naam <span>*</span></label>
-            <input type="text" id="naam" class="form-input" placeholder="Je volledige naam" autocomplete="name">
+            <input type="text" id="naam" class="form-input" placeholder="Je volledige naam" autocomplete="name" autocapitalize="words" enterkeyhint="next" required>
           </div>
         </div>
         <div class="form-group">
@@ -264,11 +276,11 @@
         <div class="form-row">
           <div class="form-group">
             <label class="form-label" for="email">E-mailadres <span>*</span></label>
-            <input type="email" id="email" class="form-input" placeholder="jouw@email.nl" autocomplete="email">
+            <input type="email" id="email" class="form-input" placeholder="jouw@email.nl" autocomplete="email" inputmode="email" autocapitalize="none" spellcheck="false" enterkeyhint="next" required>
           </div>
           <div class="form-group">
             <label class="form-label" for="telefoon">Telefoonnummer <span>*</span></label>
-            <input type="tel" id="telefoon" class="form-input" placeholder="06-12345678" autocomplete="tel">
+            <input type="tel" id="telefoon" class="form-input" placeholder="06-12345678" autocomplete="tel" inputmode="tel" enterkeyhint="next" required>
           </div>
         </div>
         <div class="form-error" id="error3" role="alert">Vul alle verplichte velden in.</div>

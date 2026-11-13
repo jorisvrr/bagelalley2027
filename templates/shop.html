@@ -3,7 +3,7 @@
 <html lang="nl">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
   {% set seo_title = "Taarten & High Tea bestellen | Bagel Alley Wassenaar" %}
   {% set seo_desc = "Bestel online bij Bagel Alley Wassenaar: huisgemaakte taarten zoals Apple Pie, Oreo, Red Velvet en Carrot Cake. Vers gemaakt, klaar om af te halen." %}
   {% set seo_path = "/shop" %}
@@ -12,7 +12,7 @@
   {% include "_tokens.html" ignore missing %}
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'DM Sans', sans-serif; background: var(--dark); color: var(--cream); min-height: 100vh; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--dark); color: var(--cream); min-height: 100vh; min-height: 100svh; }
     nav { position: sticky; top: 0; z-index: var(--z-nav); display: flex; justify-content: space-between; align-items: center; padding: 1rem 3rem; background: var(--dark2); border-bottom: 2px solid var(--purple); }
     .nav-logo { display: flex; align-items: center; gap: .75rem; text-decoration: none; }
     .nav-logo img { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; }
@@ -69,6 +69,18 @@
     @media (max-width: 768px) { nav { padding: .9rem 1.2rem; } .page-hero { padding: 2.5rem 1.2rem 2rem; } .shop-main { padding: 2rem 1.2rem 4rem; } .product-grid { grid-template-columns: 1fr 1fr; } .custom-order-card { flex-direction: column; } }
     @media (max-width: 480px) { .product-grid { grid-template-columns: 1fr; } }
     @media (max-width: 600px) { .nav-back { display: none; } .nav-logo-text { white-space: nowrap; } .nav-cta { white-space: nowrap; } }
+    /* Mobiel: veilige zones en tikdoelen */
+    nav { padding-top: max(1rem, env(safe-area-inset-top, 0px)); }
+    .nav-logo, .nav-back { min-height: 44px; }
+    .nav-cta { display: inline-flex; align-items: center; gap: .4rem; min-height: 44px; }
+    .nav-cta-short { display: none; }
+    @media (max-width: 1024px) {
+      nav { padding-left: max(1.2rem, env(safe-area-inset-left, 0px)); padding-right: max(1.2rem, env(safe-area-inset-right, 0px)); }
+    }
+    @media (max-width: 400px) {
+      .nav-cta-long { display: none; }
+      .nav-cta-short { display: inline; }
+    }
   </style>
   {% include "_favicons.html" ignore missing %}
 </head>
@@ -76,11 +88,11 @@
 {% include "_loader.html" ignore missing %}
 <nav>
   <a href="/" class="nav-logo">
-    <img src="{{ url_for('static', filename='logo.png') }}" alt="Bagel Alley">
+    <img src="{{ url_for('static', filename='logo.png') }}" alt="" width="36" height="36">
     <span class="nav-logo-text">Bagel <span>Alley</span></span>
   </a>
   <a href="/" class="nav-back">{{ icon('arrow-left', 16) }} Terug naar de website</a>
-  <a href="{{ reserveer_url }}" class="nav-cta">{{ reserveer_label }}</a>
+  <a href="{{ reserveer_url }}" class="nav-cta">{{ icon('phone', 16) }} <span class="nav-cta-long">{{ reserveer_label }}</span><span class="nav-cta-short">Bellen</span></a>
 </nav>
 <div class="page-hero">
   <div class="page-hero-inner">

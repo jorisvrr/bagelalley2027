@@ -3,10 +3,11 @@
 <html lang="nl">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
   {% set seo_title = "Bagel Alley | Bagels, Breakfast, Lunch & High Tea in Wassenaar" %}
   {% set seo_desc = "Bagel Alley in Wassenaar: vers belegde bagels, breakfast, lunch, high tea en tapas. Ook glutenvrij & lactosevrij. Reserveer een tafel of bestel online." %}
   {% set seo_path = "/" %}
+  {% set theme_color = "#F5F0E8" %}
   {% include "_seo.html" ignore missing %}
   {% include "_tokens.html" ignore missing %}
   <style>
@@ -120,14 +121,12 @@
     @media (hover: hover) and (pointer: fine) { .nav-links a.nav-jobs:hover { color: var(--muted); } }
     .nav-cta { background: var(--purple) !important; color: white !important; padding: .6rem 1.5rem; border-radius: var(--r-btn); font-weight: 500 !important; transition: background .2s, transform .15s !important; }
     @media (hover: hover) and (pointer: fine) { .nav-cta:hover { background: var(--purple3) !important; transform: translateY(-1px); } }
-    .nav-close-btn { display: none; }
-    .nav-toggle { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
-    .nav-toggle:focus-visible ~ nav .mobile-menu-btn { outline: 2px solid var(--purple); outline-offset: 3px; border-radius: var(--r-btn); }
-    .mobile-menu-btn { display: none; background: none; border: none; cursor: pointer; flex-direction: column; gap: 5px; padding: 4px; z-index: 110; }
+    .mobile-menu-btn { display: none; background: none; border: none; cursor: pointer; flex-direction: column; align-items: center; justify-content: center; gap: 5px; width: 44px; height: 44px; margin-right: -10px; padding: 0; border-radius: var(--r-field); }
+    .nav-logo { min-height: 44px; }
     .mobile-menu-btn span { display: block; width: 22px; height: 2px; background: var(--muted); border-radius: var(--r-btn); transition: transform .3s, opacity .3s; }
-    .mobile-menu-btn.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
-    .mobile-menu-btn.open span:nth-child(2) { opacity: 0; }
-    .mobile-menu-btn.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+    .site-nav-open .mobile-menu-btn span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .site-nav-open .mobile-menu-btn span:nth-child(2) { opacity: 0; }
+    .site-nav-open .mobile-menu-btn span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
     /* HERO */
     .hero { position: relative; height: 95vh; min-height: 560px; overflow: hidden; display: flex; align-items: flex-end; }
@@ -337,8 +336,19 @@
     .reserveer-banner-sub { font-size: var(--fs-xs); color: rgba(245,240,232,.65); }
     .reserveer-banner-arrow { color: #D4AAFF; font-size: var(--fs-lg); }
 
+    .chat-minimized { padding-bottom: calc(12px + var(--safe-bottom)); }
+    button.min-left { flex: 1; min-width: 0; min-height: 44px; background: none; border: 0; padding: 0; color: inherit; font: inherit; text-align: left; cursor: pointer; }
+    .min-text { display: flex; flex-direction: column; }
+    .min-naam, .min-status, .reserveer-banner-tekst, .reserveer-banner-sub { display: block; }
+    .min-reserveer-btn { display: inline-flex; align-items: center; gap: .35rem; min-height: 44px; }
+    button.status-banner, button.reserveer-banner { width: 100%; border: 0; font: inherit; text-align: left; }
+    button.status-banner { background: none; min-height: 36px; }
+    .header-min { display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; margin: -6px -8px -6px 0; }
+    #chatWrapper { bottom: var(--kb, 0px); }
+    .chat-input { padding-bottom: calc(.8rem + var(--safe-bottom)); }
+
     /* Chat venster */
-    #chatvenster { flex: 1; overflow-y: auto; padding: 1rem; display: flex; flex-direction: column; gap: .6rem; }
+    #chatvenster { flex: 1; overflow-y: auto; overscroll-behavior: contain; padding: 1rem; display: flex; flex-direction: column; gap: .6rem; }
     #chatvenster::-webkit-scrollbar { width: 4px; }
     #chatvenster::-webkit-scrollbar-thumb { background: rgba(135,88,206,.2); border-radius: var(--r-btn); }
 
@@ -365,22 +375,22 @@
 
     /* Snelknoppen */
     #snelknoppen { padding: .5rem 1rem; display: flex; flex-wrap: wrap; gap: 6px; background: #F8F5FC; flex-shrink: 0; }
-    .snel-knop { background: white; color: var(--text); border: 1.5px solid rgba(135,88,206,.2); padding: .4rem .85rem; border-radius: var(--r-pill); font-size: var(--fs-sm); cursor: pointer; transition: background-color .2s, border-color .2s, color .2s, transform .2s, box-shadow .2s; white-space: nowrap; }
+    .snel-knop { background: white; color: var(--text); border: 1.5px solid rgba(135,88,206,.2); min-height: 40px; padding: .5rem .95rem; border-radius: var(--r-pill); font-size: var(--fs-sm); cursor: pointer; transition: background-color .2s, border-color .2s, color .2s, transform .2s, box-shadow .2s; white-space: nowrap; }
     @media (hover: hover) and (pointer: fine) { .snel-knop:hover { background: var(--purple); color: white; border-color: var(--purple); } }
 
     /* Invoer */
     .chat-input { display: flex; gap: .6rem; padding: .8rem 1rem; background: white; border-top: 1px solid rgba(135,88,206,.12); flex-shrink: 0; }
-    #invoer { flex: 1; padding: .6rem .9rem; font-size: var(--fs-md); border: 1.5px solid rgba(135,88,206,.2); border-radius: var(--r-field); outline: none; font-family: 'DM Sans', sans-serif; color: var(--text); background: #fafafa; transition: border-color .2s; }
+    #invoer { flex: 1; padding: .6rem .9rem; font-size: var(--fs-base); border: 1.5px solid rgba(135,88,206,.2); border-radius: var(--r-field); outline: none; font-family: 'DM Sans', sans-serif; color: var(--text); background: #fafafa; transition: border-color .2s; }
     #invoer:focus { border-color: var(--purple); background: white; }
     #invoer::placeholder { color: #736b7a; }
-    #knop { width: 38px; height: 38px; border-radius: var(--r-field); background: var(--purple); border: none; cursor: pointer; color: white; display: flex; align-items: center; justify-content: center; transition: background .2s, transform .15s; flex-shrink: 0; font-size: var(--fs-md); }
+    #knop { width: 44px; height: 44px; border-radius: var(--r-field); background: var(--purple); border: none; cursor: pointer; color: white; display: flex; align-items: center; justify-content: center; transition: background .2s, transform .15s; flex-shrink: 0; font-size: var(--fs-md); }
     @media (hover: hover) and (pointer: fine) { #knop:hover { background: var(--purple3); transform: scale(1.05); } }
 
     /* Booking form in chat */
     .booking-chat-wrapper { margin-top: 8px; animation: bubbleIn .3s ease; }
     @keyframes bubbleIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
     .booking-chat-form { background: white; border-radius: var(--r-card); padding: 1rem; display: flex; flex-direction: column; gap: 8px; border: 1.5px solid rgba(135,88,206,.15); max-width: 320px; }
-    .booking-chat-form input, .booking-chat-form select { width: 100%; padding: .55rem .75rem; border: 1.5px solid #e8e3f0; border-radius: var(--r-field); font-size: var(--fs-sm); font-family: 'DM Sans', sans-serif; color: var(--text); background: #fafafa; outline: none; transition: border-color .2s; }
+    .booking-chat-form input, .booking-chat-form select { width: 100%; padding: .55rem .75rem; border: 1.5px solid #e8e3f0; border-radius: var(--r-field); font-size: var(--fs-base); font-family: 'DM Sans', sans-serif; color: var(--text); background: #fafafa; outline: none; transition: border-color .2s; }
     .booking-chat-form input:focus, .booking-chat-form select:focus { border-color: var(--purple); }
     .booking-chat-form input::placeholder { color: #736b7a; font-size: var(--fs-sm); }
     .booking-row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
@@ -457,6 +467,16 @@
       .bruidstaart-img { height: 260px; }
     }
 
+    /* Mobiel: veilige zones, tikdoelen, onderkant-stapel */
+    nav { padding-top: max(1rem, env(safe-area-inset-top, 0px)); }
+    .hero-location { min-height: 44px; }
+    .sfeer-link { display: inline-flex; align-items: center; min-height: 44px; }
+    .footer-col a { padding: .55rem 0; margin-bottom: 0; }
+    .contact-list li a { display: inline-block; padding: .7rem 0; margin: -.7rem 0; }
+    @media (max-width: 1024px) {
+      nav { padding-left: max(2rem, env(safe-area-inset-left, 0px)); padding-right: max(2rem, env(safe-area-inset-right, 0px)); }
+    }
+
     /* RESPONSIVE */
     @media (max-width: 1024px) {
       /* Stats onder de knoppen in plaats van eroverheen */
@@ -474,24 +494,20 @@
     @media (max-width: 768px) {
       nav { padding: .9rem 1.5rem; }
       .nav-links { display: none; }
-      .mobile-menu-btn { display: flex; cursor: pointer; z-index: var(--z-nav); position: relative; }
-      .nav-close-btn { display: none; position: fixed; top: 1.2rem; right: 1.5rem; z-index: calc(var(--z-sheet) + 1); font-size: var(--fs-xl); color: rgba(245,240,232,.62); cursor: pointer; padding: .5rem; line-height: 1; }
-      #nav-toggle:checked ~ nav .nav-close-btn { display: block; }
-      
-      #nav-toggle:checked ~ nav .nav-links {
+      .mobile-menu-btn { display: flex; position: relative; z-index: calc(var(--z-sheet) + 1); }
+      .site-nav-open .mobile-menu-btn span { background: var(--cream); }
+      .site-nav-open .nav-links {
         display: flex; flex-direction: column; align-items: flex-start;
-        position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-        min-height: 100vh; width: 100vw;
-        background: #1A1018; padding: 7rem 2rem 2rem;
-        gap: 2rem; z-index: var(--z-sheet);
+        position: fixed; inset: 0; height: 100vh; height: 100dvh;
+        background: var(--dark); gap: .5rem; z-index: var(--z-sheet);
+        padding: calc(6rem + env(safe-area-inset-top, 0px)) max(2rem, env(safe-area-inset-right, 0px)) calc(2rem + env(safe-area-inset-bottom, 0px)) max(2rem, env(safe-area-inset-left, 0px));
+        overflow-y: auto; overscroll-behavior: contain;
       }
-      #nav-toggle:checked ~ nav .nav-links a { font-size: var(--fs-lg); color: var(--cream); }
-      #nav-toggle:checked ~ nav .nav-links a.nav-jobs { color: rgba(245,240,232,.62); font-size: var(--fs-base); }
-      #nav-toggle:checked ~ nav .nav-links .nav-cta { font-size: var(--fs-base); padding: .8rem 1.8rem; }
-      #nav-toggle:checked ~ nav .mobile-menu-btn span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
-      #nav-toggle:checked ~ nav .mobile-menu-btn span:nth-child(2) { opacity: 0; }
-      #nav-toggle:checked ~ nav .mobile-menu-btn span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
-      
+      .site-nav-open .nav-links li { width: 100%; }
+      .site-nav-open .nav-links a { display: flex; align-items: center; min-height: 48px; font-size: var(--fs-lg); color: var(--cream); }
+      .site-nav-open .nav-links a.nav-jobs { color: rgba(245,240,232,.62); font-size: var(--fs-base); }
+      .site-nav-open .nav-links .nav-cta { display: inline-flex; width: auto; margin-top: 1rem; font-size: var(--fs-base); padding: .8rem 1.8rem; }
+
       .hero-content { padding: 0 1.5rem 3rem; }
       .hero-allergen { top: .9rem; right: .9rem; font-size: var(--fs-xs); padding: .45rem .85rem .45rem .5rem; gap: .4rem; box-shadow: var(--shadow-card); }
       .hero-allergen .ha-icon { width: 18px; height: 18px; font-size: var(--fs-xs); }
@@ -512,22 +528,21 @@
       .footer-links { flex-wrap: wrap; gap: 2rem; }
       footer { padding: 2.5rem 1.5rem 1.5rem; }
       #chatWrapper { width: 100%; right: 0; }
+      .chat-container { height: min(600px, calc(var(--vvh, 100dvh) - 12px)); border-radius: var(--r-card) var(--r-card) 0 0; }
     }
   </style>
   {% include "_favicons.html" ignore missing %}
 </head>
-<body>
+<body class="has-chat">
 {% include "_loader.html" ignore missing %}
 
 <!-- NAV -->
-<input type="checkbox" id="nav-toggle" class="nav-toggle" aria-label="Menu openen of sluiten">
-<nav>
-  <a href="#" class="nav-logo">
-    <img src="{{ url_for('static', filename='logo.png') }}" alt="Bagel Alley" onerror="this.style.display='none'">
+<nav id="site-nav">
+  <a href="#home" class="nav-logo">
+    <img src="{{ url_for('static', filename='logo.png') }}" alt="" width="38" height="38" onerror="this.style.display='none'">
     <span class="nav-logo-text">Bagel <span>Alley</span></span>
   </a>
-  <label for="nav-toggle" class="nav-close-btn" aria-hidden="true">{{ icon('x', 24) }}</label>
-  <ul class="nav-links">
+  <ul class="nav-links" id="nav-links">
     <li><a href="#menu">Menu</a></li>
     <li><a href="#sfeer">Over Ons</a></li>
     <li><a href="#tijden">Openingstijden</a></li>
@@ -535,9 +550,9 @@
     <li><a href="/jobs" class="nav-jobs">Jobs</a></li>
     <li><a href="{{ reserveer_url }}" class="nav-cta">{% if online_reserveren %}Reserveren{% else %}Bel om te reserveren{% endif %}</a></li>
   </ul>
-  <label for="nav-toggle" class="mobile-menu-btn" aria-label="Menu">
+  <button type="button" class="mobile-menu-btn" aria-expanded="false" aria-controls="nav-links" aria-label="Menu openen">
     <span></span><span></span><span></span>
-  </label>
+  </button>
 </nav>
 
 
@@ -891,20 +906,20 @@ document.addEventListener('DOMContentLoaded', function() {
 <!-- ── CHATBOT ── -->
 <div id="chatWrapper">
   <!-- Minimized bar -->
-  <div class="chat-minimized" id="minimizedBar" onclick="openChat()">
-    <div class="min-left">
-      <div class="min-avatar">{{ bedrijf.avatar_initialen }}</div>
-      <div>
-        <div class="min-naam">{{ bedrijf.avatar_naam }}</div>
-        <div class="min-status">Online</div>
-      </div>
-      <span class="badge" id="badge">1</span>
-    </div>
-    <button class="min-reserveer-btn" onclick="event.stopPropagation();openChatEnReserveer()">{{ icon('calendar', 16) }} Reserveer nu</button>
+  <div class="chat-minimized" id="minimizedBar">
+    <button type="button" class="min-left" onclick="openChat()" aria-label="Open de chat">
+      <span class="min-avatar" aria-hidden="true">{{ bedrijf.avatar_initialen }}</span>
+      <span class="min-text">
+        <span class="min-naam">{{ bedrijf.avatar_naam }}</span>
+        <span class="min-status">Online</span>
+      </span>
+      <span class="badge" id="badge" aria-label="1 nieuw bericht">1</span>
+    </button>
+    <button type="button" class="min-reserveer-btn" onclick="openChatEnReserveer()">{{ icon('calendar', 16) }} Reserveer nu</button>
   </div>
 
   <!-- Chat container -->
-  <div class="chat-container verborgen" id="chatContainer">
+  <div class="chat-container verborgen" id="chatContainer" role="dialog" aria-label="Chat met Bagel Alley">
     <div class="chat-header">
       <div class="chat-header-top">
         <div class="header-avatar">{{ bedrijf.avatar_initialen }}</div>
@@ -912,30 +927,30 @@ document.addEventListener('DOMContentLoaded', function() {
           <div class="header-naam">{{ bedrijf.avatar_naam }}</div>
           <div class="header-status">Online, {{ bedrijf.naam }}</div>
         </div>
-        <button class="header-min" onclick="minimizeChat()" aria-label="Chat minimaliseren">{{ icon('minus', 20) }}</button>
+        <button type="button" class="header-min" onclick="minimizeChat()" aria-label="Chat minimaliseren">{{ icon('minus', 20) }}</button>
       </div>
-      <div class="status-banner" id="statusBanner" onclick="bannerKlik()">
-        <div class="status-dot"></div>
+      <button type="button" class="status-banner" id="statusBanner" onclick="bannerKlik()">
+        <span class="status-dot" aria-hidden="true"></span>
         <span id="statusTekst">Laden...</span>
-      </div>
-      <div class="reserveer-banner" onclick="toonBookingFormulier()">
-        <div class="reserveer-banner-left">
+      </button>
+      <button type="button" class="reserveer-banner" onclick="toonBookingFormulier()">
+        <span class="reserveer-banner-left">
           {{ icon('calendar', 20) }}
-          <div>
-            <div class="reserveer-banner-tekst">Reserveer een tafel</div>
-            <div class="reserveer-banner-sub">{% if online_reserveren %}Direct boeken, geen wachttijd{% else %}Telefonisch via 070-514 61 16{% endif %}</div>
-          </div>
-        </div>
+          <span>
+            <span class="reserveer-banner-tekst">Reserveer een tafel</span>
+            <span class="reserveer-banner-sub">{% if online_reserveren %}Direct boeken, geen wachttijd{% else %}Telefonisch via 070-514 61 16{% endif %}</span>
+          </span>
+        </span>
         <span class="reserveer-banner-arrow">{{ icon('chevron-right', 20) }}</span>
-      </div>
+      </button>
     </div>
 
     <div id="chatvenster"></div>
     <div id="snelknoppen"></div>
 
     <div class="chat-input">
-      <input id="invoer" type="text" placeholder="Typ een bericht..." onkeydown="if(event.key==='Enter')verstuur()">
-      <button id="knop" onclick="verstuur()" aria-label="Verstuur bericht">{{ icon('send', 20) }}</button>
+      <input id="invoer" type="text" placeholder="Typ een bericht..." aria-label="Je vraag" autocomplete="off" enterkeyhint="send" onkeydown="if(event.key==='Enter')verstuur()">
+      <button type="button" id="knop" onclick="verstuur()" aria-label="Verstuur bericht">{{ icon('send', 20) }}</button>
     </div>
   </div>
 </div>
@@ -973,10 +988,16 @@ function checkOpenStatus() {
 function bannerKlik() { verstuurNaarBot("__openingstijden_banner__"); }
 
 // ── MINIMIZE/OPEN ──
+const isTelefoon = () => matchMedia('(max-width: 768px)').matches;
 function minimizeChat() {
   document.getElementById("chatContainer").classList.add("verborgen");
   document.getElementById("minimizedBar").classList.add("zichtbaar");
+  document.body.style.overflow = "";
+  const knop = document.querySelector("#minimizedBar .min-left"); if (knop) knop.focus({ preventScroll: true });
 }
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape" && !document.getElementById("chatContainer").classList.contains("verborgen")) minimizeChat();
+});
 const ONLINE_RESERVEREN = {{ online_reserveren | tojson }};
 function openChatEnReserveer() { openChat(); setTimeout(() => toonBookingFormulier(), 350); }
 function openChat() {
@@ -985,6 +1006,8 @@ function openChat() {
   document.getElementById("minimizedBar").classList.remove("zichtbaar");
   document.getElementById("badge").classList.remove("zichtbaar");
   setTimeout(() => document.getElementById("chatContainer").classList.remove("open-animatie"), 400);
+  if (isTelefoon()) document.body.style.overflow = "hidden";
+  const kop = document.querySelector("#chatContainer .header-min"); if (kop) kop.focus({ preventScroll: true });
 }
 
 // ── SNELKNOPPEN ──
@@ -1311,14 +1334,59 @@ function verstuurRating() {
 
 
 // ── HAMBURGER MENU ──
-// Het menu opent/sluit via de checkbox #nav-toggle (CSS). Hier alleen:
-// scroll blokkeren als het open is, en sluiten na het tikken op een link.
+// Echte knop: aria-expanded, focus blijft in het menu, Escape en de terug-gebaar sluiten het.
 (function () {
-  const toggle = document.getElementById('nav-toggle');
-  if (!toggle) return;
-  const sync = () => { document.body.style.overflow = toggle.checked ? 'hidden' : ''; };
-  toggle.addEventListener('change', sync);
-  document.querySelectorAll('.nav-links a').forEach(a => a.addEventListener('click', () => { toggle.checked = false; sync(); }));
+  const nav = document.getElementById('site-nav');
+  const btn = nav && nav.querySelector('.mobile-menu-btn');
+  const links = document.getElementById('nav-links');
+  if (!btn || !links) return;
+  let open = false;
+  const focusables = () => [...links.querySelectorAll('a'), btn];  // DOM-volgorde
+  function zet(waarde, opties = {}) {
+    if (open === waarde) return;
+    open = waarde;
+    nav.classList.toggle('site-nav-open', open);
+    btn.setAttribute('aria-expanded', String(open));
+    btn.setAttribute('aria-label', open ? 'Menu sluiten' : 'Menu openen');
+    document.body.style.overflow = open ? 'hidden' : '';
+    if (open) {
+      if (!opties.uitGeschiedenis) history.pushState({ menu: 1 }, '');
+      const eerste = links.querySelector('a'); if (eerste) eerste.focus();
+    } else {
+      if (!opties.uitGeschiedenis && history.state && history.state.menu) history.replaceState(null, '');
+      if (opties.focus !== false) btn.focus();
+    }
+  }
+  btn.addEventListener('click', () => zet(!open));
+  links.querySelectorAll('a').forEach(a => a.addEventListener('click', () => zet(false, { focus: false })));
+  window.addEventListener('popstate', () => { if (open) zet(false, { uitGeschiedenis: true }); });
+  document.addEventListener('keydown', (e) => {
+    if (!open) return;
+    if (e.key === 'Escape') { e.preventDefault(); zet(false); return; }
+    if (e.key === 'Tab') {
+      const f = focusables(), eerste = f[0], laatste = f[f.length - 1];
+      if (e.shiftKey && document.activeElement === eerste) { e.preventDefault(); laatste.focus(); }
+      else if (!e.shiftKey && document.activeElement === laatste) { e.preventDefault(); eerste.focus(); }
+    }
+  });
+  matchMedia('(min-width: 769px)').addEventListener('change', (e) => { if (e.matches) zet(false, { focus: false }); });
+})();
+
+// ── CHAT ALS BOTTOM SHEET ──
+// Volgt het zichtbare deel van het scherm (visualViewport), zodat de chat boven
+// het toetsenbord blijft en nooit hoger wordt dan wat je ziet.
+(function () {
+  const wrap = document.getElementById('chatWrapper');
+  const vv = window.visualViewport;
+  if (!wrap || !vv) return;
+  function sync() {
+    const kb = Math.max(0, window.innerHeight - vv.height - vv.offsetTop);
+    wrap.style.setProperty('--kb', kb + 'px');
+    wrap.style.setProperty('--vvh', vv.height + 'px');
+  }
+  vv.addEventListener('resize', sync);
+  vv.addEventListener('scroll', sync);
+  sync();
 })();
 
 window.addEventListener("load", () => {

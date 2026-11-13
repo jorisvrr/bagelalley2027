@@ -3,7 +3,7 @@
   #ident {
     position: fixed;
     right: clamp(1rem, 3vw, 2rem);
-    bottom: clamp(1rem, 3vw, 2rem);
+    bottom: calc(clamp(1rem, 3vw, 2rem) + var(--safe-bottom, 0px));
     z-index: var(--z-ident);
     display: inline-flex; align-items: center; gap: 0;
     text-decoration: none;
@@ -49,7 +49,8 @@
     function chatOpen() { return chatBox && !chatBox.classList.contains('verborgen'); }
     function update() {
       var nearBottom = window.innerHeight + window.scrollY >= document.body.offsetHeight - 80;
-      var show = nearBottom && !chatOpen();
+      var cookieOpen = !!document.getElementById('ba-cookie');
+      var show = nearBottom && !chatOpen() && !cookieOpen;
       ident.classList.toggle('show', show);
       if (chat) {                     // chat en ident wisselen elkaar netjes af onderaan
         chat.style.opacity = show ? '0' : '';

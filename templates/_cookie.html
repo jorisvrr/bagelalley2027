@@ -10,7 +10,7 @@
   </div>
 </div>
 <style>
-  .ba-cookie { position: fixed; left: clamp(1rem, 3vw, 2rem); bottom: clamp(1rem, 3vw, 2rem); z-index: var(--z-cookie);
+  .ba-cookie { position: fixed; left: clamp(1rem, 3vw, 2rem); bottom: calc(var(--chatbar-h, 0px) + clamp(1rem, 3vw, 2rem) + var(--safe-bottom, 0px)); z-index: var(--z-cookie);
     max-width: 330px; background: #241E2A; border: 1px solid rgba(135,88,206,.3); border-radius: var(--r-card);
     padding: 1.1rem 1.2rem; box-shadow: var(--shadow-float);
     transform: translateY(160%); transition: transform .45s cubic-bezier(.4,0,.2,1);
@@ -18,10 +18,10 @@
   .ba-cookie.show { transform: none; }
   .ba-cookie-text { color: rgba(245,240,232,.8); font-size: var(--fs-sm); line-height: 1.55; margin-bottom: .9rem; }
   .ba-cookie-btns { display: flex; gap: .55rem; }
-  .ba-cookie-accept { flex: 1; background: #8758CE; color: #fff; border: none; padding: .6rem; border-radius: var(--r-field);
+  .ba-cookie-accept { min-height: 44px; flex: 1; background: #8758CE; color: #fff; border: none; padding: .6rem; border-radius: var(--r-field);
     font-size: var(--fs-sm); font-weight: 600; cursor: pointer; font-family: inherit; transition: background .2s; }
   @media (hover: hover) and (pointer: fine) { .ba-cookie-accept:hover { background: #6E42B0; } }
-  .ba-cookie-decline { background: transparent; color: rgba(245,240,232,.62); border: 1px solid rgba(245,240,232,.18);
+  .ba-cookie-decline { min-height: 44px; background: transparent; color: rgba(245,240,232,.62); border: 1px solid rgba(245,240,232,.18);
     padding: .6rem .9rem; border-radius: var(--r-field); font-size: var(--fs-sm); cursor: pointer; font-family: inherit; transition: color .2s; }
   @media (hover: hover) and (pointer: fine) { .ba-cookie-decline:hover { color: rgba(245,240,232,.9); } }
 </style>
