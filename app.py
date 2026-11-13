@@ -97,6 +97,13 @@ def _clean_str(value, maxlen: int) -> str:
     """Strip + harde lengtelimiet voor vrije-tekst input."""
     return str(value or "").strip()[:maxlen]
 
+_STUURTEKENS = re.compile(r"[\x00-\x1f\x7f\u2028\u2029]+")
+
+def _eenregelig(value, maxlen: int) -> str:
+    """Als _clean_str, maar voor velden van een regel: regeleinden en andere
+    stuurtekens worden een spatie (komt o.a. in het onderwerp van de mail)."""
+    return " ".join(_STUURTEKENS.sub(" ", str(value or "")).split())[:maxlen]
+
 def _json_body() -> dict:
     """JSON-body als dict. Alles wat geen JSON-object is (lijst, getal, tekst) telt als leeg."""
     data = request.get_json(silent=True)
@@ -1107,7 +1114,7 @@ def valideer_bestelling(data: dict):
         gezien.add(tid)
         regels.append((naam, "Klein" if formaat == "klein" else "Groot", prijs))
         totaal += prijs
-    tekst = _clean_str(data.get("tekst"), 40)
+    tekst = _eenregelig(data.get("tekst"), 40)
     if tekst:
         totaal += TEKST_OP_TAART_PRIJS
     datum = _valid_iso_date(data.get("afhaaldatum"))
@@ -1119,9 +1126,9 @@ def valideer_bestelling(data: dict):
     tijd = _clean_str(data.get("afhaaltijd"), 5)
     if tijd not in AFHAAL_SLOTS:
         return None, "Kies een afhaaltijd."
-    naam = _clean_str(data.get("naam"), 100)
+    naam = _eenregelig(data.get("naam"), 100)
     email = _clean_str(data.get("email"), 150)
-    telefoon = _clean_str(data.get("telefoon"), 30)
+    telefoon = _eenregelig(data.get("telefoon"), 30)
     opmerkingen = _clean_str(data.get("opmerkingen"), 1000)
     if not naam:
         return None, "Vul je naam in."
