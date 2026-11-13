@@ -57,4 +57,3 @@ De tekstversie op /menu (`menukaart.py`) is letterlijk van de gedrukte kaart ove
 - Het blok "Order for take away" (bellen of WhatsApp 06-51343359): weggelaten tot punt 6 beantwoord is.
 - Het koffie-tekstje van de brander: op de kaart staat "Lagaranta", de klant schrijft "La Garanta". Welke spelling klopt? Op de site staat nu "La Garanta".
 - IJskoffie, haver-/sojamelk en extra shot staan op de kaart in de L-kolom; in de tekstversie zonder maat vermeld.
-- De gedrukte kaart (`public/static/menu/menu_1.webp`, `menu_2.webp`) toont nog `vrcbagel@gmail.com` en `bagelalley.nl` onderaan. Dat kan alleen met een nieuwe scan of een nieuw ontwerp van de kaart.

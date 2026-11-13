@@ -221,7 +221,7 @@ def _mail_footer():
       </td>
       <td class="col" width="34%" valign="top" style="font-family:Arial,sans-serif;padding-right:10px;">
         <div style="font-size:10px;letter-spacing:1.5px;color:#8758ce;text-transform:uppercase;margin-bottom:8px;">Bagel Alley Wassenaar</div>
-        <div style="font-size:12px;color:#7c7484;line-height:1.7;">Langstraat 42<br>2242 KM Wassenaar<br>070 514 61 16<br>info@bagelalley.nl</div>
+        <div style="font-size:12px;color:#7c7484;line-height:1.7;">Langstraat 42<br>2242 KM Wassenaar<br>070 514 61 16<br>vrcbagel@gmail.com</div>
       </td>
       <td class="col" width="33%" valign="top" style="font-family:Arial,sans-serif;padding-right:10px;">
         <div style="font-size:10px;letter-spacing:1.5px;color:#8758ce;text-transform:uppercase;margin-bottom:8px;">Volg ons</div>
@@ -402,7 +402,7 @@ def newsletter_html(naam: str = "") -> str:
 </body></html>"""
 
 
-def sendgrid_verstuur(naar: str, onderwerp: str, html_inhoud: str, antwoord_naar: str = "info@bagelalley.nl") -> bool:
+def sendgrid_verstuur(naar: str, onderwerp: str, html_inhoud: str, antwoord_naar: str = "vrcbagel@gmail.com") -> bool:
     """Verstuurt een HTML-mail via SendGrid. Geeft alleen True terug als SendGrid
     de mail heeft geaccepteerd (status 200/202). Zonder API-key: False."""
     if not SENDGRID_API_KEY:
@@ -507,7 +507,7 @@ BEDRIJF = {
     "avatar_naam": "Sonja",
     "avatar_initialen": "SO",
     "telefoon": "070-514 61 16",
-    "email": "info@bagelalley.nl",
+    "email": "vrcbagel@gmail.com",
     "adres": "Langstraat 42, 2242 KM Wassenaar",
     "openingstijden": {
         0: ("08:00", "16:00"),   # maandag
@@ -665,7 +665,7 @@ def link(tekst, url):
 # region ── KENNISBANK ──────────────────────────────────────────
 # Alle antwoorden van de chatbot, vul per bedrijf in
 _TEL = link("070-514 61 16", "tel:+31705146116")
-_MAIL = link("info@bagelalley.nl", "mailto:info@bagelalley.nl")
+_MAIL = link("vrcbagel@gmail.com", "mailto:vrcbagel@gmail.com")
 _ROUTE = "https://www.google.com/maps/search/?api=1&query=Bagel%20Alley%20Langstraat%2042%20Wassenaar"
 
 KENNISBANK = {
@@ -833,7 +833,7 @@ def jobs():
 
 
 # ── TAARTBESTELLING ──────────────────────────────────────────
-ORDER_MAIL_TO = os.environ.get("ORDER_MAIL_TO", "info@bagelalley.nl")
+ORDER_MAIL_TO = os.environ.get("ORDER_MAIL_TO", "vrcbagel@gmail.com")
 TAARTEN = {  # id: (naam, prijs klein, prijs groot); None = formaat niet leverbaar
     "apple":  ("Apple Pie", 32.50, 45.00),
     "choco":  ("Chocoladetaart", 32.50, 45.00),
