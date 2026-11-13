@@ -148,7 +148,7 @@ a:focus-visible{{outline:2px solid #B394EC;outline-offset:2px}}</style>
 </head><body><main class="c"><div class="b">{code}</div><h1>{titel}</h1><p>{tekst}</p>
 <nav aria-label="Verder naar"><a class="p" href="/">Naar de homepage</a><a href="/menu">Bekijk de kaart</a>
 <a href="tel:+31705146116">Bel 070-514 61 16</a>
-<a href="https://www.google.com/maps/search/?api=1&amp;query=Bagel%20Alley%20Langstraat%2042%20Wassenaar" rel="noopener">Route</a></nav></main></body></html>"""
+<a href="https://www.google.com/maps/search/?api=1&amp;query=Bagel%20Alley%20Langstraat%2042%20Wassenaar" rel="noopener noreferrer">Route</a></nav></main></body></html>"""
     return html, code
 
 @app.errorhandler(404)
@@ -680,7 +680,7 @@ def favicon_ico():
 def link(tekst, url):
     """Maakt een klikbare HTML link met huisstijl. Eigen pagina's (/...) openen in hetzelfde tabblad."""
     extern = url.startswith("http")
-    doel = ' target="_blank" rel="noopener"' if extern else ""
+    doel = ' target="_blank" rel="noopener noreferrer"' if extern else ""
     return f'<a href="{url}"{doel} class="chat-link">{tekst}</a>'
 # endregion
 
