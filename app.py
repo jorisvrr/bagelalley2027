@@ -566,9 +566,9 @@ RESERVEER_TEL_LINK = "tel:+31705146116"
 # Bron: BAG via PDOK Locatieserver (adresobject Langstraat 42), gecontroleerd 13-11-2026.
 GEO = {"lat": 52.14408, "lng": 4.39315}
 
-# Profielen van de zaak voor 'sameAs'. Alleen bevestigde URL's invullen:
-# Instagram (@bagelalleywassenaar, nog bevestigen) en het Google Bedrijfsprofiel.
-SOCIAL = []
+# Profielen van de zaak voor 'sameAs'. Alleen bevestigde URL's.
+# Het Google Bedrijfsprofiel hier toevoegen zodra de URL bekend is.
+SOCIAL = ["https://www.instagram.com/bagelalleywassenaar/"]
 
 _DAGEN = {0: "Monday", 1: "Tuesday", 2: "Wednesday",
           3: "Thursday", 4: "Friday", 5: "Saturday", 6: "Sunday"}
