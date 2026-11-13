@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+{% from "_icons.html" import icon with context %}
 <html lang="nl">
 <head>
   <meta charset="UTF-8">
@@ -19,7 +20,7 @@
     .nav-logo { display: flex; align-items: center; gap: .75rem; text-decoration: none; }
     .nav-logo-text { font-family: 'Playfair Display', serif; font-size: var(--fs-lg); font-weight: 700; color: var(--cream); }
     .nav-logo-text span { color: var(--purple2); }
-    .nav-back { font-size: var(--fs-sm); color: rgba(245,240,232,.62); text-decoration: none; letter-spacing: var(--track-button); text-transform: uppercase; transition: color .2s; display: flex; align-items: center; gap: .4rem; }
+    .nav-back { font-size: var(--fs-sm); color: rgba(245,240,232,.62); text-decoration: none; letter-spacing: var(--track-button); text-transform: uppercase; transition: color .2s; display: inline-flex; align-items: center; gap: .4rem; }
     @media (hover: hover) and (pointer: fine) { .nav-back:hover { color: var(--purple2); } }
 
     /* HERO STRIP */
@@ -55,11 +56,11 @@
 
     /* PRODUCT CARDS (STAP 1) */
     .product-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
-    .multi-hint { font-size: var(--fs-sm); color: var(--purple3); background: rgba(135,88,206,.08); border: 1px solid rgba(135,88,206,.18); border-radius: var(--r-field); padding: .7rem .9rem; margin-bottom: 1.1rem; line-height: 1.5; }
+    .multi-hint { display: flex; gap: .5rem; align-items: flex-start; font-size: var(--fs-sm); color: var(--purple3); background: rgba(135,88,206,.08); border: 1px solid rgba(135,88,206,.18); border-radius: var(--r-field); padding: .7rem .9rem; margin-bottom: 1.1rem; line-height: 1.5; }
     .product-card { border: 1.5px solid rgba(135,88,206,.18); border-radius: var(--r-field); padding: 1.1rem; cursor: pointer; transition: background-color .15s, border-color .15s, color .15s, transform .15s, box-shadow .15s; position: relative; }
     @media (hover: hover) and (pointer: fine) { .product-card:hover { border-color: var(--purple); background: rgba(135,88,206,.04); } }
     .product-card.gekozen { border-color: var(--purple); background: rgba(135,88,206,.07); box-shadow: var(--focus-ring); }
-    .product-card-check { position: absolute; top: .9rem; right: .9rem; width: 18px; height: 18px; border-radius: 50%; border: 1.5px solid rgba(135,88,206,.3); background: white; display: flex; align-items: center; justify-content: center; font-size: var(--fs-xs); color: transparent; }
+    .product-card-check { position: absolute; top: .9rem; right: .9rem; width: 22px; height: 22px; border-radius: 50%; border: 1.5px solid rgba(135,88,206,.3); background: white; display: flex; align-items: center; justify-content: center; font-size: var(--fs-xs); color: transparent; }
     .product-card.gekozen .product-card-check { background: var(--purple); border-color: var(--purple); color: white; }
     .product-card-title { font-family: 'Playfair Display', serif; font-weight: 700; font-size: var(--fs-base); color: var(--dark); margin-bottom: .55rem; padding-right: 1.5rem; }
     .size-options { display: flex; gap: .5rem; margin-top: .3rem; }
@@ -105,9 +106,9 @@
 
     /* STEP NAV BUTTONS */
     .step-nav { display: flex; justify-content: space-between; gap: 1rem; margin-top: .5rem; }
-    .btn-prev { background: transparent; color: var(--muted); border: 1.5px solid rgba(135,88,206,.2); padding: .9rem 1.6rem; font-size: var(--fs-md); font-weight: 500; border-radius: var(--r-field); cursor: pointer; transition: background-color .2s, border-color .2s, color .2s, transform .2s, box-shadow .2s; font-family: 'DM Sans', sans-serif; }
+    .btn-prev { display: inline-flex; align-items: center; gap: .35rem; background: transparent; color: var(--muted); border: 1.5px solid rgba(135,88,206,.2); padding: .9rem 1.6rem; font-size: var(--fs-md); font-weight: 500; border-radius: var(--r-field); cursor: pointer; transition: background-color .2s, border-color .2s, color .2s, transform .2s, box-shadow .2s; font-family: 'DM Sans', sans-serif; }
     @media (hover: hover) and (pointer: fine) { .btn-prev:hover { border-color: var(--purple); color: var(--purple); } }
-    .btn-next, .btn-submit { background: var(--purple); color: white; border: none; padding: .9rem 1.8rem; font-size: var(--fs-md); font-weight: 500; border-radius: var(--r-field); cursor: pointer; transition: background .2s, transform .15s; font-family: 'DM Sans', sans-serif; letter-spacing: normal; margin-left: auto; }
+    .btn-next, .btn-submit { display: inline-flex; align-items: center; gap: .35rem; background: var(--purple); color: white; border: none; padding: .9rem 1.8rem; font-size: var(--fs-md); font-weight: 500; border-radius: var(--r-field); cursor: pointer; transition: background .2s, transform .15s; font-family: 'DM Sans', sans-serif; letter-spacing: normal; margin-left: auto; }
     @media (hover: hover) and (pointer: fine) { .btn-next:hover, .btn-submit:hover { background: var(--purple3); transform: translateY(-1px); } }
     .btn-next:disabled, .btn-submit:disabled { opacity: .5; cursor: not-allowed; transform: none; }
 
@@ -138,7 +139,7 @@
 
     .sidebar-info-list { display: flex; flex-direction: column; gap: .9rem; }
     .sidebar-info-item { display: flex; align-items: flex-start; gap: .75rem; }
-    .sidebar-info-item svg { width: 16px; height: 16px; stroke: var(--purple2); fill: none; stroke-width: 1.8; flex-shrink: 0; margin-top: 2px; }
+    .sidebar-info-item .icon { margin-top: 1px; }
     .sidebar-info-label { font-size: var(--fs-xs); color: rgba(245,240,232,.62); text-transform: uppercase; letter-spacing: var(--track-button); margin-bottom: .1rem; }
     .sidebar-info-value { font-size: var(--fs-md); color: var(--cream); font-weight: 500; line-height: 1.4; }
 
@@ -166,7 +167,7 @@
   <a href="/" class="nav-logo">
     <span class="nav-logo-text">Bagel <span>Alley</span></span>
   </a>
-  <a href="/shop" class="nav-back">← Terug naar de shop</a>
+  <a href="/shop" class="nav-back">{{ icon('arrow-left', 16) }} Terug naar de shop</a>
 </nav>
 
 <!-- HERO -->
@@ -208,14 +209,14 @@
 
       <!-- STAP 1: PRODUCT -->
       <div class="step-panel active" data-panel="1">
-        <p class="multi-hint">💡 Je kunt meerdere taarten kiezen. Klik op een formaat om toe te voegen, klik nogmaals om te verwijderen.</p>
+        <p class="multi-hint">{{ icon('info', 16) }} Je kunt meerdere taarten kiezen. Klik op een formaat om toe te voegen, klik nogmaals om te verwijderen.</p>
         <div class="product-grid" id="productGrid">
           <!-- cards worden via JS gevuld -->
         </div>
         <div class="form-error" id="error1">Kies eerst minimaal één taart met een formaat.</div>
         <div class="step-nav">
           <span></span>
-          <button class="btn-next" onclick="goToStep(2)">Volgende →</button>
+          <button class="btn-next" onclick="goToStep(2)">Volgende {{ icon('chevron-right', 20) }}</button>
         </div>
       </div>
 
@@ -234,15 +235,15 @@
         </div>
         <div class="form-error" id="error2">Vul de gewenste tekst in, of zet de optie uit.</div>
         <div class="step-nav">
-          <button class="btn-prev" onclick="goToStep(1)">← Vorige</button>
-          <button class="btn-next" onclick="goToStep(3)">Volgende →</button>
+          <button class="btn-prev" onclick="goToStep(1)">{{ icon('chevron-left', 20) }} Vorige</button>
+          <button class="btn-next" onclick="goToStep(3)">Volgende {{ icon('chevron-right', 20) }}</button>
         </div>
       </div>
 
       <!-- STAP 3: AFHALEN & CONTACT -->
       <div class="step-panel" data-panel="3">
         <div class="pickup-note">
-          📍 <strong>Alleen afhalen</strong> bij Bagel Alley, Langstraat 42 in Wassenaar. Bezorgen is niet mogelijk. Je dient minimaal 24 uur van te voren te bestellen.
+          {{ icon('map-pin', 16) }} <strong>Alleen afhalen</strong> bij Bagel Alley, Langstraat 42 in Wassenaar. Bezorgen is niet mogelijk. Je dient minimaal 24 uur van te voren te bestellen.
         </div>
         <div class="form-row">
           <div class="form-group">
@@ -272,8 +273,8 @@
         </div>
         <div class="form-error" id="error3" role="alert">Vul alle verplichte velden in.</div>
         <div class="step-nav">
-          <button class="btn-prev" onclick="goToStep(2)">← Vorige</button>
-          <button class="btn-next" onclick="goToStep(4)">Volgende →</button>
+          <button class="btn-prev" onclick="goToStep(2)">{{ icon('chevron-left', 20) }} Vorige</button>
+          <button class="btn-next" onclick="goToStep(4)">Volgende {{ icon('chevron-right', 20) }}</button>
         </div>
       </div>
 
@@ -301,7 +302,7 @@
           </div>
         </div>
         <div class="step-nav" id="step4Nav">
-          <button class="btn-prev" onclick="goToStep(3)">← Vorige</button>
+          <button class="btn-prev" onclick="goToStep(3)">{{ icon('chevron-left', 20) }} Vorige</button>
           <button class="btn-submit" id="orderSubmit" onclick="plaatsBestelling()">Bestelling versturen</button>
         </div>
       </div>
@@ -326,21 +327,21 @@
       <div class="sidebar-card-title">Praktische info</div>
       <div class="sidebar-info-list">
         <div class="sidebar-info-item">
-          <svg viewBox="0 0 24 24"><path d="M12 22s8-7.5 8-13a8 8 0 1 0-16 0c0 5.5 8 13 8 13z"/><circle cx="12" cy="9" r="2.5"/></svg>
+          {{ icon('map-pin', 20) }}
           <div>
             <div class="sidebar-info-label">Adres</div>
             <div class="sidebar-info-value">Langstraat 42<br>2242 KM Wassenaar</div>
           </div>
         </div>
         <div class="sidebar-info-item">
-          <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.362 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          {{ icon('phone', 20) }}
           <div>
             <div class="sidebar-info-label">Telefoon</div>
             <div class="sidebar-info-value">070-514 61 16</div>
           </div>
         </div>
         <div class="sidebar-info-item">
-          <svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
+          {{ icon('mail', 20) }}
           <div>
             <div class="sidebar-info-label">E-mail</div>
             <div class="sidebar-info-value">info@bagelalley.nl</div>
@@ -354,6 +355,7 @@
 
 <script>
   // ---------- PRODUCTDATA ----------
+  const ICON_CHECK = {{ icon('check', 16)|string|tojson }};
   const producten = [
     { id: 'apple',   naam: 'Apple Pie',       klein: 32.50, groot: 45.00 },
     { id: 'choco',   naam: 'Chocoladetaart',  klein: 32.50, groot: 45.00 },
@@ -381,7 +383,7 @@
     sizesHtml += '</div>';
 
     card.innerHTML = `
-      <div class="product-card-check" aria-hidden="true">✓</div>
+      <div class="product-card-check" aria-hidden="true">${ICON_CHECK}</div>
       <div class="product-card-title">${p.naam}</div>
       ${sizesHtml}
     `;
@@ -400,7 +402,7 @@
 
     const huidige = gekozenProducten[id];
     if (huidige && huidige.formaat === formaat) {
-      // zelfde taart + formaat nogmaals aangeklikt → weer deselecteren
+      // zelfde taart + formaat nogmaals aangeklikt: weer deselecteren
       delete gekozenProducten[id];
       card.classList.remove('gekozen');
       card.querySelectorAll('.size-opt').forEach(o => { o.classList.remove('gekozen'); o.setAttribute('aria-pressed', 'false'); });

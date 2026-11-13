@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+{% from "_icons.html" import icon with context %}
 <html lang="nl">
 <head>
   <meta charset="UTF-8">
@@ -19,7 +20,7 @@
     .nav-logo img { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; }
     .nav-logo-text { font-family: 'Playfair Display', serif; font-size: var(--fs-lg); font-weight: 700; color: var(--cream); }
     .nav-logo-text span { color: var(--purple2); }
-    .nav-back { font-size: var(--fs-sm); color: rgba(245,240,232,.62); text-decoration: none; transition: color .2s; }
+    .nav-back { display: inline-flex; align-items: center; gap: .4rem; font-size: var(--fs-sm); color: rgba(245,240,232,.62); text-decoration: none; transition: color .2s; }
     @media (hover: hover) and (pointer: fine) { .nav-back:hover { color: var(--purple2); } }
     .nav-cta { background: var(--purple); color: white; padding: .5rem 1.4rem; border-radius: var(--r-btn); font-size: var(--fs-sm); font-weight: 500; text-decoration: none; }
     @media (hover: hover) and (pointer: fine) { .nav-cta:hover { background: var(--purple3); } }
@@ -54,7 +55,7 @@
     .vacature-intro strong { color: var(--purple-light); font-weight: 600; }
     .vacature-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 2rem; }
     .vacature-item { background: rgba(135,88,206,.07); border: 1px solid rgba(135,88,206,.12); border-radius: var(--r-field); padding: 1.1rem 1.3rem; }
-    .vacature-item-icon { font-size: var(--fs-xl); margin-bottom: .5rem; }
+    .vacature-item-icon { color: var(--cream); margin-bottom: .5rem; }
     .vacature-item-label { font-size: var(--fs-xs); font-weight: 500; letter-spacing: var(--track-label); text-transform: uppercase; color: var(--purple-light); margin-bottom: .3rem; }
     .vacature-item-value { font-size: var(--fs-md); color: var(--cream); font-weight: 500; }
 
@@ -73,7 +74,7 @@
     .sfeer-label { font-size: var(--fs-xs); font-weight: 500; letter-spacing: var(--track-label); text-transform: uppercase; color: var(--purple-light); display: block; margin-bottom: 1rem; }
     .sfeer-items { display: flex; gap: .8rem; flex-wrap: wrap; }
     .sfeer-item { background: var(--dark2); border: 1px solid rgba(135,88,206,.1); border-radius: var(--r-field); padding: .75rem 1.1rem; display: flex; align-items: center; gap: .6rem; font-size: var(--fs-md); color: rgba(245,240,232,.7); }
-    .sfeer-item-icon { font-size: var(--fs-lg); }
+    .sfeer-item-icon { display: inline-flex; }
 
     @media (max-width: 768px) {
       nav { padding: .9rem 1.2rem; }
@@ -95,7 +96,7 @@
     <img src="{{ url_for('static', filename='logo.png') }}" alt="Bagel Alley">
     <span class="nav-logo-text">Bagel <span>Alley</span></span>
   </a>
-  <a href="/" class="nav-back">← Terug naar de website</a>
+  <a href="/" class="nav-back">{{ icon('arrow-left', 16) }} Terug naar de website</a>
   <a href="{{ reserveer_url }}" class="nav-cta">{{ reserveer_label }}</a>
 </nav>
 
@@ -104,12 +105,6 @@
     <span class="page-label">Werken bij ons</span>
     <h1 class="page-title">Wij zoeken<br><em>enthousiaste collega's</em></h1>
     <p class="page-desc">Ben jij energiek, gastvrij en houd je van een gezellige werkomgeving? Dan ben jij precies wie we zoeken bij Bagel Alley in Wassenaar.</p>
-    <div class="hero-badges">
-      <span class="hero-badge">☀️ Parttime</span>
-      <span class="hero-badge">💼 Fulltime</span>
-      <span class="hero-badge">📅 Doordeweeks & weekend</span>
-      <span class="hero-badge">📍 Wassenaar</span>
-    </div>
   </div>
 </div>
 
@@ -130,22 +125,22 @@
 
       <div class="vacature-grid">
         <div class="vacature-item">
-          <div class="vacature-item-icon">🕐</div>
+          <div class="vacature-item-icon">{{ icon('clock', 24) }}</div>
           <div class="vacature-item-label">Uren</div>
           <div class="vacature-item-value">Parttime of fulltime</div>
         </div>
         <div class="vacature-item">
-          <div class="vacature-item-icon">📅</div>
+          <div class="vacature-item-icon">{{ icon('calendar', 24) }}</div>
           <div class="vacature-item-label">Dagen</div>
           <div class="vacature-item-value">Doordeweeks &amp; weekend</div>
         </div>
         <div class="vacature-item">
-          <div class="vacature-item-icon">📍</div>
+          <div class="vacature-item-icon">{{ icon('map-pin', 24) }}</div>
           <div class="vacature-item-label">Locatie</div>
           <div class="vacature-item-value">Langstraat 42, Wassenaar</div>
         </div>
         <div class="vacature-item">
-          <div class="vacature-item-icon">💶</div>
+          <div class="vacature-item-icon">{{ icon('euro', 24) }}</div>
           <div class="vacature-item-label">Salaris</div>
           <div class="vacature-item-value">Eerlijk salaris</div>
         </div>
@@ -154,11 +149,11 @@
       <div class="sfeer-blok">
         <span class="sfeer-label">Wat wij bieden</span>
         <div class="sfeer-items">
-          <div class="sfeer-item"><span class="sfeer-item-icon">😊</span> Gezellige werkvloer</div>
-          <div class="sfeer-item"><span class="sfeer-item-icon">⏰</span> Flexibele werktijden</div>
-          <div class="sfeer-item"><span class="sfeer-item-icon">💪</span> Zelfstandig werken</div>
-          <div class="sfeer-item"><span class="sfeer-item-icon">☕</span> Gratis koffie &amp; lunch</div>
-          <div class="sfeer-item"><span class="sfeer-item-icon">📈</span> Ruimte om te groeien</div>
+          <div class="sfeer-item"><span class="sfeer-item-icon">{{ icon('check', 16) }}</span> Gezellige werkvloer</div>
+          <div class="sfeer-item"><span class="sfeer-item-icon">{{ icon('check', 16) }}</span> Flexibele werktijden</div>
+          <div class="sfeer-item"><span class="sfeer-item-icon">{{ icon('check', 16) }}</span> Zelfstandig werken</div>
+          <div class="sfeer-item"><span class="sfeer-item-icon">{{ icon('check', 16) }}</span> Gratis koffie &amp; lunch</div>
+          <div class="sfeer-item"><span class="sfeer-item-icon">{{ icon('check', 16) }}</span> Ruimte om te groeien</div>
         </div>
       </div>
     </div>
@@ -169,8 +164,8 @@
     <div class="contact-cta-title">Geïnteresseerd?</div>
     <p class="contact-cta-sub">Stuur een mailtje of bel ons gewoon op. We reageren snel en plannen graag een korte kennismaking in. Ook als je nog vragen hebt, we staan altijd open voor een goed gesprek.</p>
     <div class="contact-btns">
-      <a href="tel:0651343359" class="btn-purple">📞 Bel 06-513 43 359</a>
-      <a href="mailto:vrcbagel@gmail.com" class="btn-ghost">✉️ vrcbagel@gmail.com</a>
+      <a href="tel:0651343359" class="btn-purple">{{ icon('phone', 20) }} Bel 06-513 43 359</a>
+      <a href="mailto:vrcbagel@gmail.com" class="btn-ghost">{{ icon('mail', 20) }} vrcbagel@gmail.com</a>
     </div>
   </div>
 

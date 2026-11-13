@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+{% from "_icons.html" import icon with context %}
 <html lang="nl">
 <head>
   <meta charset="UTF-8">
@@ -136,7 +137,7 @@
     .hero-content { position: relative; z-index: 2; padding: 0 6rem 5rem; max-width: 780px; }
     .hero-location { display: inline-flex; align-items: center; gap: .5rem; color: rgba(245,240,232,.85); font-size: var(--fs-base); font-weight: 500; letter-spacing: normal; text-decoration: none; margin-bottom: 1.5rem; width: fit-content; opacity: 0; animation: fadeUp .8s .2s forwards; transition: color .2s; }
     @media (hover: hover) and (pointer: fine) { .hero-location:hover { color: #fff; } }
-    .hero-location svg { width: 15px; height: 16px; flex-shrink: 0; color: var(--purple-light); }
+    
     .hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(3rem, 5.5vw, 5.5rem); font-weight: 700; line-height: 1.05; color: var(--cream); letter-spacing: var(--track-display); margin-bottom: 1.4rem; opacity: 0; animation: fadeUp .8s .4s forwards; }
     .hero h1 em { font-style: italic; color: var(--purple2); }
     .hero-desc { font-size: var(--fs-base); font-weight: 300; color: rgba(245,240,232,.72); line-height: 1.75; max-width: 500px; margin-bottom: 2.2rem; opacity: 0; animation: fadeUp .8s .6s forwards; }
@@ -157,7 +158,7 @@
     .info-strip-item { flex: 1; display: flex; align-items: center; gap: 1rem; padding: 1.5rem 2rem; border-right: 1px solid rgba(135,88,206,.12); }
     .info-strip-item:last-child { border-right: none; }
     .strip-icon { width: 38px; height: 38px; background: rgba(135,88,206,.15); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-    .strip-icon svg { width: 17px; height: 17px; stroke: var(--purple2); fill: none; stroke-width: 1.8; }
+    .strip-icon { color: var(--cream); }
     .strip-text-main { font-size: var(--fs-md); font-weight: 500; color: var(--cream); line-height: 1.3; }
     .strip-text-sub { font-size: var(--fs-xs); color: rgba(245,240,232,.62); margin-top: .1rem; }
 
@@ -255,7 +256,7 @@
     .contact-block h3 { font-family: 'Playfair Display', serif; font-size: var(--fs-xl); font-weight: 700; color: var(--text); margin-bottom: 1.5rem; }
     .contact-list { list-style: none; display: flex; flex-direction: column; gap: 1rem; }
     .contact-list li { display: flex; align-items: flex-start; gap: .8rem; font-size: var(--fs-md); color: var(--muted); line-height: 1.6; }
-    .contact-list li svg { width: 18px; height: 18px; flex-shrink: 0; margin-top: 1px; stroke: var(--purple); fill: none; stroke-width: 1.8; }
+    .contact-list li .icon { margin-top: 2px; }
     .contact-map { border-radius: var(--r-btn); overflow: hidden; height: 300px; }
     .contact-map iframe { width: 100%; height: 100%; border: none; }
 
@@ -398,10 +399,12 @@
     /* Rating */
     .rating-wrapper { background: white; border-radius: var(--r-card); padding: 1rem; max-width: 280px; }
     .rating-label { font-size: var(--fs-sm); color: var(--muted); margin-bottom: .5rem; }
-    .ster-rij { display: flex; gap: 6px; margin-bottom: .6rem; }
-    .ster { font-size: var(--fs-2xl); cursor: pointer; filter: grayscale(1); transition: filter .15s, transform .1s; }
+    .ster-rij { display: flex; gap: 0; margin-bottom: .6rem; }
+    .ster { display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; background: none; border: 0; padding: 0; color: #CFC7D8; cursor: pointer; transition: color var(--dur-ui), transform var(--dur-press); }
+    .ster.actief { color: var(--purple); }
+    .ster.actief svg { fill: currentColor; }
     .ster.actief { filter: none; transform: scale(1.15); }
-    @media (hover: hover) and (pointer: fine) { .ster:hover { filter: none; transform: scale(1.15); } }
+    
     .rating-bevestig { background: var(--purple); color: white; border: none; padding: .5rem 1.2rem; border-radius: var(--r-field); font-size: var(--fs-sm); cursor: pointer; transition: background .2s; }
     @media (hover: hover) and (pointer: fine) { .rating-bevestig:hover { background: var(--purple3); } }
 
@@ -523,7 +526,7 @@
     <img src="{{ url_for('static', filename='logo.png') }}" alt="Bagel Alley" onerror="this.style.display='none'">
     <span class="nav-logo-text">Bagel <span>Alley</span></span>
   </a>
-  <label for="nav-toggle" class="nav-close-btn">✕</label>
+  <label for="nav-toggle" class="nav-close-btn" aria-hidden="true">{{ icon('x', 24) }}</label>
   <ul class="nav-links">
     <li><a href="#menu">Menu</a></li>
     <li><a href="#sfeer">Over Ons</a></li>
@@ -542,10 +545,10 @@
 <section class="hero" id="home">
   <div class="hero-bg"></div>
   <div class="hero-overlay"></div>
-  <div class="hero-allergen"><span class="ha-icon">✓</span> Glutenvrij &amp; lactosevrij</div>
+  <div class="hero-allergen"><span class="ha-icon">{{ icon('check', 16) }}</span> Glutenvrij &amp; lactosevrij</div>
   <div class="hero-content">
     <a href="https://www.google.com/maps/search/?api=1&query=Bagel%20Alley%20Langstraat%2042%20Wassenaar" target="_blank" rel="noopener" class="hero-location" aria-label="Bekijk Langstraat 42 Wassenaar op Google Maps">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      {{ icon('map-pin', 16) }}
       Langstraat 42, Wassenaar
     </a>
     <h1>Elke hap<br>een <em>verhaal.</em></h1>
@@ -570,7 +573,7 @@
     <div class="shortcut-body">
       <span class="shortcut-label">Ons aanbod</span>
       <h2 class="shortcut-title">Bagels, High Tea<br>&amp; Tapas</h2>
-      <span class="shortcut-link">Bekijk de kaart →</span>
+      <span class="shortcut-link">Bekijk de kaart {{ icon('arrow-right', 16) }}</span>
     </div>
   </a>
   <a href="{{ reserveer_url }}" class="shortcut-card">
@@ -580,10 +583,10 @@
       <span class="shortcut-label">Reserveren</span>
       {% if online_reserveren %}
       <h2 class="shortcut-title">Tafel boeken,<br>direct bevestigd</h2>
-      <span class="shortcut-link">Reserveer nu →</span>
+      <span class="shortcut-link">Reserveer nu {{ icon('arrow-right', 16) }}</span>
       {% else %}
       <h2 class="shortcut-title">Even bellen,<br>wij dekken de tafel</h2>
-      <span class="shortcut-link">070-514 61 16 →</span>
+      <span class="shortcut-link">070-514 61 16 {{ icon('arrow-right', 16) }}</span>
       {% endif %}
     </div>
   </a>
@@ -592,19 +595,19 @@
 <!-- INFO STRIP -->
 <div class="info-strip">
   <div class="info-strip-item">
-    <div class="strip-icon"><svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6l4 2M12 2a10 10 0 100 20A10 10 0 0012 2z"/></svg></div>
+    <div class="strip-icon">{{ icon('clock', 20) }}</div>
     <div><div class="strip-text-main">Ma–Zo (excl. Di)</div><div class="strip-text-sub">08:00 – 16:00 uur</div></div>
   </div>
   <div class="info-strip-item">
-    <div class="strip-icon"><svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a2 2 0 01-2.828 0l-4.243-4.243a8 8 0 1111.314 0zM15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg></div>
+    <div class="strip-icon">{{ icon('map-pin', 20) }}</div>
     <div><div class="strip-text-main">Langstraat 42</div><div class="strip-text-sub">2242 KM Wassenaar</div></div>
   </div>
   <div class="info-strip-item">
-    <div class="strip-icon"><svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg></div>
+    <div class="strip-icon">{{ icon('phone', 20) }}</div>
     <div><div class="strip-text-main">070-514 61 16</div><div class="strip-text-sub">info@bagelalley.nl</div></div>
   </div>
   <div class="info-strip-item info-strip-item--accent">
-    <div class="strip-icon"><svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div>
+    <div class="strip-icon">{{ icon('circle-check', 20) }}</div>
     <div><div class="strip-text-main">Donderdag open!</div><div class="strip-text-sub">Nu 6 dagen per week voor je klaar</div></div>
   </div>
 </div>
@@ -657,7 +660,7 @@ document.addEventListener('DOMContentLoaded', function() {
       <span class="section-label">Onze belofte</span>
       <h3 class="sfeer-text-title">Ambachtelijk bereid,<br>altijd verse ingrediënten</h3>
       <p class="sfeer-text-body">Elke dag beginnen we opnieuw. Verse ingrediënten, zelfgemaakte producten en een warme sfeer, dat is waar Bagel Alley voor staat.</p>
-      <a href="#menu" class="sfeer-link">Bekijk de menukaart →</a>
+      <a href="#menu" class="sfeer-link">Bekijk de menukaart</a>
     </div>
   </div>
 </section>
@@ -694,17 +697,17 @@ document.addEventListener('DOMContentLoaded', function() {
     <div class="botm-img-wrap">
       <img src="{{ url_for('static', filename='specials/bagelvdmaand.png') }}" alt="Bagel van de maand: The Spanish Classic" class="botm-img">
       <div class="botm-img-overlay"></div>
-      <span class="botm-badge">🥯 Bagel van de maand</span>
+      <span class="botm-badge">Bagel van de maand</span>
     </div>
     <div class="botm-content">
       <span class="botm-month">Juni 2026</span>
       <h2 class="botm-title">The Spanish<br><em>Classic</em></h2>
       <p class="botm-desc">Een mediterrane klassieker, onze krokante alles-bagel met verse rucola, luchtige omelet, pittige chorizo en zoete zongedroogde tomaten. Zuid-Europese smaken in één perfecte hap.</p>
       <div class="botm-tags">
-        <span class="botm-tag">🥬 Rucola</span>
-        <span class="botm-tag">🍳 Omelet</span>
-        <span class="botm-tag">🌶️ Chorizo</span>
-        <span class="botm-tag">🍅 Zongedroogde tomaten</span>
+        <span class="botm-tag">Rucola</span>
+        <span class="botm-tag">Omelet</span>
+        <span class="botm-tag">Chorizo</span>
+        <span class="botm-tag">Zongedroogde tomaten</span>
       </div>
       <div class="botm-divider"></div>
       <div>
@@ -736,10 +739,10 @@ document.addEventListener('DOMContentLoaded', function() {
       </div>
       <div class="menu-links reveal">
         <a href="/menu" class="menu-link-btn menu-link-btn--primary">
-          📋 Bekijk de volledige menukaart
+          {{ icon('utensils', 20) }} Bekijk de volledige menukaart
         </a>
         <a href="/shop" class="menu-link-btn menu-link-btn--ghost">
-          🛍️ Online bestellen
+          {{ icon('shopping-bag', 20) }} Online bestellen
         </a>
       </div>
     </div>
@@ -777,7 +780,7 @@ document.addEventListener('DOMContentLoaded', function() {
         <span class="section-label">Cadeaubon</span>
         <h3 class="menu-card-title menu-card-title-light">Geef een<br>smaakvolle beleving</h3>
         <p class="menu-card-body menu-card-body-light">Cadeaubonnen beschikbaar vanaf €5. Het perfecte cadeau voor ieder moment.</p>
-        <a href="#cadeaubon" class="sfeer-link">Meer info →</a>
+        <a href="#cadeaubon" class="sfeer-link">Meer info</a>
       </div>
     </div>
   </div>
@@ -793,7 +796,7 @@ document.addEventListener('DOMContentLoaded', function() {
       <span class="section-label">Voor jullie grote dag</span>
       <h3 class="bruidstaart-title">Bruidstaart op maat</h3>
       <p class="bruidstaart-body">Trouwen, een jubileum of een feest om nooit te vergeten? Wij maken jullie bruidstaart volledig op maat. Vers, ambachtelijk en precies zoals jullie 'm voor je zien. Van een klassieke witte taart tot een verrassende smaakcombinatie, samen bedenken we de perfecte taart voor jullie dag.</p>
-      <a href="/shop" class="sfeer-link">Vraag een bruidstaart aan &rarr;</a>
+      <a href="/shop" class="sfeer-link">Vraag een bruidstaart aan</a>
     </div>
   </div>
 </section>
@@ -813,7 +816,7 @@ document.addEventListener('DOMContentLoaded', function() {
         <tr><td>Zaterdag</td><td>08:00 – 16:00</td></tr>
         <tr><td>Zondag</td><td>08:00 – 16:00</td></tr>
       </table>
-      <div class="hours-note"><p><strong>🥯 Keuken sluit om 15:30.</strong> Op nationale feestdagen kunnen de tijden afwijken. Bel ons voor actuele info.</p></div>
+      <div class="hours-note"><p><strong>Keuken sluit om 15:30.</strong> Op nationale feestdagen kunnen de tijden afwijken. Bel ons voor actuele info.</p></div>
       <a href="{{ reserveer_url }}" class="btn-purple hours-cta">{{ reserveer_label }}</a>
     </div>
     <div class="hours-visual reveal reveal-delay-1">
@@ -841,11 +844,11 @@ document.addEventListener('DOMContentLoaded', function() {
     <div class="contact-block reveal">
       <h3>Vind ons</h3>
       <ul class="contact-list">
-        <li><svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a2 2 0 01-2.828 0l-4.243-4.243a8 8 0 1111.314 0zM15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>Langstraat 42, 2242 KM Wassenaar</li>
-        <li><svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg><a href="tel:+31705146116" style="color:inherit;text-decoration:none;">070-514 61 16</a></li>
-        <li><svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg><a href="mailto:info@bagelalley.nl" style="color:inherit;text-decoration:none;">info@bagelalley.nl</a></li>
-        <li><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3"/></svg>Ma–Zo (excl. Di): 08:00 – 16:00</li>
-        <li><svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg><a href="/jobs" style="color:inherit;text-decoration:none;border-bottom:1px solid rgba(107,95,122,.35);">Wij zoeken collega's → bekijk vacatures</a></li>
+        <li>{{ icon('map-pin', 20) }}Langstraat 42, 2242 KM Wassenaar</li>
+        <li>{{ icon('phone', 20) }}<a href="tel:+31705146116" style="color:inherit;text-decoration:none;">070-514 61 16</a></li>
+        <li>{{ icon('mail', 20) }}<a href="mailto:info@bagelalley.nl" style="color:inherit;text-decoration:none;">info@bagelalley.nl</a></li>
+        <li>{{ icon('clock', 20) }}Ma–Zo (excl. Di): 08:00 – 16:00</li>
+        <li>{{ icon('briefcase', 20) }}<a href="/jobs" style="color:inherit;text-decoration:none;border-bottom:1px solid rgba(107,95,122,.35);">Wij zoeken collega's: bekijk de vacatures</a></li>
       </ul>
     </div>
     <div class="contact-map reveal reveal-delay-1">
@@ -897,7 +900,7 @@ document.addEventListener('DOMContentLoaded', function() {
       </div>
       <span class="badge" id="badge">1</span>
     </div>
-    <button class="min-reserveer-btn" onclick="event.stopPropagation();openChatEnReserveer()">📅 Reserveer nu</button>
+    <button class="min-reserveer-btn" onclick="event.stopPropagation();openChatEnReserveer()">{{ icon('calendar', 16) }} Reserveer nu</button>
   </div>
 
   <!-- Chat container -->
@@ -909,7 +912,7 @@ document.addEventListener('DOMContentLoaded', function() {
           <div class="header-naam">{{ bedrijf.avatar_naam }}</div>
           <div class="header-status">Online, {{ bedrijf.naam }}</div>
         </div>
-        <button class="header-min" onclick="minimizeChat()" title="Minimaliseren">╌</button>
+        <button class="header-min" onclick="minimizeChat()" aria-label="Chat minimaliseren">{{ icon('minus', 20) }}</button>
       </div>
       <div class="status-banner" id="statusBanner" onclick="bannerKlik()">
         <div class="status-dot"></div>
@@ -917,13 +920,13 @@ document.addEventListener('DOMContentLoaded', function() {
       </div>
       <div class="reserveer-banner" onclick="toonBookingFormulier()">
         <div class="reserveer-banner-left">
-          <span>📅</span>
+          {{ icon('calendar', 20) }}
           <div>
             <div class="reserveer-banner-tekst">Reserveer een tafel</div>
             <div class="reserveer-banner-sub">{% if online_reserveren %}Direct boeken, geen wachttijd{% else %}Telefonisch via 070-514 61 16{% endif %}</div>
           </div>
         </div>
-        <span class="reserveer-banner-arrow">›</span>
+        <span class="reserveer-banner-arrow">{{ icon('chevron-right', 20) }}</span>
       </div>
     </div>
 
@@ -932,7 +935,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     <div class="chat-input">
       <input id="invoer" type="text" placeholder="Typ een bericht..." onkeydown="if(event.key==='Enter')verstuur()">
-      <button id="knop" onclick="verstuur()">➤</button>
+      <button id="knop" onclick="verstuur()" aria-label="Verstuur bericht">{{ icon('send', 20) }}</button>
     </div>
   </div>
 </div>
@@ -940,6 +943,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 <script>
 // CONFIG
+const ICON_STAR = {{ icon('star', 24)|string|tojson }};
 const AVATAR_INITIALEN = "{{ bedrijf.avatar_initialen }}";
 const AVATAR_NAAM      = "{{ bedrijf.avatar_naam }}";
 const BEDRIJF_NAAM     = "{{ bedrijf.naam }}";
@@ -987,28 +991,28 @@ function openChat() {
 const snelknopSets = {
   start: [
     { label: "⏱ Openingstijden", msg: "Wat zijn jullie openingstijden?" },
-    { label: "🥯 Menu",           msg: "Wat staat er op het menu?" },
-    { label: "🫖 High Tea",       msg: "Vertel me meer over de High Tea" },
-    { label: "📅 Reserveren",     msg: "__booking__" },
+    { label: "Menu",           msg: "Wat staat er op het menu?" },
+    { label: "High Tea",       msg: "Vertel me meer over de High Tea" },
+    { label: "Reserveren",     msg: "__booking__" },
   ],
   na_menu: [
-    { label: "🥯 Bagels",     msg: "Vertel me meer over de bagels" },
-    { label: "🫖 High Tea",   msg: "Vertel me meer over de High Tea" },
-    { label: "🫒 Tapas",      msg: "Wat hebben jullie aan tapas?" },
-    { label: "📅 Reserveren", msg: "__booking__" },
+    { label: "Bagels",     msg: "Vertel me meer over de bagels" },
+    { label: "High Tea",   msg: "Vertel me meer over de High Tea" },
+    { label: "Tapas",      msg: "Wat hebben jullie aan tapas?" },
+    { label: "Reserveren", msg: "__booking__" },
   ],
   na_openingstijden: [
-    { label: "📍 Adres",      msg: "Waar zijn jullie gevestigd?" },
-    { label: "📞 Bellen",     msg: "Hoe kan ik jullie bereiken?" },
-    { label: "📅 Reserveren", msg: "__booking__" },
+    { label: "Adres",      msg: "Waar zijn jullie gevestigd?" },
+    { label: "Bellen",     msg: "Hoe kan ik jullie bereiken?" },
+    { label: "Reserveren", msg: "__booking__" },
   ],
   na_contact: [
     { label: "⏱ Tijden",      msg: "Wat zijn jullie openingstijden?" },
-    { label: "📍 Adres",      msg: "Waar zijn jullie gevestigd?" },
-    { label: "📅 Reserveren", msg: "__booking__" },
+    { label: "Adres",      msg: "Waar zijn jullie gevestigd?" },
+    { label: "Reserveren", msg: "__booking__" },
   ],
   einde: [
-    { label: "⭐ Geef beoordeling", msg: "__rating__" },
+    { label: "Geef beoordeling", msg: "__rating__" },
   ],
 };
 
@@ -1022,7 +1026,7 @@ function zetSnelknoppen(set) {
     btn.onclick = () => {
       if (k.msg === "__rating__")  { toonRating(); return; }
       if (k.msg === "__booking__") { toonBookingFormulier(); return; }
-      voegJijToe(k.label.replace(/^[^\s]+\s/, ""));
+      voegJijToe(k.label);
       verstuurNaarBot(k.msg);
     };
     container.appendChild(btn);
@@ -1081,7 +1085,7 @@ async function verstuurNaarBot(bericht) {
   else if (bericht.includes("contact") || bericht.includes("bellen") || bericht.includes("bereiken"))
     setTimeout(() => zetSnelknoppen("na_contact"), 1200);
 
-  // Reserveer keywords → inline booking form
+  // Reserveer-woorden: telefonisch antwoord (of het formulier als online reserveren aan staat)
   if (/reserv|tafel|boek|plekje/i.test(bericht) && bericht !== "__openingstijden_banner__") {
     voegTypingToe();
     setTimeout(() => { verwijderTyping(); toonBookingFormulier(); }, 600);
@@ -1099,7 +1103,7 @@ async function verstuurNaarBot(bericht) {
     verwijderTyping();
     const antwoord = data.antwoord || "Dat weet ik niet zeker. Bel ons op 070-514 61 16!";
     if (antwoord === "STOP") {
-      await voegBotToe("Tot ziens! 👋 We zien je graag binnenkort bij Bagel Alley!");
+      await voegBotToe("Tot ziens! We zien je graag binnenkort bij Bagel Alley.");
       zetSnelknoppen("einde");
     } else {
       await voegBotToe(antwoord);
@@ -1173,7 +1177,7 @@ async function toonBookingFormulier() {
   const form = document.createElement("div"); form.className = "booking-chat-form";
   form.innerHTML = `
     <div style="background:rgba(135,88,206,.08);border:1px solid rgba(135,88,206,.2);border-radius:8px;padding:.85rem 1.1rem;margin-bottom:.5rem;font-size:.8rem;color:var(--muted);line-height:1.6;">
-      🍵 Voor <strong style="color:var(--purple3)">arrangementen</strong> (High Tea, Tapas box, catering) graag bellen: <a href="tel:0705146116" style="color:var(--purple3);font-weight:600;">070-514 61 16</a>
+      Voor <strong style="color:var(--purple3)">arrangementen</strong> (High Tea, Tapas box, catering) graag bellen: <a href="tel:0705146116" style="color:var(--purple3);font-weight:600;">070-514 61 16</a>
     </div>
     <input type="text"  id="bkNaam"   placeholder="Jouw naam" autocomplete="name">
     <input type="email" id="bkEmail"  placeholder="E-mailadres" autocomplete="email">
@@ -1188,13 +1192,13 @@ async function toonBookingFormulier() {
       </select>
     </div>
     <div id="bkGroepNotice" style="display:none;background:rgba(135,88,206,.12);border:1px solid rgba(135,88,206,.3);border-radius:8px;padding:.9rem 1.1rem;font-size:.82rem;color:var(--purple3);line-height:1.6;">
-      📞 Voor groepen van 7 of meer personen kun je niet online reserveren.<br>
+      Voor groepen van 7 of meer personen kun je niet online reserveren.<br>
       Bel ons op <strong><a href="tel:0705146116" style="color:var(--purple3)">070-514 61 16</a></strong> of stuur een WhatsApp naar <strong><a href="https://wa.me/31651343359" style="color:var(--purple3)">06-513 43 359</a></strong>.
     </div>
     <div class="booking-slot-label">Kies een tijdslot</div>
     <div class="booking-slot-grid" id="bkSlotGrid">${bouwSlotGrid(vollSlots, gesloten)}</div>
     <div class="booking-err" id="bkErr" style="display:none"></div>
-    <button class="booking-verstuur-btn" id="bkVerstuur">📅 Reservering bevestigen</button>
+    <button class="booking-verstuur-btn" id="bkVerstuur">Reservering bevestigen</button>
   `;
 
   formWrapper.appendChild(form);
@@ -1258,7 +1262,7 @@ async function verstuurBooking() {
     voegTypingToe();
     if (data.succes) {
       setTimeout(async () => {
-        await voegBotToe(`Top ${voornaam}! 🥯 Je tafel staat gereserveerd op ${datum} om ${bevestigdSlot}. We sturen een bevestigingsmail naar ${email}, check ook je spammap als je hem niet ziet. Tot dan!`);
+        await voegBotToe(`Top ${voornaam}! Je tafel staat gereserveerd op ${datum} om ${bevestigdSlot}. We sturen een bevestigingsmail naar ${email}, check ook je spammap als je hem niet ziet. Tot dan!`);
         zetSnelknoppen("einde");
       }, 800);
     } else {
@@ -1270,7 +1274,7 @@ async function verstuurBooking() {
   } catch {
     err.textContent = "Kan de server niet bereiken. Probeer opnieuw.";
     err.style.display = "block";
-    btn.textContent = "📅 Reservering bevestigen";
+    btn.textContent = "Reservering bevestigen";
     btn.disabled = false;
   }
 }
@@ -1289,7 +1293,7 @@ function toonRating() {
   let sterScore = 0;
   ratingDiv.innerHTML = `
     <div class="rating-label">Klik op een ster</div>
-    <div class="ster-rij">${[1,2,3,4,5].map(i=>`<span class="ster" data-score="${i}">⭐</span>`).join("")}</div>
+    <div class="ster-rij">${[1,2,3,4,5].map(i=>`<button type="button" class="ster" data-score="${i}" aria-label="${i} van 5 sterren">${ICON_STAR}</button>`).join("")}</div>
     <button class="rating-bevestig" onclick="verstuurRating(${Date.now()})">Verstuur</button>
   `;
   ratingDiv.querySelectorAll(".ster").forEach(s => {
@@ -1300,9 +1304,9 @@ function toonRating() {
 }
 function verstuurRating() {
   document.querySelectorAll(".rating-wrapper").forEach(e=>e.remove());
-  voegJijToe("Beoordeling verstuurd ⭐");
+  voegJijToe("Beoordeling verstuurd");
   voegTypingToe();
-  setTimeout(async()=>{ await voegBotToe("Dankjewel voor je beoordeling! 🙏 We hopen je snel weer te zien bij Bagel Alley."); }, 800);
+  setTimeout(async()=>{ await voegBotToe("Dankjewel voor je beoordeling! We hopen je snel weer te zien bij Bagel Alley."); }, 800);
 }
 
 
@@ -1327,7 +1331,7 @@ window.addEventListener("load", () => {
     document.getElementById("badge").classList.add("zichtbaar");
 
     // Zet welkomstbericht klaar (zichtbaar wanneer chat opengaat)
-    await voegBotToe(`Hoi! 👋 Ik ben ${AVATAR_NAAM}, de eigenares van ${BEDRIJF_NAAM}. Waarmee kan ik je helpen?`);
+    await voegBotToe(`Hoi! Ik ben ${AVATAR_NAAM}, de eigenares van ${BEDRIJF_NAAM}. Waarmee kan ik je helpen?`);
   }, 800);
 });
 

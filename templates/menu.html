@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+{% from "_icons.html" import icon with context %}
 <html lang="nl">
 <head>
   <meta charset="UTF-8">
@@ -27,7 +28,7 @@
     .nav-logo-text { font-family: 'Playfair Display', serif; font-size: var(--fs-lg); font-weight: 700; color: var(--cream); }
     .nav-logo-text span { color: var(--purple2); }
     .nav-back {
-      display: inline-flex; align-items: center; gap: .5rem;
+      display: inline-flex; align-items: center; gap: .4rem;
       font-size: var(--fs-sm); font-weight: 500; color: rgba(245,240,232,.62);
       text-decoration: none; letter-spacing: var(--track-button);
       transition: color .2s;
@@ -173,7 +174,7 @@
       padding: .8rem 1.8rem; font-size: var(--fs-sm); font-weight: 500;
       letter-spacing: var(--track-button); text-transform: uppercase;
       border: none; cursor: pointer; text-decoration: none;
-      display: inline-block; border-radius: var(--r-btn); transition: background .2s;
+      display: inline-flex; align-items: center; gap: .5rem; border-radius: var(--r-btn); transition: background .2s;
     }
     @media (hover: hover) and (pointer: fine) { .btn-purple:hover { background: var(--purple3); } }
     .btn-ghost {
@@ -181,7 +182,7 @@
       padding: .8rem 1.8rem; font-size: var(--fs-sm); font-weight: 500;
       letter-spacing: var(--track-button); text-transform: uppercase;
       border: 1.5px solid rgba(245,240,232,.2); cursor: pointer;
-      text-decoration: none; display: inline-block; border-radius: var(--r-btn);
+      text-decoration: none; display: inline-flex; align-items: center; gap: .5rem; border-radius: var(--r-btn);
       transition: background-color .2s, border-color .2s, color .2s, transform .2s, box-shadow .2s;
     }
     @media (hover: hover) and (pointer: fine) { .btn-ghost:hover { border-color: rgba(245,240,232,.4); color: var(--cream); } }
@@ -217,7 +218,7 @@
     <img src="{{ url_for('static', filename='logo.png') }}" alt="Bagel Alley logo">
     <span class="nav-logo-text">Bagel <span>Alley</span></span>
   </a>
-  <a href="/" class="nav-back">← Terug naar de website</a>
+  <a href="/" class="nav-back">{{ icon('arrow-left', 16) }} Terug naar de website</a>
   <a href="{{ reserveer_url }}" class="nav-cta">{{ reserveer_label }}</a>
 </nav>
 
@@ -226,20 +227,13 @@
     <span class="page-label">Onze kaart</span>
     <h1 class="page-title">De volledige<br><em>menukaart</em></h1>
     <p class="page-desc">Van verse ontbijtbagels tot uitgebreide High Tea, alles vers bereid in onze eigen keuken. Elke dag wisselend aanbod.</p>
-    <div class="page-badges">
-      <span class="page-badge">🥯 Verse bagels</span>
-      <span class="page-badge">🍵 High Tea</span>
-      <span class="page-badge">🫒 Tapas</span>
-      <span class="page-badge">☕ Specialty koffie</span>
-      <span class="page-badge">🥤 Smoothies & Juices</span>
-    </div>
   </div>
 </div>
 
 <div class="menu-main">
 
   <div class="menu-intro">
-    <div class="menu-intro-icon">ℹ️</div>
+    <div class="menu-intro-icon">{{ icon('info', 24) }}</div>
     <p class="menu-intro-text">
       Prijzen en aanbod kunnen seizoensgebonden afwijken.
       <strong>Keuken sluit om 15:30.</strong>
@@ -256,7 +250,7 @@
     <div class="menu-img-card">
       <img src="{{ url_for('static', filename='menu/menu_1.webp') }}" alt="Menukaart Bagel Alley, pagina 1: ontbijt, bagels, sappen, smoothies, yoghurt en bowls" loading="eager" onerror="this.closest('.menu-img-card').querySelector('.menu-img-fallback').style.display='flex';this.style.display='none'">
       <div class="menu-img-fallback">
-        <div class="menu-img-fallback-icon">📁</div>
+        
         <div class="menu-img-fallback-text">
           Zet <span class="menu-img-fallback-code">menu_1.webp</span> in de map<br>
           <span class="menu-img-fallback-code">public/static/menu/</span>
@@ -284,7 +278,7 @@
     <div class="menu-img-card">
       <img src="{{ url_for('static', filename='menu/menu_2.webp') }}" alt="Menukaart Bagel Alley, pagina 2: soepen, salades, zoetigheden, high tea, tapas, koffie en thee" loading="lazy" onerror="this.closest('.menu-img-card').querySelector('.menu-img-fallback').style.display='flex';this.style.display='none'">
       <div class="menu-img-fallback">
-        <div class="menu-img-fallback-icon">📁</div>
+        
         <div class="menu-img-fallback-text">
           Zet <span class="menu-img-fallback-code">menu_2.webp</span> in de map<br>
           <span class="menu-img-fallback-code">public/static/menu/</span>
@@ -304,8 +298,8 @@
       <div class="cta-sub">{% if online_reserveren %}Reserveer een tafel of bestel online via onze webshop.{% else %}Reserveer telefonisch via 070-514 61 16 of bestel online via onze webshop.{% endif %}</div>
     </div>
     <div class="menu-cta-btns">
-      <a href="{{ reserveer_url }}" class="btn-purple">📅 {{ reserveer_label }}</a>
-      <a href="/shop" class="btn-ghost">🛍️ Online bestellen</a>
+      <a href="{{ reserveer_url }}" class="btn-purple">{{ icon('phone', 20) }} {{ reserveer_label }}</a>
+      <a href="/shop" class="btn-ghost">{{ icon('shopping-bag', 20) }} Online bestellen</a>
     </div>
   </div>
 

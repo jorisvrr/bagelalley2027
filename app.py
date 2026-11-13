@@ -13,6 +13,14 @@ import html as _html
 # (Flask's eigen static-map wordt daar genegeerd). Lokaal serveert Flask ze zelf.
 app = Flask(__name__, static_folder="public/static", static_url_path="/static")
 app.secret_key = os.environ.get("SECRET_KEY") or os.urandom(32)  # geen vaste fallback
+
+# Iconen-partial: valt terug op een lege macro als templates/_icons.html ontbreekt,
+# zodat `{% from "_icons.html" import icon %}` een pagina nooit kan breken.
+from jinja2 import ChoiceLoader, DictLoader
+app.jinja_loader = ChoiceLoader([
+    app.jinja_loader,
+    DictLoader({"_icons.html": "{% macro icon(name, size=20, label=None) %}{% endmacro %}"}),
+])
 app.config.update(
     SESSION_COOKIE_HTTPONLY=True,
     SESSION_COOKIE_SAMESITE="Lax",
@@ -193,8 +201,7 @@ BAGEL_VD_MAAND = {
     "inspiratie": "Ge&iuml;nspireerd op Zuid-Europa: lichte, zonnige smaken en de juiste "
                   "balans tussen hartig en fris. Een bagel die net zo goed werkt bij het "
                   "ontbijt, de lunch of een ontspannen weekendbrunch.",
-    "ingredienten": [("\U0001F96C", "Rucola"), ("\U0001F373", "Omelet"),
-                     ("\U0001F336\uFE0F", "Chorizo"), ("\U0001F345", "Zongedroogde tomaten")],
+    "ingredienten": ["Rucola", "Omelet", "Chorizo", "Zongedroogde tomaten"],
     "afbeelding": "/static/specials/bagelvdmaand.png",
 }
 
@@ -269,11 +276,10 @@ def newsletter_html(naam: str = "") -> str:
     img_bagel  = f"{SITE_URL}/static/fotos/pexels-anchornhaven-43716305-29445728.jpg"
 
     ing = "".join(
-        f"""<td align="center" valign="top" style="padding:0 6px;">
-          <div style="font-size:24px;line-height:1;margin-bottom:8px;">{emoji}</div>
-          <div style="font-family:Arial,sans-serif;font-size:10px;letter-spacing:.5px;color:#7c7484;text-transform:uppercase;line-height:1.3;">{label}</div>
+        f"""<td align="center" valign="top" style="padding:4px;">
+          <div style="display:inline-block;font-family:Arial,sans-serif;font-size:12px;color:#5a4f68;background:#ffffff;border:1px solid #e4dcd0;border-radius:999px;padding:6px 12px;line-height:1.3;">{label}</div>
         </td>"""
-        for emoji, label in b["ingredienten"]
+        for label in b["ingredienten"]
     )
 
     def _more(img, titel, tekst):
@@ -717,7 +723,7 @@ def reageer_zonder_ai(bericht: str) -> str:
     elif any(w in b for w in ["parke", "auto"]):
         return KENNISBANK["parking"]
     elif re.search(r"\b(hallo|hoi|hey|hi|hello|goedemorgen|goedemiddag)\b", b):
-        return "Hallo! Welkom bij Bagel Alley Wassenaar 🥯 Leuk dat je er bent!"
+        return "Hallo! Welkom bij Bagel Alley Wassenaar. Leuk dat je er bent!"
     elif any(w in b for w in ["doei", "bye", "tot ziens", "bedankt", "dankjewel", "thanks"]):
         return "STOP"
     else:

@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+{% from "_icons.html" import icon with context %}
 <html lang="nl">
 <head>
   <meta charset="UTF-8">
@@ -17,7 +18,7 @@
     .nav-logo img { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; }
     .nav-logo-text { font-family: 'Playfair Display', serif; font-size: var(--fs-lg); font-weight: 700; color: var(--cream); }
     .nav-logo-text span { color: var(--purple2); }
-    .nav-back { font-size: var(--fs-sm); color: rgba(245,240,232,.62); text-decoration: none; transition: color .2s; }
+    .nav-back { display: inline-flex; align-items: center; gap: .4rem; font-size: var(--fs-sm); color: rgba(245,240,232,.62); text-decoration: none; transition: color .2s; }
     @media (hover: hover) and (pointer: fine) { .nav-back:hover { color: var(--purple2); } }
     .nav-cta { background: var(--purple); color: white; padding: .5rem 1.4rem; border-radius: var(--r-btn); font-size: var(--fs-sm); font-weight: 500; text-decoration: none; }
     @media (hover: hover) and (pointer: fine) { .nav-cta:hover { background: var(--purple3); } }
@@ -49,21 +50,21 @@
     .product-card-desc { font-size: var(--fs-sm); color: rgba(245,240,232,.62); line-height: 1.6; flex: 1; }
     .product-card-footer { padding: .9rem 1.4rem; border-top: 1px solid rgba(135,88,206,.08); display: flex; align-items: center; justify-content: space-between; }
     .product-card-price { font-size: var(--fs-md); font-weight: 600; color: var(--purple-light); }
-    .product-card-btn { background: rgba(135,88,206,.15); color: var(--purple-light); border: 1px solid rgba(135,88,206,.3); padding: .35rem .9rem; border-radius: var(--r-field); font-size: var(--fs-xs); font-weight: 500; cursor: pointer; text-decoration: none; transition: background-color .2s, border-color .2s, color .2s, transform .2s, box-shadow .2s; }
+    .product-card-btn { display: inline-flex; align-items: center; gap: .25rem; background: rgba(135,88,206,.15); color: var(--purple-light); border: 1px solid rgba(135,88,206,.3); padding: .35rem .9rem; border-radius: var(--r-field); font-size: var(--fs-xs); font-weight: 500; cursor: pointer; text-decoration: none; transition: background-color .2s, border-color .2s, color .2s, transform .2s, box-shadow .2s; }
     @media (hover: hover) and (pointer: fine) { .product-card-btn:hover { background: rgba(135,88,206,.3); } }
     .divider { height: 1px; background: rgba(135,88,206,.1); margin: 2.5rem 0; }
     .custom-order-card { background: var(--purple); border-radius: var(--r-card); padding: 2.2rem 2.5rem; display: flex; align-items: center; justify-content: space-between; gap: 2rem; flex-wrap: wrap; margin-bottom: 2rem; }
     .custom-order-text .custom-title { font-family: 'Playfair Display', serif; font-size: var(--fs-xl); font-weight: 700; color: white; margin-bottom: .4rem; }
     .custom-order-text .custom-sub { font-size: var(--fs-md); color: #fff; line-height: 1.6; }
-    .btn-white { background: white; color: var(--purple); padding: .75rem 1.8rem; font-size: var(--fs-sm); font-weight: 600; letter-spacing: var(--track-button); text-transform: uppercase; text-decoration: none; display: inline-block; border-radius: var(--r-btn); flex-shrink: 0; }
+    .btn-white { background: white; color: var(--purple); padding: .75rem 1.8rem; font-size: var(--fs-sm); font-weight: 600; letter-spacing: var(--track-button); text-transform: uppercase; text-decoration: none; display: inline-flex; align-items: center; gap: .5rem; border-radius: var(--r-btn); flex-shrink: 0; }
     @media (hover: hover) and (pointer: fine) { .btn-white:hover { background: var(--cream); } }
     .order-cta { background: var(--dark2); border-radius: var(--r-card); padding: 2rem 2.4rem; border: 1px solid rgba(135,88,206,.15); text-align: center; }
     .order-cta-title { font-family: 'Playfair Display', serif; font-size: var(--fs-xl); font-weight: 700; color: var(--cream); margin-bottom: .5rem; }
     .order-cta-sub { font-size: var(--fs-md); color: rgba(245,240,232,.62); margin-bottom: 1.5rem; }
     .order-cta-btns { display: flex; gap: .9rem; justify-content: center; flex-wrap: wrap; }
-    .btn-purple { background: var(--purple); color: white; padding: .8rem 1.8rem; font-size: var(--fs-sm); font-weight: 500; letter-spacing: var(--track-button); text-transform: uppercase; text-decoration: none; display: inline-block; border-radius: var(--r-btn); }
+    .btn-purple { background: var(--purple); color: white; padding: .8rem 1.8rem; font-size: var(--fs-sm); font-weight: 500; letter-spacing: var(--track-button); text-transform: uppercase; text-decoration: none; display: inline-flex; align-items: center; gap: .5rem; border-radius: var(--r-btn); }
     @media (hover: hover) and (pointer: fine) { .btn-purple:hover { background: var(--purple3); } }
-    .btn-ghost { background: transparent; color: rgba(245,240,232,.7); padding: .8rem 1.8rem; font-size: var(--fs-sm); font-weight: 500; letter-spacing: var(--track-button); text-transform: uppercase; border: 1.5px solid rgba(245,240,232,.2); text-decoration: none; display: inline-block; border-radius: var(--r-btn); }
+    .btn-ghost { background: transparent; color: rgba(245,240,232,.7); padding: .8rem 1.8rem; font-size: var(--fs-sm); font-weight: 500; letter-spacing: var(--track-button); text-transform: uppercase; border: 1.5px solid rgba(245,240,232,.2); text-decoration: none; display: inline-flex; align-items: center; gap: .5rem; border-radius: var(--r-btn); }
     @media (hover: hover) and (pointer: fine) { .btn-ghost:hover { border-color: rgba(245,240,232,.4); color: var(--cream); } }
     @media (max-width: 768px) { nav { padding: .9rem 1.2rem; } .page-hero { padding: 2.5rem 1.2rem 2rem; } .shop-main { padding: 2rem 1.2rem 4rem; } .product-grid { grid-template-columns: 1fr 1fr; } .custom-order-card { flex-direction: column; } }
     @media (max-width: 480px) { .product-grid { grid-template-columns: 1fr; } }
@@ -78,7 +79,7 @@
     <img src="{{ url_for('static', filename='logo.png') }}" alt="Bagel Alley">
     <span class="nav-logo-text">Bagel <span>Alley</span></span>
   </a>
-  <a href="/" class="nav-back">← Terug naar de website</a>
+  <a href="/" class="nav-back">{{ icon('arrow-left', 16) }} Terug naar de website</a>
   <a href="{{ reserveer_url }}" class="nav-cta">{{ reserveer_label }}</a>
 </nav>
 <div class="page-hero">
@@ -86,16 +87,11 @@
     <span class="page-label">Online Shop</span>
     <h1 class="page-title">Bagel Alley<br><em>thuis bezorgd</em></h1>
     <p class="page-desc">Bestel onze taarten en meer, voor afhalen of bezorging. Vers bereid, precies zoals in de zaak.</p>
-    <div class="page-badges">
-      <span class="page-badge">🥯 Verse bagels</span>
-      <span class="page-badge">🎂 Taarten op bestelling</span>
-      <span class="page-badge">🚗 Afhalen &amp; bezorgen</span>
-    </div>
   </div>
 </div>
 <div class="shop-main">
   <div class="shop-notice">
-    <span class="shop-notice-icon">📦</span>
+    <span class="shop-notice-icon">{{ icon('info', 24) }}</span>
     <p class="shop-notice-text">
       Bestellen via de officiële webshop op <strong><a href="https://www.bagelalley.nl/online-shop" target="_blank" rel="noopener">bagelalley.nl/online-shop</a></strong>.
       Maatwerk of grote bestellingen? Bel <strong>070-514 61 16</strong> of WhatsApp <strong>06-51343359</strong> / <strong><a href="mailto:vrcbagel@gmail.com">vrcbagel@gmail.com</a></strong>.
@@ -112,7 +108,7 @@
           <div class="product-card-title">Apple Pie</div>
           <p class="product-card-desc">Huisgemaakte appeltaart, per stuk of heel te bestellen.</p>
         </div>
-        <div class="product-card-footer"><span class="product-card-price">Vanaf €32,50</span><span class="product-card-btn">Bestellen →</span></div>
+        <div class="product-card-footer"><span class="product-card-price">Vanaf €32,50</span><span class="product-card-btn">Bestellen {{ icon('chevron-right', 16) }}</span></div>
       </a>
       <a href="/bestellen" class="product-card">
         <div class="product-card-img-wrap"><img class="product-card-img" src="{{ url_for('static', filename='taarten/oreo.png') }}" loading="lazy" alt="Oreo taart"></div>
@@ -120,7 +116,7 @@
           <div class="product-card-title">Oreo taart</div>
           <p class="product-card-desc">Romige taart versierd met Oreo koekjes, een echte favoriet.</p>
         </div>
-        <div class="product-card-footer"><span class="product-card-price">Vanaf €32,50</span><span class="product-card-btn">Bestellen →</span></div>
+        <div class="product-card-footer"><span class="product-card-price">Vanaf €32,50</span><span class="product-card-btn">Bestellen {{ icon('chevron-right', 16) }}</span></div>
       </a>
       <a href="/bestellen" class="product-card">
         <div class="product-card-img-wrap"><img class="product-card-img" src="{{ url_for('static', filename='taarten/chocolade.png') }}" loading="lazy" alt="Chocoladetaart"></div>
@@ -128,7 +124,7 @@
           <div class="product-card-title">Chocoladetaart</div>
           <p class="product-card-desc">Intense pure chocolade, zijdezacht en ambachtelijk bereid.</p>
         </div>
-        <div class="product-card-footer"><span class="product-card-price">Vanaf €32,50</span><span class="product-card-btn">Bestellen →</span></div>
+        <div class="product-card-footer"><span class="product-card-price">Vanaf €32,50</span><span class="product-card-btn">Bestellen {{ icon('chevron-right', 16) }}</span></div>
       </a>
       <a href="/bestellen" class="product-card">
         <div class="product-card-img-wrap"><img class="product-card-img" src="{{ url_for('static', filename='taarten/carrot.png') }}" loading="lazy" alt="Carrot Cake"></div>
@@ -136,7 +132,7 @@
           <div class="product-card-title">Carrot Cake</div>
           <p class="product-card-desc">Wortelcake met rozijnen en walnoot, luchtig en smaakvol.</p>
         </div>
-        <div class="product-card-footer"><span class="product-card-price">€45,00</span><span class="product-card-btn">Bestellen →</span></div>
+        <div class="product-card-footer"><span class="product-card-price">€45,00</span><span class="product-card-btn">Bestellen {{ icon('chevron-right', 16) }}</span></div>
       </a>
       <a href="/bestellen" class="product-card">
         <div class="product-card-img-wrap"><img class="product-card-img" src="{{ url_for('static', filename='taarten/redvelvet.png') }}" loading="lazy" alt="Red Velvet Cake"></div>
@@ -144,7 +140,7 @@
           <div class="product-card-title">Red Velvet Cake</div>
           <p class="product-card-desc">Met rode vruchten, macarons en witte chocolade. Volledig te bestellen.</p>
         </div>
-        <div class="product-card-footer"><span class="product-card-price">Vanaf €32,50</span><span class="product-card-btn">Bestellen →</span></div>
+        <div class="product-card-footer"><span class="product-card-price">Vanaf €32,50</span><span class="product-card-btn">Bestellen {{ icon('chevron-right', 16) }}</span></div>
       </a>
       <a href="https://www.bagelalley.nl/shop" target="_blank" rel="noopener" class="product-card">
         <div class="product-card-img-wrap"><img class="product-card-img" src="{{ url_for('static', filename='taarten/tekst.png') }}" loading="lazy" alt="Tekst op taart"></div>
@@ -152,7 +148,7 @@
           <div class="product-card-title">Tekst op taart</div>
           <p class="product-card-desc">Laat een naam of persoonlijke tekst op de taart zetten.</p>
         </div>
-        <div class="product-card-footer"><span class="product-card-price">Op aanvraag</span><span class="product-card-btn">Meer info →</span></div>
+        <div class="product-card-footer"><span class="product-card-price">Op aanvraag</span><span class="product-card-btn">Meer info {{ icon('chevron-right', 16) }}</span></div>
       </a>
       <a href="mailto:vrcbagel@gmail.com" class="product-card">
         <div class="product-card-img-wrap"><img class="product-card-img" src="{{ url_for('static', filename='taarten/bruidstaart.png') }}" loading="lazy" alt="Bruidstaart" style="object-position:center top"></div>
@@ -160,7 +156,7 @@
           <div class="product-card-title">Bruidstaart</div>
           <p class="product-card-desc">Op maat gemaakt voor jouw speciale dag. Neem contact op voor een offerte.</p>
         </div>
-        <div class="product-card-footer"><span class="product-card-price">Op maat</span><span class="product-card-btn">Contact →</span></div>
+        <div class="product-card-footer"><span class="product-card-price">Op maat</span><span class="product-card-btn">Contact {{ icon('chevron-right', 16) }}</span></div>
       </a>
     </div>
   </div>
@@ -171,14 +167,14 @@
       <div class="custom-title">Catering of grote bestelling?</div>
       <p class="custom-sub">Voor groepen, bedrijfsevents of speciale gelegenheden, bel of mail ons direct.</p>
     </div>
-    <a href="tel:0705146116" class="btn-white">📞 Bel 070-514 61 16</a>
+    <a href="tel:0705146116" class="btn-white">{{ icon('phone', 20) }} Bel 070-514 61 16</a>
   </div>
   <div class="order-cta">
     <div class="order-cta-title">Klaar om te bestellen?</div>
     <p class="order-cta-sub">Bestellingen via onze webshop of telefonisch. Liever ter plekke? {% if online_reserveren %}Reserveer een tafel.{% else %}Reserveer een tafel via 070-514 61 16.{% endif %}</p>
     <div class="order-cta-btns">
-      <a href="https://www.bagelalley.nl/online-shop" target="_blank" rel="noopener" class="btn-purple">🛍️ Naar de webshop</a>
-      <a href="{{ reserveer_url }}" class="btn-ghost">📅 {{ reserveer_label }}</a>
+      <a href="https://www.bagelalley.nl/online-shop" target="_blank" rel="noopener" class="btn-purple">{{ icon('shopping-bag', 20) }} Naar de webshop</a>
+      <a href="{{ reserveer_url }}" class="btn-ghost">{{ icon('phone', 20) }} {{ reserveer_label }}</a>
     </div>
   </div>
 </div>
