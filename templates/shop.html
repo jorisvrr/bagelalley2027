@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  {% set seo_title = "Taarten & High Tea bestellen | Bagel Alley Wassenaar" %}
+  {% set seo_desc = "Bestel online bij Bagel Alley Wassenaar: huisgemaakte taarten zoals Apple Pie, Oreo, Red Velvet en Carrot Cake. Vers gemaakt, klaar om af te halen." %}
+  {% set seo_path = "/shop" %}
+  {% set seo_crumb = "Online bestellen" %}
+  {% include "_seo.html" ignore missing %}
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root { --cream:#F5F0E8;--dark:#1A1018;--dark2:#241E2A;--purple:#8758CE;--purple2:#9B6EE0;--purple3:#6E42B0; --purple-light: #B394EC; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--dark); color: var(--cream); min-height: 100vh; }
+    nav { position: sticky; top: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; padding: 1rem 3rem; background: var(--dark2); border-bottom: 2px solid var(--purple); }
+    .nav-logo { display: flex; align-items: center; gap: .75rem; text-decoration: none; }
+    .nav-logo img { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; }
+    .nav-logo-text { font-family: 'Playfair Display', serif; font-size: 1.2rem; font-weight: 700; color: var(--cream); }
+    .nav-logo-text span { color: var(--purple2); }
+    .nav-back { font-size: .82rem; color: rgba(245,240,232,.62); text-decoration: none; transition: color .2s; }
+    .nav-back:hover { color: var(--purple2); }
+    .nav-cta { background: var(--purple); color: white; padding: .5rem 1.4rem; border-radius: 3px; font-size: .8rem; font-weight: 500; text-decoration: none; }
+    .nav-cta:hover { background: var(--purple3); }
+    .page-hero { background: linear-gradient(135deg, var(--dark2) 0%, rgba(135,88,206,.08) 100%); padding: 3.5rem 3rem 2.5rem; border-bottom: 1px solid rgba(135,88,206,.12); }
+    .page-hero-inner { max-width: 860px; }
+    .page-label { font-size: .75rem; font-weight: 500; letter-spacing: .18em; text-transform: uppercase; color: var(--purple-light); display: block; margin-bottom: .7rem; }
+    .page-title { font-family: 'Playfair Display', serif; font-size: clamp(2rem,4vw,3.2rem); font-weight: 700; line-height: 1.1; color: var(--cream); margin-bottom: 1rem; }
+    .page-title em { font-style: italic; color: var(--purple2); }
+    .page-desc { font-size: .95rem; color: rgba(245,240,232,.62); line-height: 1.7; max-width: 520px; }
+    .page-badges { display: flex; gap: .7rem; flex-wrap: wrap; margin-top: 1.5rem; }
+    .page-badge { background: rgba(135,88,206,.15); border: 1px solid rgba(135,88,206,.3); color: var(--purple-light); font-size: .75rem; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; padding: .35rem .9rem; border-radius: 20px; }
+    .shop-main { max-width: 1100px; margin: 0 auto; padding: 2.5rem 3rem 5rem; }
+    .shop-notice { background: rgba(135,88,206,.1); border: 1px solid rgba(135,88,206,.25); border-radius: 10px; padding: 1.2rem 1.6rem; margin-bottom: 2.5rem; display: flex; align-items: flex-start; gap: 1rem; }
+    .shop-notice-icon { font-size: 1.2rem; flex-shrink: 0; }
+    .shop-notice-text { font-size: .88rem; color: rgba(245,240,232,.75); line-height: 1.65; }
+    .shop-notice-text strong { color: var(--purple-light); }
+    .shop-notice-text a { color: var(--purple-light); text-decoration: none; border-bottom: 1px solid rgba(155,110,224,.35); }
+    .shop-section { margin-bottom: 3rem; }
+    .shop-section-label { font-size: .75rem; font-weight: 500; letter-spacing: .16em; text-transform: uppercase; color: var(--purple-light); display: block; margin-bottom: .4rem; }
+    .shop-section-title { font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 700; color: var(--cream); margin-bottom: 1.5rem; }
+    .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.2rem; }
+    .product-card { background: var(--dark2); border-radius: 12px; border: 1px solid rgba(135,88,206,.1); overflow: hidden; transition: border-color .25s, transform .2s, box-shadow .2s; text-decoration: none; display: flex; flex-direction: column; }
+    .product-card:hover { border-color: var(--purple); transform: translateY(-3px); box-shadow: 0 10px 40px rgba(135,88,206,.15); }
+    .product-card-img-wrap { overflow: hidden; }
+    .product-card-img { width: 100%; height: 200px; object-fit: cover; display: block; transition: transform .5s; }
+    .product-card:hover .product-card-img { transform: scale(1.05); }
+    .product-card-body { padding: 1.2rem 1.4rem; flex: 1; display: flex; flex-direction: column; }
+    .product-card-title { font-family: 'Playfair Display', serif; font-size: 1.05rem; font-weight: 700; color: var(--cream); margin-bottom: .45rem; }
+    .product-card-desc { font-size: .82rem; color: rgba(245,240,232,.62); line-height: 1.6; flex: 1; }
+    .product-card-footer { padding: .9rem 1.4rem; border-top: 1px solid rgba(135,88,206,.08); display: flex; align-items: center; justify-content: space-between; }
+    .product-card-price { font-size: .88rem; font-weight: 600; color: var(--purple-light); }
+    .product-card-btn { background: rgba(135,88,206,.15); color: var(--purple-light); border: 1px solid rgba(135,88,206,.3); padding: .35rem .9rem; border-radius: 6px; font-size: .75rem; font-weight: 500; cursor: pointer; text-decoration: none; transition: all .2s; }
+    .product-card-btn:hover { background: rgba(135,88,206,.3); }
+    .divider { height: 1px; background: rgba(135,88,206,.1); margin: 2.5rem 0; }
+    .custom-order-card { background: var(--purple); border-radius: 12px; padding: 2.2rem 2.5rem; display: flex; align-items: center; justify-content: space-between; gap: 2rem; flex-wrap: wrap; margin-bottom: 2rem; }
+    .custom-order-text .custom-title { font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 700; color: white; margin-bottom: .4rem; }
+    .custom-order-text .custom-sub { font-size: .88rem; color: #fff; line-height: 1.6; }
+    .btn-white { background: white; color: var(--purple); padding: .75rem 1.8rem; font-size: .82rem; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; text-decoration: none; display: inline-block; border-radius: 3px; flex-shrink: 0; }
+    .btn-white:hover { background: var(--cream); }
+    .order-cta { background: var(--dark2); border-radius: 12px; padding: 2rem 2.4rem; border: 1px solid rgba(135,88,206,.15); text-align: center; }
+    .order-cta-title { font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 700; color: var(--cream); margin-bottom: .5rem; }
+    .order-cta-sub { font-size: .88rem; color: rgba(245,240,232,.62); margin-bottom: 1.5rem; }
+    .order-cta-btns { display: flex; gap: .9rem; justify-content: center; flex-wrap: wrap; }
+    .btn-purple { background: var(--purple); color: white; padding: .8rem 1.8rem; font-size: .82rem; font-weight: 500; letter-spacing: .07em; text-transform: uppercase; text-decoration: none; display: inline-block; border-radius: 3px; }
+    .btn-purple:hover { background: var(--purple3); }
+    .btn-ghost { background: transparent; color: rgba(245,240,232,.7); padding: .8rem 1.8rem; font-size: .82rem; font-weight: 500; letter-spacing: .07em; text-transform: uppercase; border: 1.5px solid rgba(245,240,232,.2); text-decoration: none; display: inline-block; border-radius: 3px; }
+    .btn-ghost:hover { border-color: rgba(245,240,232,.4); color: var(--cream); }
+    @media (max-width: 768px) { nav { padding: .9rem 1.2rem; } .page-hero { padding: 2.5rem 1.2rem 2rem; } .shop-main { padding: 2rem 1.2rem 4rem; } .product-grid { grid-template-columns: 1fr 1fr; } .custom-order-card { flex-direction: column; } }
+    @media (max-width: 480px) { .product-grid { grid-template-columns: 1fr; } }
+    @media (max-width: 600px) { .nav-back { display: none; } .nav-logo-text { white-space: nowrap; } .nav-cta { white-space: nowrap; } }
+  </style>
+  {% include "_favicons.html" ignore missing %}
+</head>
+<body>
+{% include "_loader.html" ignore missing %}
+<nav>
+  <a href="/" class="nav-logo">
+    <img src="{{ url_for('static', filename='logo.png') }}" alt="Bagel Alley">
+    <span class="nav-logo-text">Bagel <span>Alley</span></span>
+  </a>
+  <a href="/" class="nav-back">← Terug naar de website</a>
+  <a href="{{ reserveer_url }}" class="nav-cta">{{ reserveer_label }}</a>
+</nav>
+<div class="page-hero">
+  <div class="page-hero-inner">
+    <span class="page-label">Online Shop</span>
+    <h1 class="page-title">Bagel Alley<br><em>thuis bezorgd</em></h1>
+    <p class="page-desc">Bestel onze taarten en meer, voor afhalen of bezorging. Vers bereid, precies zoals in de zaak.</p>
+    <div class="page-badges">
+      <span class="page-badge">🥯 Verse bagels</span>
+      <span class="page-badge">🎂 Taarten op bestelling</span>
+      <span class="page-badge">🚗 Afhalen &amp; bezorgen</span>
+    </div>
+  </div>
+</div>
+<div class="shop-main">
+  <div class="shop-notice">
+    <span class="shop-notice-icon">📦</span>
+    <p class="shop-notice-text">
+      Bestellen via de officiële webshop op <strong><a href="https://www.bagelalley.nl/online-shop" target="_blank" rel="noopener">bagelalley.nl/online-shop</a></strong>.
+      Maatwerk of grote bestellingen? Bel <strong>070-514 61 16</strong> of WhatsApp <strong>06-51343359</strong> / <strong><a href="mailto:vrcbagel@gmail.com">vrcbagel@gmail.com</a></strong>.
+    </p>
+  </div>
+
+  <div class="shop-section">
+    <span class="shop-section-label">Op bestelling</span>
+    <h2 class="shop-section-title">Taarten &amp; Gebak</h2>
+    <div class="product-grid">
+      <a href="/bestellen" class="product-card">
+        <div class="product-card-img-wrap"><img class="product-card-img" src="{{ url_for('static', filename='taarten/apple.png') }}" loading="lazy" alt="Applepie"></div>
+        <div class="product-card-body">
+          <div class="product-card-title">Apple Pie</div>
+          <p class="product-card-desc">Huisgemaakte appeltaart, per stuk of heel te bestellen.</p>
+        </div>
+        <div class="product-card-footer"><span class="product-card-price">Vanaf €32,50</span><span class="product-card-btn">Bestellen →</span></div>
+      </a>
+      <a href="/bestellen" class="product-card">
+        <div class="product-card-img-wrap"><img class="product-card-img" src="{{ url_for('static', filename='taarten/oreo.png') }}" loading="lazy" alt="Oreo taart"></div>
+        <div class="product-card-body">
+          <div class="product-card-title">Oreo taart</div>
+          <p class="product-card-desc">Romige taart versierd met Oreo koekjes, een echte favoriet.</p>
+        </div>
+        <div class="product-card-footer"><span class="product-card-price">Vanaf €32,50</span><span class="product-card-btn">Bestellen →</span></div>
+      </a>
+      <a href="/bestellen" class="product-card">
+        <div class="product-card-img-wrap"><img class="product-card-img" src="{{ url_for('static', filename='taarten/chocolade.png') }}" loading="lazy" alt="Chocoladetaart"></div>
+        <div class="product-card-body">
+          <div class="product-card-title">Chocoladetaart</div>
+          <p class="product-card-desc">Intense pure chocolade, zijdezacht en ambachtelijk bereid.</p>
+        </div>
+        <div class="product-card-footer"><span class="product-card-price">Vanaf €32,50</span><span class="product-card-btn">Bestellen →</span></div>
+      </a>
+      <a href="/bestellen" class="product-card">
+        <div class="product-card-img-wrap"><img class="product-card-img" src="{{ url_for('static', filename='taarten/carrot.png') }}" loading="lazy" alt="Carrot Cake"></div>
+        <div class="product-card-body">
+          <div class="product-card-title">Carrot Cake</div>
+          <p class="product-card-desc">Wortelcake met rozijnen en walnoot, luchtig en smaakvol.</p>
+        </div>
+        <div class="product-card-footer"><span class="product-card-price">€45,00</span><span class="product-card-btn">Bestellen →</span></div>
+      </a>
+      <a href="/bestellen" class="product-card">
+        <div class="product-card-img-wrap"><img class="product-card-img" src="{{ url_for('static', filename='taarten/redvelvet.png') }}" loading="lazy" alt="Red Velvet Cake"></div>
+        <div class="product-card-body">
+          <div class="product-card-title">Red Velvet Cake</div>
+          <p class="product-card-desc">Met rode vruchten, macarons en witte chocolade. Volledig te bestellen.</p>
+        </div>
+        <div class="product-card-footer"><span class="product-card-price">Vanaf €32,50</span><span class="product-card-btn">Bestellen →</span></div>
+      </a>
+      <a href="https://www.bagelalley.nl/shop" target="_blank" rel="noopener" class="product-card">
+        <div class="product-card-img-wrap"><img class="product-card-img" src="{{ url_for('static', filename='taarten/tekst.png') }}" loading="lazy" alt="Tekst op taart"></div>
+        <div class="product-card-body">
+          <div class="product-card-title">Tekst op taart</div>
+          <p class="product-card-desc">Laat een naam of persoonlijke tekst op de taart zetten.</p>
+        </div>
+        <div class="product-card-footer"><span class="product-card-price">Op aanvraag</span><span class="product-card-btn">Meer info →</span></div>
+      </a>
+      <a href="mailto:vrcbagel@gmail.com" class="product-card">
+        <div class="product-card-img-wrap"><img class="product-card-img" src="{{ url_for('static', filename='taarten/bruidstaart.png') }}" loading="lazy" alt="Bruidstaart" style="object-position:center top"></div>
+        <div class="product-card-body">
+          <div class="product-card-title">Bruidstaart</div>
+          <p class="product-card-desc">Op maat gemaakt voor jouw speciale dag. Neem contact op voor een offerte.</p>
+        </div>
+        <div class="product-card-footer"><span class="product-card-price">Op maat</span><span class="product-card-btn">Contact →</span></div>
+      </a>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+  <div class="custom-order-card">
+    <div class="custom-order-text">
+      <div class="custom-title">Catering of grote bestelling?</div>
+      <p class="custom-sub">Voor groepen, bedrijfsevents of speciale gelegenheden, bel of mail ons direct.</p>
+    </div>
+    <a href="tel:0705146116" class="btn-white">📞 Bel 070-514 61 16</a>
+  </div>
+  <div class="order-cta">
+    <div class="order-cta-title">Klaar om te bestellen?</div>
+    <p class="order-cta-sub">Bestellingen via onze webshop of telefonisch. Liever ter plekke? {% if online_reserveren %}Reserveer een tafel.{% else %}Reserveer een tafel via 070-514 61 16.{% endif %}</p>
+    <div class="order-cta-btns">
+      <a href="https://www.bagelalley.nl/online-shop" target="_blank" rel="noopener" class="btn-purple">🛍️ Naar de webshop</a>
+      <a href="{{ reserveer_url }}" class="btn-ghost">📅 {{ reserveer_label }}</a>
+    </div>
+  </div>
+</div>
+{% include "_ident.html" ignore missing %}
+{% include "_cookie.html" ignore missing %}
+</body>
+</html>
