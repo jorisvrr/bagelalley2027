@@ -1,4 +1,5 @@
-<!-- jorisvrr ident: maker-signature, herbruikbaar. Verschijnt subtiel rechtsonder bij de footer. -->
+<!-- jorisvrr ident: maker-signature, herbruikbaar. Standaard zwevend rechtsonder;
+     zet vóór de include de variabele ident_inline op true, dan staat hij in de footer (in de flow). -->
 <style>
   #ident {
     position: fixed;
@@ -13,6 +14,11 @@
   }
   #ident.show { opacity: .4; transform: none; pointer-events: auto; }          #ident:focus-visible { opacity: .95; color: #ececef; }          @media (hover: hover) and (pointer: fine) { /* subtiel */
   #ident:hover { opacity: .95; color: #ececef; } }         /* duidelijker */
+
+  /* In de footer: gewoon in de flow, altijd zichtbaar, zelfde hover-animatie */
+  #ident.ident--inline { position: static; opacity: .4; transform: none; pointer-events: auto; align-self: flex-start; }
+  #ident.ident--inline:focus-visible { opacity: .95; color: #ececef; }
+  @media (hover: hover) and (pointer: fine) { #ident.ident--inline:hover { opacity: .95; color: #ececef; } }
 
   .ident__cur {
     display: block; height: 40px; width: auto;
@@ -34,7 +40,7 @@
   #chatWrapper { transition: opacity .35s ease; }
 </style>
 
-<a id="ident" href="https://jorisvrr.com/" target="_blank"
+<a id="ident"{% if ident_inline %} class="ident--inline"{% endif %} href="https://jorisvrr.com/" target="_blank"
    rel="noopener noreferrer" aria-label="Website gemaakt door jorisvrr">
   <span class="ident__name">jorisvrr</span>
   <img class="ident__cur" src="{{ url_for('static', filename='img/jorisvrr-cursor.png') }}" alt="" width="40" height="40">
@@ -44,14 +50,16 @@
   (function () {
     var ident = document.getElementById('ident');
     if (!ident) return;
-    var chat = document.getElementById('chatWrapper');        // optioneel, site-specifiek
-    var chatBox = document.getElementById('chatContainer');
-    function chatOpen() { return chatBox && !chatBox.classList.contains('verborgen'); }
+    // chat-elementen pas opzoeken bij gebruik: in de footer staat dit script vóór de chat
+    function chatOpen() { var box = document.getElementById('chatContainer'); return box && !box.classList.contains('verborgen'); }
+    var inline = ident.classList.contains('ident--inline');
     function update() {
       var nearBottom = window.innerHeight + window.scrollY >= document.body.offsetHeight - 80;
       var cookieOpen = !!document.getElementById('ba-cookie');
       var show = nearBottom && !chatOpen() && !cookieOpen;
-      ident.classList.toggle('show', show);
+      if (inline) show = nearBottom && !chatOpen();   // in de footer: alleen de chatbalk wegfaden
+      else ident.classList.toggle('show', show);
+      var chat = document.getElementById('chatWrapper');   // optioneel, site-specifiek
       if (chat) {                     // chat en ident wisselen elkaar netjes af onderaan
         chat.style.opacity = show ? '0' : '';
         chat.style.pointerEvents = show ? 'none' : '';
@@ -60,5 +68,6 @@
     window.addEventListener('scroll', update, { passive: true });
     window.addEventListener('resize', update);
     update();
+    document.addEventListener('DOMContentLoaded', update);
   })();
 </script>
