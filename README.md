@@ -62,7 +62,7 @@ De originele bronfoto's staan niet in de repo. Alleen de verkleinde varianten in
 
 - De Content-Security-Policy staat in `CSP` in `app.py`. Komt er een externe dienst bij (bijvoorbeeld analytics), voeg het domein daar toe.
 - De site zet geen cookies en heeft daarom geen cookiemelding. Google Maps laadt pas na een tik op "Toon kaart".
-- `/privacy` is nog een concept: de pagina heeft `noindex` en staat niet in de sitemap. Na goedkeuring door de klant: de conceptmelding en `seo_noindex` uit `templates/privacy.html` halen, de `X-Robots-Tag` uit de route `privacy()` halen en `/privacy` toevoegen aan `SITEMAP`.
+- De privacyverklaring staat op `/privacy` (goedgekeurd door de klant op 13-11-2026). Pas bij wijzigingen ook de datum onderaan de pagina en in `SITEMAP` aan.
 
 ## Chatbot
 

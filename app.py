@@ -710,6 +710,7 @@ SITEMAP = [
     ("/bestellen", "2026-11-13"),
     ("/reserveren", "2026-11-13"),
     ("/jobs", "2026-11-13"),
+    ("/privacy", "2026-11-13"),
 ]
 
 @app.route("/sitemap.xml")
@@ -1140,10 +1141,7 @@ def high_tea():
 
 @app.route("/privacy")
 def privacy():
-    # CONCEPT: noindex en buiten de sitemap tot de klant de tekst heeft goedgekeurd.
-    resp = app.make_response(render_template("privacy.html", bedrijf=BEDRIJF))
-    resp.headers["X-Robots-Tag"] = "noindex"
-    return resp
+    return render_template("privacy.html", bedrijf=BEDRIJF)
 
 
 @app.route("/jobs")
