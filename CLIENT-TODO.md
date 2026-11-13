@@ -16,7 +16,6 @@ Vraag: is dit nog nieuws, of mag het weg (of vervangen door bijv. "Keuken open t
 ## 3. Feiten voor de chatbot
 De chat antwoordt nu "Dat weet ik niet. Bel ons op 070-514 61 16" op deze vragen. Vraag per punt: ja/nee en eventuele details.
 - Pinnen (alleen pin, ook contant?)
-- Honden welkom?
 - Wifi voor gasten?
 - Rolstoeltoegankelijk (drempel, toilet)?
 - Vegan opties (nu krijgt "vegan?" het allergie-antwoord; op de kaart staan twee vegan soepen)

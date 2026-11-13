@@ -689,6 +689,7 @@ KENNISBANK = {
     "groepen":        f"Voor groepen of speciale gelegenheden bel je ons op {_TEL}.",
     "vacatures":      f'We zoeken mensen voor bediening en keuken. Kijk {link("hier", "/jobs")}.',
     "keuken":         "De keuken sluit om 15:30.",
+    "huisdieren":     f"Huisdieren zijn toegestaan binnen en op het terras! Voor meer info over huisdieren, bel {_TEL}.",
     "reserveren":     f"Reserveren gaat op dit moment telefonisch. Bel ons op {_TEL}, dan zetten we een tafel voor je klaar. "
                       "We zijn bereikbaar op ma en wo t/m zo van 08:00 tot 16:00.",
 }
@@ -800,6 +801,8 @@ def reageer_zonder_ai(bericht: str) -> str:
         return KENNISBANK["bagels"]
     if has("menu", "eten", "kaart", "lunch", "ontbijt"):
         return KENNISBANK["menu"]
+    if re.search(r"\b(hond|honden|hondje|kat|katten|huisdier|huisdieren|dieren)\b", b):
+        return KENNISBANK["huisdieren"]
     if has("parke", "auto"):
         return KENNISBANK["parking"]
     if re.search(r"\b(hallo|hoi|hey|hi|hello|goedemorgen|goedemiddag)\b", b):
