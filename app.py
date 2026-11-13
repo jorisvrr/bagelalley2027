@@ -194,7 +194,8 @@ def pic(path, alt="", sizes="100vw", cls="", eager=False, priority=False):
 
 # region ── SENDGRID MAIL ───────────────────────────────────────
 SENDGRID_API_KEY = os.environ.get("SENDGRID_API_KEY", "")
-MAIL_VAN         = os.environ.get("MAIL_VAN", "jorisvrr@gmail.com")
+# Afzender: alleen via env var (een in SendGrid geverifieerd adres). Geen standaard.
+MAIL_VAN         = os.environ.get("MAIL_VAN", "").strip()
 MAIL_VAN_NAAM    = "Bagel Alley"
 
 def datum_nl(datum_str: str) -> str:
@@ -406,11 +407,16 @@ def newsletter_html(naam: str = "") -> str:
 </body></html>"""
 
 
+def mail_ingesteld() -> bool:
+    """True als zowel de SendGrid-key als de afzender (MAIL_VAN) gezet zijn."""
+    return bool(SENDGRID_API_KEY and MAIL_VAN)
+
+
 def sendgrid_verstuur(naar: str, onderwerp: str, html_inhoud: str, antwoord_naar: str = "vrcbagel@gmail.com") -> bool:
     """Verstuurt een HTML-mail via SendGrid. Geeft alleen True terug als SendGrid
-    de mail heeft geaccepteerd (status 200/202). Zonder API-key: False."""
-    if not SENDGRID_API_KEY:
-        print("[MAIL] SENDGRID_API_KEY ontbreekt, mail niet verstuurd")
+    de mail heeft geaccepteerd (status 200/202). Zonder API-key of afzender: False."""
+    if not mail_ingesteld():
+        print("[MAIL] SENDGRID_API_KEY of MAIL_VAN ontbreekt, mail niet verstuurd")
         return False
     try:
         payload = {
@@ -1155,7 +1161,7 @@ def bestelling_verstuur():
     bestelling, fout = valideer_bestelling(data)
     if fout:
         return jsonify({"succes": False, "reden": "ongeldig", "fout": fout}), 400
-    if not SENDGRID_API_KEY:
+    if not mail_ingesteld():
         return jsonify({"succes": False, "reden": "niet_verstuurd",
                         "fout": "De bestelling kon niet automatisch worden verstuurd."}), 503
     onderwerp = f"Taartbestelling {bestelling['naam']} (afhalen {bestelling['datum'].strftime('%d-%m-%Y')} {bestelling['tijd']})"
