@@ -252,7 +252,8 @@ BAGEL_VD_MAAND = {
     "inspiratie": "Lichte, zonnige smaken en de balans tussen hartig en fris. "
                   "Lekker bij het ontbijt, de lunch of een weekendbrunch.",
     "ingredienten": ["Rucola", "Omelet", "Chorizo", "Zongedroogde tomaten"],
-    "foto": "specials/bagelvdmaand.png",
+    "foto": "specials/bagelvdmaand.png",          # site (WebP/AVIF via pic())
+    "email_foto": "email/bagelvdmaand.jpg",       # nieuwsbrief (JPG, e-mailclients)
 }
 _MAANDEN = ["januari", "februari", "maart", "april", "mei", "juni",
             "juli", "augustus", "september", "oktober", "november", "december"]
@@ -267,7 +268,7 @@ def bagel_vd_maand() -> dict:
     return {**BAGEL_VD_MAAND,
             "maand": f"{_MAANDEN[nu.month - 1].capitalize()} {nu.year}",
             "einde": begin_volgende.isoformat(),
-            "afbeelding": "/static/" + BAGEL_VD_MAAND["foto"]}
+            "afbeelding": "/static/" + BAGEL_VD_MAAND["email_foto"]}
 
 def mail_html(naam: str, datum_str: str, tijd: str, gasten: int) -> str:
     """Reserverings-bevestigingsmail (warme, redactionele stijl)."""
@@ -275,10 +276,10 @@ def mail_html(naam: str, datum_str: str, tijd: str, gasten: int) -> str:
     delen = naam.split()
     voornaam = delen[0] if delen else naam
     gasten_label = "persoon" if gasten == 1 else "personen"
-    img_hero    = f"{SITE_URL}/static/fotos/pexels-amar-28056733.jpg"
-    img_classic = f"{SITE_URL}/static/fotos/pexels-barbara-g-135944487-11599632.jpg"
-    img_salmon  = f"{SITE_URL}/static/fotos/pexels-amar-28056766.jpg"
-    img_coffee  = f"{SITE_URL}/static/specials/koffie.png"
+    img_hero    = f"{SITE_URL}/static/email/pexels-amar-28056733.jpg"
+    img_classic = f"{SITE_URL}/static/email/pexels-barbara-g-135944487-11599632.jpg"
+    img_salmon  = f"{SITE_URL}/static/email/pexels-amar-28056766.jpg"
+    img_coffee  = f"{SITE_URL}/static/email/koffie.jpg"
     return f"""<!DOCTYPE html><html lang="nl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Je tafel staat klaar | Bagel Alley</title><style>@media (max-width:480px){{.col{{display:block!important;width:100%!important;padding-bottom:18px!important}}}}</style></head>
 <body style="margin:0;padding:0;background:#ece7df;font-family:Georgia,'Times New Roman',serif;">
 <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#ece7df;"><tr><td align="center" style="padding:26px 12px;">
@@ -335,16 +336,16 @@ def newsletter_html(naam: str = "") -> str:
     voornaam = delen[0] if delen else ""
     intro = (f"Hoi {voornaam}, ontdek " if voornaam else "Ontdek ")
     img_botm   = f"{SITE_URL}{b['afbeelding']}"
-    img_coffee = f"{SITE_URL}/static/specials/koffie.png"
-    img_cake   = f"{SITE_URL}/static/taarten/redvelvet.png"
-    img_bagel  = f"{SITE_URL}/static/fotos/pexels-anchornhaven-43716305-29445728.jpg"
+    img_coffee = f"{SITE_URL}/static/email/koffie.jpg"
+    img_cake   = f"{SITE_URL}/static/email/redvelvet.jpg"
+    img_bagel  = f"{SITE_URL}/static/email/pexels-anchornhaven-43716305-29445728.jpg"
 
-    ing = "".join(
-        f"""<td align="center" valign="top" style="padding:4px;">
-          <div style="display:inline-block;font-family:Arial,sans-serif;font-size:12px;color:#5a4f68;background:#ffffff;border:1px solid #e4dcd0;border-radius:999px;padding:6px 12px;line-height:1.3;">{label}</div>
-        </td>"""
+    # Eén cel met inline-blokjes: loopt op een smal scherm door naar een volgende regel.
+    ing = '<td align="center" style="padding:0;">' + "".join(
+        f'<span style="display:inline-block;margin:4px;font-family:Arial,sans-serif;font-size:12px;color:#5a4f68;'
+        f'background:#ffffff;border:1px solid #e4dcd0;border-radius:999px;padding:6px 12px;line-height:1.3;">{label}</span>'
         for label in b["ingredienten"]
-    )
+    ) + "</td>"
 
     def _more(img, titel, tekst):
         return f"""<td class="col" width="33%" valign="top" style="padding:0 6px;">
