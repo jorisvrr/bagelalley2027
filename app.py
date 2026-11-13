@@ -1,6 +1,7 @@
 # region ── IMPORTS ─────────────────────────────────────────────
-from flask import Flask, render_template, request, jsonify, session, Response, abort
+from flask import Flask, render_template, request, jsonify, session, Response, abort, redirect
 import os
+from urllib.parse import urlsplit
 import json
 import re
 import requests
@@ -637,6 +638,36 @@ def inject_seo_globals():
         "reserveer_url": "/reserveren" if ONLINE_RESERVEREN else RESERVEER_TEL_LINK,
         "reserveer_label": "Tafel reserveren" if ONLINE_RESERVEREN else "Bel om te reserveren",
     }
+
+# Oude URL's van de vorige bagelalley.nl -> nieuwe pagina's (301, permanent).
+# Nieuwe regel nodig? Voeg hem hier toe, zonder slash aan het eind; "/pad/" werkt dan ook.
+OUDE_URLS = {
+    "/menu-takeaway": "/menu",
+    "/high-tea": "/menu#high-tea",
+    "/tapas": "/menu#tapas",
+    "/online-shop": "/shop",
+    "/contact": "/#contact",
+    "/cadeaubon": "/#cadeaubon",
+}
+_PAGINAS = {"/menu", "/shop", "/bestellen", "/jobs", "/reserveren"}
+_CANON_HOST = urlsplit(os.environ["SITE_URL"]).netloc.lower() if os.environ.get("SITE_URL") else ""
+
+@app.before_request
+def _oude_urls():
+    pad = request.path.lower()
+    kort = pad.rstrip("/") or "/"
+    if kort in OUDE_URLS:
+        return redirect(OUDE_URLS[kort], code=301)
+    if pad != kort and kort in _PAGINAS:          # /jobs/ -> /jobs
+        return redirect(kort, code=301)
+
+@app.after_request
+def _geen_index_buiten_hoofddomein(resp):
+    # Zodra SITE_URL gezet is (bijv. https://bagelalley.nl), krijgt elk ander domein
+    # (zoals *.vercel.app) noindex, zodat Google geen dubbele site indexeert.
+    if _CANON_HOST and request.host.lower() != _CANON_HOST:
+        resp.headers["X-Robots-Tag"] = "noindex"
+    return resp
 
 @app.route("/robots.txt")
 def robots_txt():
