@@ -808,7 +808,7 @@ document.addEventListener('DOMContentLoaded', function() {
     </div>
     <div class="contact-map reveal reveal-delay-1" id="kaart" data-src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2450.1!2d4.3913!3d52.1502!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47c5be3f2b000001%3A0x1!2sLangstraat+42%2C+Wassenaar!5e0!3m2!1snl!2snl!4v1" data-title="Kaart: Bagel Alley, Langstraat 42, Wassenaar">
         <div class="map-placeholder">
-          <p>De kaart wordt geladen via Google Maps.</p>
+          <p>Hiermee laad je Google Maps. Google kan dan cookies plaatsen.</p>
           <div class="map-actions">
             <button type="button" class="map-btn" id="toonKaart">{{ icon('map', 20) }} Toon kaart</button>
             <a class="map-route" href="https://www.google.com/maps/search/?api=1&amp;query=Bagel%20Alley%20Langstraat%2042%20Wassenaar" target="_blank" rel="noopener noreferrer">{{ icon('navigation', 20) }} Route plannen</a>
@@ -1340,6 +1340,5 @@ const observer = new IntersectionObserver(entries => {
 document.querySelectorAll(".reveal").forEach(el => observer.observe(el));
 
 </script>
-{% include "_cookie.html" ignore missing %}
 </body>
 </html>

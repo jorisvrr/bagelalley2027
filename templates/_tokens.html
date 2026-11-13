@@ -89,7 +89,6 @@
     /* lagen */
     --z-nav: 100;
     --z-ident: 150;
-    --z-cookie: 200;
     --z-chat: 300;
     --z-sheet: 400;
     --z-loader: 1000;
@@ -97,7 +96,7 @@
     /* iconen (Lucide) */
     --icon-stroke: 1.75;
 
-    /* onderkant-stapel: chatbalk, cookiemelding, ident */
+    /* onderkant-stapel: chatbalk, ident */
     --chatbar-h: 0px;
     --safe-bottom: env(safe-area-inset-bottom, 0px);
   }
@@ -118,15 +117,15 @@
   /* Eén gedeelde druk-staat voor alles wat je kunt aantikken */
   a, button, [role="button"], label[for] { touch-action: manipulation; }
   :where(button, .btn-purple, .btn-ghost, .btn-ghost-light, .btn-white, .nav-cta, .btn-submit, .btn-next, .btn-prev,
-         .product-card-btn, .snel-knop, .size-opt, .slot, .booking-slot, .min-reserveer-btn, .ba-cookie-accept,
-         .ba-cookie-decline, .menu-link-btn) {
+         .product-card-btn, .snel-knop, .size-opt, .slot, .booking-slot, .min-reserveer-btn,
+         .menu-link-btn) {
     transition: transform var(--dur-press) var(--ease-out), background-color var(--dur-ui) var(--ease-out),
                 border-color var(--dur-ui) var(--ease-out), color var(--dur-ui) var(--ease-out);
     -webkit-user-select: none; user-select: none;
   }
   :where(button, .btn-purple, .btn-ghost, .btn-ghost-light, .btn-white, .nav-cta, .btn-submit, .btn-next, .btn-prev,
-         .product-card-btn, .snel-knop, .size-opt, .slot, .booking-slot, .min-reserveer-btn, .ba-cookie-accept,
-         .ba-cookie-decline, .menu-link-btn):active:not(:disabled) { transform: scale(.97); }
+         .product-card-btn, .snel-knop, .size-opt, .slot, .booking-slot, .min-reserveer-btn,
+         .menu-link-btn):active:not(:disabled) { transform: scale(.97); }
 
   /* Visueel verborgen, wel voor schermlezers */
   .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }

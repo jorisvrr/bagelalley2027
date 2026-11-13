@@ -55,8 +55,7 @@
     var inline = ident.classList.contains('ident--inline');
     function update() {
       var nearBottom = window.innerHeight + window.scrollY >= document.body.offsetHeight - 80;
-      var cookieOpen = !!document.getElementById('ba-cookie');
-      var show = nearBottom && !chatOpen() && !cookieOpen;
+      var show = nearBottom && !chatOpen();
       if (inline) show = nearBottom && !chatOpen();   // in de footer: alleen de chatbalk wegfaden
       else ident.classList.toggle('show', show);
       var chat = document.getElementById('chatWrapper');   // optioneel, site-specifiek
