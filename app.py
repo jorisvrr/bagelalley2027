@@ -165,8 +165,11 @@ except Exception as e:
 # valt hij terug op het originele bestand.
 from markupsafe import Markup
 try:
-    with open(os.path.join(app.static_folder, "opt", "manifest.json"), encoding="utf-8") as _fh:
-        _IMG_MANIFEST = json.load(_fh)
+    # Python-module naast app.py: wordt op Vercel wél in de functie meegenomen (public/ niet).
+    import importlib.util as _ilu2
+    _spec2 = _ilu2.spec_from_file_location("beeldmanifest", os.path.join(os.path.dirname(os.path.abspath(__file__)), "beeldmanifest.py"))
+    _mod2 = _ilu2.module_from_spec(_spec2); _spec2.loader.exec_module(_mod2)
+    _IMG_MANIFEST = _mod2.BEELDEN
 except Exception as e:
     print(f"[IMG] manifest niet geladen: {e}")
     _IMG_MANIFEST = {}
