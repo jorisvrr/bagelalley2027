@@ -544,8 +544,8 @@ BEDRIJF = {
 # endregion
 
 # region ── SEO / STRUCTURED DATA ───────────────────────────────
-# Canonieke domein. Zet desnoods de env var SITE_URL als je een ander
-# (sub)domein gebruikt, bijv. https://bagelalley.up.railway.app
+# Canonieke domein. Zet op Vercel de env var SITE_URL=https://bagelalley.nl
+# zodra het domein is overgezet. Zonder SITE_URL: het productiedomein van Vercel.
 SITE_URL = (os.environ.get("SITE_URL")
             or (("https://" + os.environ["VERCEL_PROJECT_PRODUCTION_URL"]) if os.environ.get("VERCEL_PROJECT_PRODUCTION_URL") else "")
             or "https://bagelalley.nl").rstrip("/")
@@ -555,15 +555,13 @@ SITE_URL = (os.environ.get("SITE_URL")
 ONLINE_RESERVEREN = os.environ.get("ONLINE_RESERVEREN", "0").strip().lower() in ("1", "true", "ja", "yes")
 RESERVEER_TEL_LINK = "tel:+31705146116"
 
-# Geo-coordinaten van de zaak. Controleer deze in Google Maps en pas
-# ze hier aan als ze niet exact kloppen (rechtsklik op de pin → coordinaten).
-GEO = {"lat": 52.1463, "lng": 4.4012}
+# Geo-coordinaten van Langstraat 42, 2242 KM Wassenaar.
+# Bron: BAG via PDOK Locatieserver (adresobject Langstraat 42), gecontroleerd 13-11-2026.
+GEO = {"lat": 52.14408, "lng": 4.39315}
 
-# (Optioneel) social profielen van de zaak, vul aan voor 'sameAs'.
-SOCIAL = [
-    # "https://www.instagram.com/bagelalley/",
-    # "https://www.facebook.com/bagelalley/",
-]
+# Profielen van de zaak voor 'sameAs'. Alleen bevestigde URL's invullen:
+# Instagram (@bagelalleywassenaar, nog bevestigen) en het Google Bedrijfsprofiel.
+SOCIAL = []
 
 _DAGEN = {0: "Monday", 1: "Tuesday", 2: "Wednesday",
           3: "Thursday", 4: "Friday", 5: "Saturday", 6: "Sunday"}
@@ -586,7 +584,8 @@ def build_restaurant_schema() -> str:
             })
     schema = {
         "@context": "https://schema.org",
-        "@type": "Restaurant",
+        "@type": ["Restaurant", "CafeOrCoffeeShop"],
+        "@id": SITE_URL + "/#zaak",
         "name": BEDRIJF["naam"],
         "image": SITE_URL + "/static/og-image.jpg",
         "logo": SITE_URL + "/static/favicon/android-chrome-512x512.png",
@@ -595,7 +594,7 @@ def build_restaurant_schema() -> str:
         "email": BEDRIJF["email"],
         "priceRange": "\u20ac\u20ac",
         "servesCuisine": ["Bagels", "Breakfast", "Lunch", "High Tea", "Tapas", "Koffie"],
-        "acceptsReservations": True,
+        "acceptsReservations": SITE_URL + "/reserveren",   # reserveren gaat telefonisch, die pagina legt het uit
         "hasMenu": SITE_URL + "/menu",
         "address": {
             "@type": "PostalAddress",
