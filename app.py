@@ -445,7 +445,7 @@ def sendgrid_verstuur(naar: str, onderwerp: str, html_inhoud: str, antwoord_naar
             timeout=10,
         )
         ok = resp.status_code in (200, 202)
-        print(f"[MAIL] {onderwerp[:40]} -> status {resp.status_code}")
+        print(f"[MAIL] status {resp.status_code}")   # geen onderwerp: daar staat de klantnaam in
         if not ok:
             print(f"[MAIL FOUT] {resp.text[:300]}")
         return ok
@@ -1180,7 +1180,7 @@ def bestelling_verstuur():
     if not sendgrid_verstuur(ORDER_MAIL_TO, onderwerp, bestelling_mail_html(bestelling), antwoord_naar=bestelling["email"]):
         return jsonify({"succes": False, "reden": "niet_verstuurd",
                         "fout": "De bestelling kon niet automatisch worden verstuurd."}), 502
-    print(f"[BESTELLING] {bestelling['naam']} | {bestelling['datum']} {bestelling['tijd']} | {_euro(bestelling['totaal'])}")
+    print(f"[BESTELLING] afhalen {bestelling['datum']} {bestelling['tijd']} | {_euro(bestelling['totaal'])}")   # geen persoonsgegevens in de logs
     return jsonify({"succes": True})
 
 
@@ -1256,7 +1256,7 @@ def reserveren_post():
         )
         conn.commit()
 
-    print(f"[RESERVERING] {naam} | {email} | {datum} om {tijd} | {gasten} gasten")
+    print(f"[RESERVERING] {datum} om {tijd} | {gasten} gasten")   # geen persoonsgegevens in de logs
     stuur_bevestigingsmail(naam, email, datum, tijd, gasten)
     # Nieuwsbrief alleen bij expliciete opt-in (AVG-conform)
     if bool(data.get("nieuwsbrief")):
