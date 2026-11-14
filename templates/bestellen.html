@@ -241,7 +241,7 @@
         <div class="product-grid" id="productGrid">
           <!-- cards worden via JS gevuld -->
         </div>
-        <div class="form-error" id="error1">Kies eerst minimaal één taart met een formaat.</div>
+        <div class="form-error" id="error1" role="alert">Kies minimaal één taart: tik bij een taart op Klein of Groot.</div>
         <div class="step-nav">
           <span></span>
           <button class="btn-next" onclick="goToStep(2)">Volgende {{ icon('chevron-right', 20) }}</button>
@@ -259,9 +259,9 @@
         </button>
         <div class="form-group" id="tekstVeldWrap" style="display:none;">
           <label class="form-label" for="tekstOpTaart">Gewenste tekst <span>*</span></label>
-          <input type="text" id="tekstOpTaart" class="form-input" placeholder="Bijv. Gefeliciteerd Anne!" maxlength="40" autocomplete="off" enterkeyhint="done">
+          <input type="text" id="tekstOpTaart" class="form-input" placeholder="Bijv. Gefeliciteerd Anne!" maxlength="40" autocomplete="off" enterkeyhint="done" aria-describedby="fout-tekstOpTaart">
+          <span class="field-error" id="fout-tekstOpTaart" hidden></span>
         </div>
-        <div class="form-error" id="error2">Vul de gewenste tekst in, of zet de optie uit.</div>
         <div class="step-nav">
           <button class="btn-prev" onclick="goToStep(1)">{{ icon('chevron-left', 20) }} Vorige</button>
           <button class="btn-next" onclick="goToStep(3)">Volgende {{ icon('chevron-right', 20) }}</button>
@@ -271,35 +271,39 @@
       <!-- STAP 3: AFHALEN & CONTACT -->
       <div class="step-panel" data-panel="3">
         <div class="pickup-note">
-          {{ icon('map-pin', 16) }} <strong>Alleen afhalen</strong> bij Bagel Alley, Langstraat 42 in Wassenaar. Bezorgen is niet mogelijk. Je dient minimaal 24 uur van te voren te bestellen.
+          {{ icon('map-pin', 16) }} <strong>Alleen afhalen</strong> bij Bagel Alley, Langstraat 42 in Wassenaar. Bezorgen is niet mogelijk. Bestel minimaal 24 uur van tevoren.
         </div>
         <div class="form-row">
           <div class="form-group">
             <label class="form-label" for="afhaaldatum">Afhaaldatum <span>*</span></label>
-            <input type="date" id="afhaaldatum" class="form-input" min="" required>
+            <input type="date" id="afhaaldatum" class="form-input" min="" required aria-describedby="fout-afhaaldatum">
+            <span class="field-error" id="fout-afhaaldatum" hidden></span>
           </div>
           <div class="form-group">
             <label class="form-label" for="naam">Naam <span>*</span></label>
-            <input type="text" id="naam" class="form-input" placeholder="Je volledige naam" autocomplete="name" autocapitalize="words" enterkeyhint="next" required>
+            <input type="text" id="naam" class="form-input" placeholder="Je volledige naam" autocomplete="name" autocapitalize="words" enterkeyhint="next" required aria-describedby="fout-naam">
+            <span class="field-error" id="fout-naam" hidden></span>
           </div>
         </div>
         <div class="form-group">
-          <label class="form-label">Afhaaltijd <span>*</span></label>
-          <div class="slot-grid" id="slotGrid">
+          <span class="form-label" id="label-afhaaltijd">Afhaaltijd <span>*</span></span>
+          <div class="slot-grid" id="slotGrid" role="group" aria-labelledby="label-afhaaltijd" aria-describedby="fout-afhaaltijd">
             <!-- tijdsloten via JS -->
           </div>
+          <span class="field-error" id="fout-afhaaltijd" hidden></span>
         </div>
         <div class="form-row">
           <div class="form-group">
             <label class="form-label" for="email">E-mailadres <span>*</span></label>
-            <input type="email" id="email" class="form-input" placeholder="jouw@email.nl" autocomplete="email" inputmode="email" autocapitalize="none" spellcheck="false" enterkeyhint="next" required>
+            <input type="email" id="email" class="form-input" placeholder="jouw@email.nl" autocomplete="email" inputmode="email" autocapitalize="none" spellcheck="false" enterkeyhint="next" required aria-describedby="fout-email">
+            <span class="field-error" id="fout-email" hidden></span>
           </div>
           <div class="form-group">
             <label class="form-label" for="telefoon">Telefoonnummer <span>*</span></label>
-            <input type="tel" id="telefoon" class="form-input" placeholder="06-12345678" autocomplete="tel" inputmode="tel" enterkeyhint="next" required>
+            <input type="tel" id="telefoon" class="form-input" placeholder="06-12345678" autocomplete="tel" inputmode="tel" enterkeyhint="next" required aria-describedby="fout-telefoon">
+            <span class="field-error" id="fout-telefoon" hidden></span>
           </div>
         </div>
-        <div class="form-error" id="error3" role="alert">Vul alle verplichte velden in.</div>
         <div class="step-nav">
           <button class="btn-prev" onclick="goToStep(2)">{{ icon('chevron-left', 20) }} Vorige</button>
           <button class="btn-next" onclick="goToStep(4)">Volgende {{ icon('chevron-right', 20) }}</button>
@@ -456,11 +460,11 @@
     document.getElementById('tekstVeldWrap').style.display = tekstAan ? 'flex' : 'none';
     if (!tekstAan) {
       document.getElementById('tekstOpTaart').value = '';
-      document.getElementById('error2').style.display = 'none';
+      wisFout('tekstOpTaart');
     }
     updateSummary();
   }
-  document.getElementById('tekstOpTaart').addEventListener('input', updateSummary);
+  document.getElementById('tekstOpTaart').addEventListener('input', () => { wisFout('tekstOpTaart'); updateSummary(); });
 
   // ---------- STAP 3: TIJDSLOTEN ----------
   const tijdsloten = ['10:00','10:30','11:00','11:30','12:00','12:30','13:00','13:30','14:00','14:30','15:00','15:30'];
@@ -477,7 +481,7 @@
       el.classList.add('gekozen');
       el.setAttribute('aria-pressed', 'true');
       gekozenSlot = tijd;
-      document.getElementById('error3').style.display = 'none';
+      wisFout('afhaaltijd');
     });
     slotGrid.appendChild(el);
   });
@@ -488,16 +492,55 @@
   document.getElementById('afhaaldatum').min =
     `${morgen.getFullYear()}-${String(morgen.getMonth() + 1).padStart(2, '0')}-${String(morgen.getDate()).padStart(2, '0')}`;
 
-  // dinsdag is gesloten, blokkeer die datum
+  // ---------- FOUTEN PER VELD ----------
+  // Melding direct bij het veld, aria-invalid, focus naar het eerste foute veld en een korte
+  // nudge (de nudge staat uit bij reduced motion, zie _tokens.html).
+  const MELDING = {
+    datumLeeg: 'Kies een afhaaldatum. Bestellen kan vanaf morgen (minimaal 24 uur van tevoren).',
+    datumTeVroeg: 'Bestellen kan vanaf morgen (minimaal 24 uur van tevoren). Kies een latere datum.',
+    dinsdag: 'Op dinsdag zijn we gesloten. Kies maandag of woensdag tot en met zondag.',
+    tijd: 'Kies een afhaaltijd.',
+    naam: 'Vul je naam in, zodat we weten voor wie de taart is.',
+    emailLeeg: 'Vul je e-mailadres in; daar sturen we de bevestiging heen.',
+    email: 'Controleer je e-mailadres, bijvoorbeeld naam@voorbeeld.nl.',
+    telefoonLeeg: 'Vul je telefoonnummer in, voor als we iets moeten overleggen.',
+    telefoon: 'Gebruik cijfers, eventueel met spaties of streepjes, bijvoorbeeld 06-12345678.',
+    tekst: 'Vul de tekst voor op de taart in, of zet de optie uit.',
+  };
+  const EMAIL_RE = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
+  const TEL_RE = /^\+?[0-9][0-9 ()\-]{7,19}$/;
+  function nudge(el) {
+    el.classList.remove('ba-nudge'); void el.offsetWidth; el.classList.add('ba-nudge');
+    el.addEventListener('animationend', () => el.classList.remove('ba-nudge'), { once: true });
+  }
+  function zetFout(id, tekst) {
+    const melding = document.getElementById('fout-' + id), veldEl = document.getElementById(id) || document.getElementById('slotGrid');
+    melding.textContent = tekst; melding.hidden = false;
+    veldEl.setAttribute('aria-invalid', 'true');
+  }
+  function wisFout(id) {
+    const melding = document.getElementById('fout-' + id), veldEl = id === 'afhaaltijd' ? document.getElementById('slotGrid') : document.getElementById(id);
+    if (melding) { melding.hidden = true; melding.textContent = ''; }
+    if (veldEl) veldEl.removeAttribute('aria-invalid');
+  }
+  function toonEersteFout(ids) {
+    if (!ids.length) return;
+    const eerste = ids[0] === 'afhaaltijd' ? document.querySelector('.slot') : document.getElementById(ids[0]);
+    const doel = ids[0] === 'afhaaltijd' ? document.getElementById('slotGrid') : eerste;
+    eerste.focus({ preventScroll: true });
+    doel.scrollIntoView({ block: 'center' });
+    nudge(doel);
+  }
+  ['naam', 'email', 'telefoon'].forEach(id => document.getElementById(id).addEventListener('input', () => wisFout(id)));
+
+  // dinsdag is gesloten: direct melden wat wél kan
   document.getElementById('afhaaldatum').addEventListener('change', function () {
-    const err = document.getElementById('error3');
     if (this.value && new Date(this.value + 'T12:00:00').getDay() === 2) {
-      err.textContent = 'We zijn op dinsdag gesloten. Kies een andere afhaaldatum.';
-      err.style.display = 'block';
+      zetFout('afhaaldatum', MELDING.dinsdag);
       this.value = '';
-    } else {
-      err.textContent = 'Vul alle verplichte velden in.';
-      err.style.display = 'none';
+      nudge(this);
+    } else if (this.value) {
+      wisFout('afhaaldatum');
     }
   });
 
@@ -533,7 +576,9 @@
 
   function valideerStap1() {
     if (Object.keys(gekozenProducten).length === 0) {
-      document.getElementById('error1').style.display = 'block';
+      const err = document.getElementById('error1');
+      err.style.display = 'block'; nudge(err);
+      const eerste = document.querySelector('.size-opt'); if (eerste) eerste.focus({ preventScroll: true });
       return false;
     }
     return true;
@@ -541,24 +586,29 @@
 
   function valideerStap2() {
     if (tekstAan && document.getElementById('tekstOpTaart').value.trim() === '') {
-      document.getElementById('error2').style.display = 'block';
+      zetFout('tekstOpTaart', MELDING.tekst); toonEersteFout(['tekstOpTaart']);
       return false;
     }
     return true;
   }
 
   function valideerStap3() {
+    const fouten = [];
     const datum = document.getElementById('afhaaldatum').value;
-    const naam = document.getElementById('naam').value.trim();
-    const email = document.getElementById('email').value.trim();
-    const telefoon = document.getElementById('telefoon').value.trim();
-    if (!datum || !naam || !gekozenSlot || !email || !telefoon) {
-      document.getElementById('error3').textContent = 'Vul alle verplichte velden in.';
-      document.getElementById('error3').style.display = 'block';
-      return false;
-    }
-    document.getElementById('error3').style.display = 'none';
-    return true;
+    const minDatum = document.getElementById('afhaaldatum').min;
+    if (!datum) { zetFout('afhaaldatum', MELDING.datumLeeg); fouten.push('afhaaldatum'); }
+    else if (new Date(datum + 'T12:00:00').getDay() === 2) { zetFout('afhaaldatum', MELDING.dinsdag); fouten.push('afhaaldatum'); }
+    else if (minDatum && datum < minDatum) { zetFout('afhaaldatum', MELDING.datumTeVroeg); fouten.push('afhaaldatum'); }
+    if (!veld('naam')) { zetFout('naam', MELDING.naam); fouten.push('naam'); }
+    if (!gekozenSlot) { zetFout('afhaaltijd', MELDING.tijd); fouten.push('afhaaltijd'); }
+    const email = veld('email'), telefoon = veld('telefoon');
+    if (!email) { zetFout('email', MELDING.emailLeeg); fouten.push('email'); }
+    else if (!EMAIL_RE.test(email)) { zetFout('email', MELDING.email); fouten.push('email'); }
+    if (!telefoon) { zetFout('telefoon', MELDING.telefoonLeeg); fouten.push('telefoon'); }
+    else if (!TEL_RE.test(telefoon)) { zetFout('telefoon', MELDING.telefoon); fouten.push('telefoon'); }
+    // volgorde op het scherm: datum, naam, tijd, e-mail, telefoon
+    toonEersteFout(fouten);
+    return fouten.length === 0;
   }
 
   // ---------- LIVE SAMENVATTING / PRIJS ----------
