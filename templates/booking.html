@@ -24,7 +24,7 @@
     .nav-logo { display: flex; align-items: center; gap: .75rem; text-decoration: none; }
     .nav-logo-text { font-family: 'Playfair Display', serif; font-size: var(--fs-logo); font-weight: 700; color: var(--cream); }
     .nav-logo-text span { color: var(--purple2); }
-    .nav-back { font-size: var(--fs-sm); color: rgba(245,240,232,.62); text-decoration: none; letter-spacing: var(--track-button); text-transform: uppercase; transition: color .2s; display: inline-flex; align-items: center; gap: .4rem; }
+    .nav-back { font-size: var(--fs-sm); color: rgba(245,240,232,.62); text-decoration: none; letter-spacing: var(--track-button); text-transform: uppercase; transition: color var(--dur-ui) var(--ease-out); display: inline-flex; align-items: center; gap: .4rem; }
     @media (hover: hover) and (pointer: fine) { .nav-back:hover { color: var(--purple2); } }
 
     /* HERO STRIP */
@@ -56,7 +56,7 @@
       border: 1.5px solid rgba(135,88,206,.2); border-radius: var(--r-field);
       font-family: 'DM Sans', sans-serif; color: var(--text);
       background: #fafafa; outline: none; width: 100%;
-      transition: border-color .2s, box-shadow .2s;
+      transition: border-color var(--dur-ui) var(--ease-out);
     }
     .form-input:focus, .form-select:focus { border-color: var(--purple); background: white; box-shadow: var(--focus-ring); }
     .form-input::placeholder { color: #736b7a; }
@@ -65,7 +65,7 @@
     /* TIJDSLOT GRID */
     .slot-label { font-size: var(--fs-sm); font-weight: 500; color: var(--muted);   margin-top: .2rem; }
     .slot-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: .6rem; }
-    .slot { min-height: 44px; padding: .55rem .4rem; border: 1.5px solid rgba(135,88,206,.2); border-radius: var(--r-field); font-size: var(--fs-sm); text-align: center; cursor: pointer; color: var(--text); transition: background-color .15s, border-color .15s, color .15s, transform .15s, box-shadow .15s; font-family: 'DM Sans', sans-serif; }
+    .slot { min-height: 44px; padding: .55rem .4rem; border: 1.5px solid rgba(135,88,206,.2); border-radius: var(--r-field); font-size: var(--fs-sm); text-align: center; cursor: pointer; color: var(--text); transition: background-color var(--dur-ui) var(--ease-out), border-color var(--dur-ui) var(--ease-out), color var(--dur-ui) var(--ease-out), transform var(--dur-press) var(--ease-out); font-family: 'DM Sans', sans-serif; }
     @media (hover: hover) and (pointer: fine) { .slot:hover { border-color: var(--purple); background: rgba(135,88,206,.06); } }
     .slot.gekozen { background: var(--purple) !important; color: white !important; border-color: var(--purple) !important; font-weight: 500; }
     .slot.vol { background: #f5f5f5; color: #ccc; cursor: not-allowed; border-color: #e8e8e8; text-decoration: line-through; }
@@ -77,7 +77,7 @@
     .form-success strong { display: block; font-size: var(--fs-base); margin-bottom: .4rem; }
 
     /* SUBMIT BTN */
-    .btn-submit { background: var(--purple); color: white; border: none; padding: 1rem 2rem; font-size: var(--fs-base); font-weight: 500; border-radius: var(--r-field); cursor: pointer; transition: background .2s, transform .15s; width: 100%; font-family: 'DM Sans', sans-serif; letter-spacing: var(--track-button); }
+    .btn-submit { background: var(--purple); color: white; border: none; padding: 1rem 2rem; font-size: var(--fs-base); font-weight: 500; border-radius: var(--r-field); cursor: pointer; transition: background-color var(--dur-ui) var(--ease-out), transform var(--dur-press) var(--ease-out); width: 100%; font-family: 'DM Sans', sans-serif; letter-spacing: var(--track-button); }
     .nieuwsbrief-optin { display: flex; align-items: flex-start; gap: .6rem; margin: 0 0 1rem; padding: .85rem 1rem; background: rgba(135,88,206,.06); border: 1px solid rgba(135,88,206,.18); border-radius: var(--r-field); cursor: pointer; font-size: var(--fs-sm); color: #5a5560; line-height: 1.5; }
     .nieuwsbrief-optin input { margin-top: .15rem; width: 16px; height: 16px; accent-color: var(--purple); flex-shrink: 0; cursor: pointer; }
     .nieuwsbrief-optin strong { color: var(--purple3); font-weight: 600; }
