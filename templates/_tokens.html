@@ -150,6 +150,10 @@
   .ba-nudge { animation: ba-nudge 150ms var(--ease-in-out); }
   @keyframes ba-nudge { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-4px); } 75% { transform: translateX(4px); } }
 
+  /* Tel- en maillinks in lopende tekst: onzichtbaar klikvlak van 44px hoog, zonder dat de tekst verschuift */
+  a:is([href^="tel:"], [href^="mailto:"]):not([class]) { position: relative; }
+  a:is([href^="tel:"], [href^="mailto:"]):not([class])::after { content: ""; position: absolute; left: -4px; right: -4px; top: 50%; height: 44px; transform: translateY(-50%); }
+
   /* Visueel verborgen, wel voor schermlezers */
   .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
 

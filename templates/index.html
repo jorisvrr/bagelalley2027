@@ -89,6 +89,9 @@
     .nav-links a { font-size: var(--fs-sm); font-weight: 400; color: var(--muted); text-decoration: none; letter-spacing: var(--track-button); text-transform: uppercase; transition: color .2s; }
     @media (hover: hover) and (pointer: fine) { .nav-links a:hover { color: var(--purple3); } }
     .nav-links a.nav-jobs { color: var(--muted); font-size: var(--fs-xs); }
+    .nav-links a:not(.nav-cta) { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; min-width: 44px; }   /* tikdoel, zelfde uiterlijk */
+    .nav-links .nav-cta { position: relative; }
+    .nav-links .nav-cta::before { content: ""; position: absolute; left: 0; right: 0; top: 50%; height: 44px; transform: translateY(-50%); }
     @media (hover: hover) and (pointer: fine) { .nav-links a.nav-jobs:hover { color: var(--muted); } }
     .nav-cta { background: var(--purple) !important; color: white !important; padding: .6rem 1.5rem; border-radius: var(--r-btn); font-weight: 500 !important; transition: background .2s, transform .15s !important; }
     @media (hover: hover) and (pointer: fine) { .nav-cta:hover { background: var(--purple3) !important; transform: translateY(-1px); } }
@@ -207,7 +210,7 @@
     .contact-section { padding: 7rem 6rem; background: var(--cream2); }
     .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; margin-top: 3rem; }
     .contact-block h3 { font-family: 'Playfair Display', serif; font-size: var(--fs-xl); font-weight: 700; color: var(--text); margin-bottom: 1.5rem; }
-    .contact-list { list-style: none; display: flex; flex-direction: column; gap: 1rem; }
+    .contact-list { list-style: none; display: flex; flex-direction: column; gap: 1.35rem; }   /* 44px per regel: klikvlakken raken elkaar niet */
     .contact-list li { display: flex; align-items: flex-start; gap: .8rem; font-size: var(--fs-md); color: var(--muted); line-height: 1.6; }
     .contact-list li .icon { margin-top: 2px; }
     .contact-map { border-radius: var(--r-btn); overflow: hidden; height: 300px; }
@@ -315,7 +318,7 @@
     .min-naam, .min-status, .reserveer-banner-tekst, .reserveer-banner-sub { display: block; }
     .min-reserveer-btn { display: inline-flex; align-items: center; gap: .35rem; min-height: 44px; }
     button.status-banner, button.reserveer-banner { width: 100%; border: 0; font: inherit; text-align: left; }
-    button.status-banner { background: none; min-height: 36px; }
+    button.status-banner { background: none; min-height: 44px; }
     .header-min { display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; margin: -6px -8px -6px 0; }
     #chatWrapper { bottom: var(--kb, 0px); }
     .chat-input { padding-bottom: calc(.8rem + var(--safe-bottom)); }
@@ -349,7 +352,7 @@
     /* Snelknoppen */
     #snelknoppen { padding: .5rem 1rem; display: flex; flex-wrap: wrap; gap: 6px; background: #F8F5FC; flex-shrink: 0; }
     a.snel-knop { display: inline-flex; align-items: center; text-decoration: none; }
-    .snel-knop { background: white; color: var(--text); border: 1.5px solid rgba(135,88,206,.2); min-height: 40px; padding: .5rem .95rem; border-radius: var(--r-pill); font-size: var(--fs-sm); cursor: pointer; transition: background-color .2s, border-color .2s, color .2s, transform .2s, box-shadow .2s; white-space: nowrap; }
+    .snel-knop { background: white; color: var(--text); border: 1.5px solid rgba(135,88,206,.2); min-height: 44px; padding: .5rem .95rem; border-radius: var(--r-pill); font-size: var(--fs-sm); cursor: pointer; transition: background-color .2s, border-color .2s, color .2s, transform .2s, box-shadow .2s; white-space: nowrap; }
     @media (hover: hover) and (pointer: fine) { .snel-knop:hover { background: var(--purple); color: white; border-color: var(--purple); } }
 
     /* Invoer */
@@ -435,7 +438,7 @@
     .hero-location { min-height: 44px; }
     .sfeer-link { display: inline-flex; align-items: center; min-height: 44px; }
     .footer-col a { display: flex; align-items: center; min-height: 44px; padding: 0; margin-bottom: 0; }
-    .contact-list li a { display: inline-block; padding: .7rem 0; margin: -.7rem 0; }
+    .contact-list li a { display: inline-block; padding: calc((44px - 1.6em) / 2) 0; margin: calc((44px - 1.6em) / -2) 0; }
     @media (max-width: 1024px) {
       nav { padding-left: max(2rem, env(safe-area-inset-left, 0px)); padding-right: max(2rem, env(safe-area-inset-right, 0px)); }
     }
