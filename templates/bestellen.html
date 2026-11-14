@@ -172,7 +172,7 @@
       .nav-cta-short { display: inline; }
     }
     .steps-current { display: none; text-align: center; font-size: var(--fs-sm); color: var(--muted); margin-top: .6rem; }
-    .mobile-total { display: none; position: fixed; left: 0; right: 0; bottom: 0; z-index: var(--z-nav); align-items: center; justify-content: space-between; gap: 1rem;
+    .mobile-total { display: none; position: fixed; left: 0; right: 0; bottom: 0; z-index: var(--z-sticky); align-items: center; justify-content: space-between; gap: 1rem;
       padding: .8rem max(1.2rem, env(safe-area-inset-left, 0px)) calc(.8rem + var(--safe-bottom)) max(1.2rem, env(safe-area-inset-left, 0px));
       background: var(--dark2); color: var(--cream); box-shadow: var(--shadow-up); font-size: var(--fs-sm); }
     .mobile-total strong { font-family: 'Playfair Display', serif; font-size: var(--fs-xl); color: var(--purple-light); }
@@ -180,6 +180,7 @@
       body.has-totalbar { --chatbar-h: 64px; }
       .steps-current { display: block; }
       .mobile-total { display: flex; }
+      .mobile-total ~ #ident { display: none; }   /* nooit over het totaalbedrag */
     }
   </style>
   {% include "_favicons.html" ignore missing %}

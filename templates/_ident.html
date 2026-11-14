@@ -51,19 +51,11 @@
   (function () {
     var ident = document.getElementById('ident');
     if (!ident) return;
-    // chat-elementen pas opzoeken bij gebruik: in de footer staat dit script vóór de chat
-    function chatOpen() { var box = document.getElementById('chatContainer'); return box && !box.classList.contains('verborgen'); }
-    var inline = ident.classList.contains('ident--inline');
+    // In de footer staat het credit gewoon in de flow; vaste balken blijven altijd zichtbaar.
+    if (ident.classList.contains('ident--inline')) return;
     function update() {
       var nearBottom = window.innerHeight + window.scrollY >= document.body.offsetHeight - 80;
-      var show = nearBottom && !chatOpen();
-      if (inline) show = nearBottom && !chatOpen();   // in de footer: alleen de chatbalk wegfaden
-      else ident.classList.toggle('show', show);
-      var chat = document.getElementById('chatWrapper');   // optioneel, site-specifiek
-      if (chat) {                     // chat en ident wisselen elkaar netjes af onderaan
-        chat.style.opacity = show ? '0' : '';
-        chat.style.pointerEvents = show ? 'none' : '';
-      }
+      ident.classList.toggle('show', nearBottom);
     }
     window.addEventListener('scroll', update, { passive: true });
     window.addEventListener('resize', update);
