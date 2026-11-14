@@ -335,6 +335,7 @@
 
     /* Snelknoppen */
     #snelknoppen { padding: .5rem 1rem; display: flex; flex-wrap: wrap; gap: 6px; background: #F8F5FC; flex-shrink: 0; }
+    a.snel-knop { display: inline-flex; align-items: center; text-decoration: none; }
     .snel-knop { background: white; color: var(--text); border: 1.5px solid rgba(135,88,206,.2); min-height: 40px; padding: .5rem .95rem; border-radius: var(--r-pill); font-size: var(--fs-sm); cursor: pointer; transition: background-color .2s, border-color .2s, color .2s, transform .2s, box-shadow .2s; white-space: nowrap; }
     @media (hover: hover) and (pointer: fine) { .snel-knop:hover { background: var(--purple); color: white; border-color: var(--purple); } }
 
@@ -954,28 +955,35 @@ function openChat() {
 }
 
 // ── SNELKNOPPEN ──
+// Max. 4 per set, volgorde naar gebruik. Bellen en Taart bestellen zijn echte links.
+const BEL_OF_RESERVEER = ONLINE_RESERVEREN
+  ? { label: "Reserveren", msg: "__booking__" }
+  : { label: "Bellen", href: "tel:+31705146116" };
+const TAART = { label: "Taart bestellen", href: "/bestellen" };
 const snelknopSets = {
   start: [
-    { label: "⏱ Openingstijden", msg: "Wat zijn jullie openingstijden?" },
+    { label: "Openingstijden", msg: "Wat zijn jullie openingstijden?" },
     { label: "Menu",           msg: "Wat staat er op het menu?" },
-    { label: "High Tea",       msg: "Vertel me meer over de High Tea" },
-    { label: "Reserveren",     msg: "__booking__" },
+    BEL_OF_RESERVEER,
+    TAART,
   ],
   na_menu: [
-    { label: "Bagels",     msg: "Vertel me meer over de bagels" },
-    { label: "High Tea",   msg: "Vertel me meer over de High Tea" },
-    { label: "Tapas",      msg: "Wat hebben jullie aan tapas?" },
-    { label: "Reserveren", msg: "__booking__" },
+    { label: "Bagels",   msg: "Vertel me meer over de bagels" },
+    { label: "High Tea", msg: "Vertel me meer over de High Tea" },
+    BEL_OF_RESERVEER,
+    TAART,
   ],
   na_openingstijden: [
-    { label: "Adres",      msg: "Waar zijn jullie gevestigd?" },
-    { label: "Bellen",     msg: "Hoe kan ik jullie bereiken?" },
-    { label: "Reserveren", msg: "__booking__" },
+    { label: "Adres", msg: "Waar zijn jullie gevestigd?" },
+    { label: "Menu",  msg: "Wat staat er op het menu?" },
+    BEL_OF_RESERVEER,
+    TAART,
   ],
   na_contact: [
-    { label: "⏱ Tijden",      msg: "Wat zijn jullie openingstijden?" },
-    { label: "Adres",      msg: "Waar zijn jullie gevestigd?" },
-    { label: "Reserveren", msg: "__booking__" },
+    { label: "Openingstijden", msg: "Wat zijn jullie openingstijden?" },
+    { label: "Adres",          msg: "Waar zijn jullie gevestigd?" },
+    { label: "Menu",           msg: "Wat staat er op het menu?" },
+    TAART,
   ],
 };
 
@@ -983,16 +991,29 @@ function zetSnelknoppen(set) {
   const container = document.getElementById("snelknoppen");
   container.innerHTML = "";
   (snelknopSets[set] || snelknopSets.start).forEach(k => {
-    const btn = document.createElement("button");
-    btn.className = "snel-knop";
-    btn.textContent = k.label;
-    btn.onclick = () => {
-      if (k.msg === "__booking__") { toonBookingFormulier(); return; }
-      voegJijToe(k.label);
-      verstuurNaarBot(k.msg);
-    };
-    container.appendChild(btn);
+    const el = document.createElement(k.href ? "a" : "button");
+    el.className = "snel-knop";
+    el.textContent = k.label;
+    if (k.href) { el.href = k.href; }
+    else {
+      el.type = "button";
+      el.onclick = () => {
+        if (k.msg === "__booking__") { toonBookingFormulier(); return; }
+        voegJijToe(k.label);
+        verstuurNaarBot(k.msg);
+      };
+    }
+    container.appendChild(el);
   });
+}
+
+// Welke snelknoppen passen na deze vraag (direct na het antwoord gezet)
+function snelknopSetVoor(bericht) {
+  const b = bericht.toLowerCase();
+  if (/openingstijden|open|tijden/.test(b) || bericht === "__openingstijden_banner__") return "na_openingstijden";
+  if (/menu|eten|kaart/.test(b)) return "na_menu";
+  if (/contact|bellen|bereiken/.test(b)) return "na_contact";
+  return null;
 }
 
 // ── TYPING INDICATOR ──
@@ -1039,13 +1060,7 @@ function verstuur() {
 }
 
 async function verstuurNaarBot(bericht) {
-  // Snelknop contexten bijhouden
-  if (bericht.includes("openingstijden") || bericht.includes("open") || bericht.includes("tijden") || bericht === "__openingstijden_banner__")
-    setTimeout(() => zetSnelknoppen("na_openingstijden"), 1200);
-  else if (bericht.includes("menu") || bericht.includes("eten") || bericht.includes("kaart"))
-    setTimeout(() => zetSnelknoppen("na_menu"), 1200);
-  else if (bericht.includes("contact") || bericht.includes("bellen") || bericht.includes("bereiken"))
-    setTimeout(() => zetSnelknoppen("na_contact"), 1200);
+  const volgendeSet = snelknopSetVoor(bericht);
 
   // Reserveer-woorden: telefonisch antwoord (of het formulier als online reserveren aan staat)
   if (/reserv|tafel|boek|plekje/i.test(bericht) && bericht !== "__openingstijden_banner__") {
@@ -1069,6 +1084,7 @@ async function verstuurNaarBot(bericht) {
       zetSnelknoppen("start");
     } else {
       await voegBotToe(antwoord);
+      if (volgendeSet) zetSnelknoppen(volgendeSet);
     }
   } catch {
     verwijderTyping();
