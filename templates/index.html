@@ -276,8 +276,12 @@
       display: flex; flex-direction: column; overflow: hidden;
     }
     .chat-container.verborgen { display: none; }
-    .chat-container.open-animatie { animation: chatOpen .35s cubic-bezier(.4,0,.2,1); }
-    @keyframes chatOpen { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    /* Sheet groeit uit de balk (oorsprong onderaan), sluit sneller dan hij opent */
+    .chat-container { transform-origin: bottom right;
+      transition: opacity var(--dur-sheet) var(--ease-out), transform var(--dur-sheet) var(--ease-out); }
+    .chat-container.sheet-start { opacity: 0; transform: translateY(8px) scale(.96); transition: none; }
+    .chat-container.sluiten { opacity: 0; transform: translateY(8px) scale(.98);
+      transition: opacity var(--dur-exit) var(--ease-in), transform var(--dur-exit) var(--ease-in); }
 
     /* Header */
     .chat-header { background: var(--dark2); border-bottom: 3px solid var(--purple); flex-shrink: 0; }
@@ -337,7 +341,7 @@
     .typing-wrapper { display: flex; align-items: center; gap: 8px; }
     .typing-bubble { background: white; padding: .65rem .9rem; border-radius: 4px 12px 12px 12px; box-shadow: 0 2px 8px rgba(0,0,0,.06); }
     .typing-dots { display: inline-flex; gap: 4px; align-items: center; }
-    .typing-dots span { width: 6px; height: 6px; border-radius: 50%; background: var(--purple); animation: dotBounce 1.2s infinite; }
+    .typing-dots span { width: 6px; height: 6px; border-radius: 50%; background: var(--purple); animation: dotBounce 1.2s var(--ease-in-out) infinite; }
     .typing-dots span:nth-child(2) { animation-delay: .2s; }
     .typing-dots span:nth-child(3) { animation-delay: .4s; }
     @keyframes dotBounce { 0%,60%,100% { transform: translateY(0); } 30% { transform: translateY(-5px); } }
@@ -381,6 +385,11 @@
 
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
+      /* chat: alleen faden, geen beweging */
+      .chat-container, .chat-container.sluiten { transform: none !important; transition: opacity var(--dur-exit) linear; }
+      .chat-container.sheet-start { transform: none !important; }
+      .typing-dots span { animation: dotFade 1.2s linear infinite; }
+      @keyframes dotFade { 0%, 100% { opacity: .35; } 50% { opacity: 1; } }
     }
 
     /* Componenten die eerder inline stijlen hadden */
@@ -484,6 +493,7 @@
       footer { padding: 2.5rem 1.5rem 1.5rem; }
       .has-chat footer { padding-bottom: calc(1.5rem + var(--chatbar-h) + var(--safe-bottom)); }
       #chatWrapper { width: 100%; right: 0; }
+      .chat-container { transform-origin: bottom center; }
       .min-acties .min-route-btn, .min-acties .min-bel-btn { display: inline-flex; }
       .min-acties .min-chat-reserveer { display: none; }
       .chat-container { height: min(600px, calc(var(--vvh, 100dvh) - 12px)); border-radius: var(--r-card) var(--r-card) 0 0; }
@@ -953,11 +963,13 @@ function bannerKlik() { verstuurNaarBot("__openingstijden_banner__"); }
 // weg (history.back), zodat terug nooit twee keer nodig is. Het terug-gebaar sluit de chat.
 // Open of dicht wordt per sessie onthouden.
 const isTelefoon = () => matchMedia('(max-width: 768px)').matches;
-const chatIsOpen = () => !document.getElementById("chatContainer").classList.contains("verborgen");
+const chatIsOpen = () => { const c = document.getElementById("chatContainer"); return !c.classList.contains("verborgen") && !c.classList.contains("sluiten"); };
 function onthoudChat(open) { try { sessionStorage.setItem("ba-chat-open", open ? "1" : "0"); } catch (e) {} }
 function minimizeChat(opties = {}) {
   if (!chatIsOpen()) return;
-  document.getElementById("chatContainer").classList.add("verborgen");
+  const c = document.getElementById("chatContainer");
+  c.classList.add("sluiten");
+  setTimeout(() => { if (c.classList.contains("sluiten")) { c.classList.add("verborgen"); c.classList.remove("sluiten"); } }, 150);
   document.getElementById("minimizedBar").classList.add("zichtbaar");
   document.body.style.overflow = "";
   onthoudChat(false);
@@ -972,7 +984,10 @@ const ONLINE_RESERVEREN = {{ online_reserveren | tojson }};
 function openChatEnReserveer() { openChat(); toonBookingFormulier(); }
 function openChat(opties = {}) {
   if (chatIsOpen()) return;
-  document.getElementById("chatContainer").classList.remove("verborgen");
+  const c = document.getElementById("chatContainer");
+  c.classList.add("sheet-start"); c.classList.remove("verborgen", "sluiten");
+  void c.offsetWidth;                 // startstand vastleggen, daarna naar rust animeren
+  c.classList.remove("sheet-start");
   document.getElementById("minimizedBar").classList.remove("zichtbaar");
   document.getElementById("badge").classList.remove("zichtbaar");
   if (isTelefoon()) document.body.style.overflow = "hidden";
