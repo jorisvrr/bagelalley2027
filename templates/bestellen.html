@@ -352,7 +352,7 @@
           Je bestelling kon niet automatisch naar ons worden verstuurd. Stuur hem op een van deze manieren, dan bevestigen we hem zo snel mogelijk:
           <pre id="orderText"></pre>
           <div class="order-actions">
-            <button type="button" id="orderCopy">Kopieer bestelling</button>
+            <button type="button" id="orderCopy" aria-live="polite">Kopieer bestelling</button>
             <a id="orderWhatsApp" href="#" target="_blank" rel="noopener noreferrer">WhatsApp 06-513 43 359</a>
             <a id="orderMail" href="mailto:vrcbagel@gmail.com">Mail naar vrcbagel@gmail.com</a>
             <a href="tel:+31705146116">Bel 070-514 61 16</a>
@@ -706,8 +706,9 @@
       const r = document.createRange(); r.selectNodeContents(document.getElementById('orderText'));
       const sel = getSelection(); sel.removeAllRanges(); sel.addRange(r); document.execCommand('copy');
     }
-    knop.textContent = 'Gekopieerd';
-    setTimeout(() => { knop.textContent = 'Kopieer bestelling'; }, 2500);
+    knop.textContent = 'Gekopieerd'; knop.classList.add('is-success');
+    clearTimeout(knop._terug);
+    knop._terug = setTimeout(() => { knop.textContent = 'Kopieer bestelling'; knop.classList.remove('is-success'); }, 2000);
   });
 
   async function plaatsBestelling() {
@@ -718,7 +719,7 @@
     const fout = document.getElementById('error4');
     fout.style.display = 'none';
     document.getElementById('orderFail').hidden = true;
-    knop.disabled = true; knop.textContent = 'Bezig met versturen…';
+    knop.disabled = true; knop.textContent = 'Bezig met versturen'; knop.classList.add('is-loading'); knop.setAttribute('aria-busy', 'true');
     const payload = {
       taarten: Object.values(gekozenProducten).map(p => ({ id: p.id, formaat: p.formaat })),
       tekst: tekstAan ? veld('tekstOpTaart') : '',
@@ -730,7 +731,7 @@
       const r = await fetch('/bestellen/verstuur', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
       data = await r.json().catch(() => null);
     } catch { data = null; }
-    knop.disabled = false; knop.textContent = 'Bestelling versturen';
+    knop.disabled = false; knop.textContent = 'Bestelling versturen'; knop.classList.remove('is-loading'); knop.removeAttribute('aria-busy');
     if (data && data.succes === true) {
       document.getElementById('step4Nav').style.display = 'none';
       const d = new Date(veld('afhaaldatum') + 'T12:00:00');

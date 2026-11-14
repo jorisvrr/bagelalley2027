@@ -213,7 +213,8 @@
     .contact-list { list-style: none; display: flex; flex-direction: column; gap: 1.35rem; }   /* 44px per regel: klikvlakken raken elkaar niet */
     .contact-list li { display: flex; align-items: flex-start; gap: .8rem; font-size: var(--fs-md); color: var(--muted); line-height: 1.6; }
     .contact-list li .icon { margin-top: 2px; }
-    .contact-map { border-radius: var(--r-btn); overflow: hidden; height: 300px; }
+    .contact-map { border-radius: var(--r-btn); overflow: hidden; height: 300px; position: relative; }
+    .contact-map iframe.kaart-laden { position: absolute; inset: 0; opacity: 0; pointer-events: none; }
     .map-placeholder { height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1rem; padding: 1.5rem; text-align: center; background: var(--paper); border: 1px solid var(--line-light); border-radius: var(--r-btn); }
     .map-placeholder p { font-size: var(--fs-md); color: var(--muted); }
     .map-actions { display: flex; flex-wrap: wrap; gap: .75rem; justify-content: center; }
@@ -1314,11 +1315,20 @@ async function verstuurBooking() {
 (function () {
   const vak = document.getElementById('kaart'), knop = document.getElementById('toonKaart');
   if (!vak || !knop) return;
+  // De knop toont "Kaart laden…" tot de kaart er echt is (of na 8 s, als load niet komt).
   knop.addEventListener('click', () => {
+    if (knop.classList.contains('is-loading')) return;
+    knop.classList.add('is-loading'); knop.setAttribute('aria-busy', 'true');
+    knop.lastChild.textContent = ' Kaart laden…';
     const f = document.createElement('iframe');
-    f.src = vak.dataset.src; f.title = vak.dataset.title; f.loading = 'lazy'; f.allowFullscreen = true;
+    f.src = vak.dataset.src; f.title = vak.dataset.title; f.allowFullscreen = true;
     f.referrerPolicy = 'no-referrer-when-downgrade';
-    vak.replaceChildren(f);
+    f.className = 'kaart-laden';
+    let klaar = false;
+    const toon = () => { if (klaar) return; klaar = true; f.classList.remove('kaart-laden'); vak.replaceChildren(f); };
+    f.addEventListener('load', toon);
+    setTimeout(toon, 8000);
+    vak.appendChild(f);
   });
 })();
 
