@@ -118,7 +118,22 @@
     .size-opt:focus-visible, .slot:focus-visible, .toggle-card:focus-visible { outline: 2px solid var(--purple); outline-offset: 2px; }
     .order-result { border-radius: var(--r-field); padding: 1.2rem 1.4rem; font-size: var(--fs-md); line-height: 1.6; }
     .order-result strong { display: block; font-family: 'Playfair Display', serif; font-size: var(--fs-lg); margin-bottom: .4rem; }
-    .order-ok { background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; }
+    .order-ok { background: #f0fdf4; color: #166534; border: 1.5px solid #86efac; padding: 1.4rem 1.5rem; }
+    .order-ok-kop { display: flex; align-items: center; gap: .8rem; margin-bottom: .6rem; }
+    .order-ok-kop strong { margin: 0; font-size: var(--fs-xl); color: #14532d; }
+    .order-ok-vink { flex-shrink: 0; color: var(--success); }
+    .order-ok-sub { font-weight: 600; color: #14532d; margin-bottom: .3rem; }
+    .order-ok-stappen { margin: 0 0 0 1.1rem; display: grid; gap: .25rem; }
+    .order-ok-stappen a { color: #14532d; font-weight: 600; display: inline-block; padding: .7rem 0; margin: -.7rem 0; }
+    /* vinkje tekent zijn pad: cirkel, dan de haak (samen 270 ms, eenmalig) */
+    .order-ok-vink circle { stroke-dasharray: 151; stroke-dashoffset: 151; }
+    .order-ok-vink path { stroke-dasharray: 36; stroke-dashoffset: 36; }
+    .order-ok:not([hidden]) .order-ok-vink circle { animation: vinkTeken 150ms var(--ease-out) forwards; }
+    .order-ok:not([hidden]) .order-ok-vink path { animation: vinkTeken 150ms var(--ease-out) 120ms forwards; }
+    @keyframes vinkTeken { to { stroke-dashoffset: 0; } }
+    @media (prefers-reduced-motion: reduce) {
+      .order-ok-vink circle, .order-ok-vink path { stroke-dashoffset: 0; animation: none !important; }
+    }
     .order-fail { background: #fff8eb; color: #5c3b00; border: 1px solid #f3d9a4; }
     .order-fail pre { white-space: pre-wrap; font-family: inherit; font-size: var(--fs-md); background: #fff; border: 1px solid #f3d9a4; border-radius: var(--r-field); padding: .8rem 1rem; margin: .8rem 0; max-height: 260px; overflow: auto; color: var(--text); }
     .order-actions { display: flex; flex-wrap: wrap; gap: .6rem; margin-top: .4rem; }
@@ -318,9 +333,19 @@
         </div>
         <div class="form-error" id="error4" role="alert"></div>
         <div class="order-result order-ok" id="orderOk" hidden role="status" tabindex="-1">
-          <strong>Bedankt, je bestelling is verstuurd</strong>
-          We hebben je bestelling ontvangen en bevestigen hem zo snel mogelijk per e-mail.
-          Vragen? Bel ons op <a href="tel:+31705146116" style="color:inherit;font-weight:600;">070-514 61 16</a>.
+          <div class="order-ok-kop">
+            <svg class="order-ok-vink" viewBox="0 0 52 52" width="44" height="44" aria-hidden="true" focusable="false">
+              <circle cx="26" cy="26" r="24" fill="none" stroke="currentColor" stroke-width="2.5"/>
+              <path d="M15 27 l7 7 l15 -16" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <strong>Bestelling verstuurd</strong>
+          </div>
+          <p class="order-ok-sub">Wat gebeurt er nu?</p>
+          <ul class="order-ok-stappen">
+            <li>We bevestigen je bestelling zo snel mogelijk per e-mail<span id="okEmail"></span>.</li>
+            <li>Ophalen op <span id="okMoment"></span> bij Bagel Alley, Langstraat 42 in Wassenaar.</li>
+            <li>Vragen of iets wijzigen? Bel <a href="tel:+31705146116">070-514 61 16</a>.</li>
+          </ul>
         </div>
         <div class="order-result order-fail" id="orderFail" hidden role="alert" tabindex="-1">
           <strong>Nog niet verstuurd</strong>
@@ -708,6 +733,10 @@
     knop.disabled = false; knop.textContent = 'Bestelling versturen';
     if (data && data.succes === true) {
       document.getElementById('step4Nav').style.display = 'none';
+      const d = new Date(veld('afhaaldatum') + 'T12:00:00');
+      document.getElementById('okMoment').textContent =
+        d.toLocaleDateString('nl-NL', { weekday: 'long', day: 'numeric', month: 'long' }) + ' om ' + gekozenSlot;
+      document.getElementById('okEmail').textContent = ' aan ' + veld('email');
       const ok = document.getElementById('orderOk');
       ok.hidden = false; ok.focus({ preventScroll: true });
       ok.scrollIntoView({ behavior: 'smooth', block: 'start' });
