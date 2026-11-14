@@ -863,7 +863,7 @@ document.addEventListener('DOMContentLoaded', function() {
 <!-- ── CHATBOT ── -->
 <div id="chatWrapper">
   <!-- Minimized bar -->
-  <div class="chat-minimized" id="minimizedBar">
+  <div class="chat-minimized zichtbaar" id="minimizedBar">
     <button type="button" class="min-left" onclick="openChat()">
       <span class="sr-only">Open de chat: </span>
       <span class="min-avatar" aria-hidden="true">{{ bedrijf.avatar_initialen }}</span>
@@ -960,7 +960,7 @@ document.addEventListener("keydown", (e) => {
   if (e.key === "Escape" && !document.getElementById("chatContainer").classList.contains("verborgen")) minimizeChat();
 });
 const ONLINE_RESERVEREN = {{ online_reserveren | tojson }};
-function openChatEnReserveer() { openChat(); setTimeout(() => toonBookingFormulier(), 350); }
+function openChatEnReserveer() { openChat(); toonBookingFormulier(); }
 function openChat() {
   document.getElementById("chatContainer").classList.remove("verborgen");
   document.getElementById("chatContainer").classList.add("open-animatie");
@@ -1081,12 +1081,12 @@ async function verstuurNaarBot(bericht) {
 
   // Reserveer-woorden: telefonisch antwoord (of het formulier als online reserveren aan staat)
   if (/reserv|tafel|boek|plekje/i.test(bericht) && bericht !== "__openingstijden_banner__") {
-    voegTypingToe();
-    setTimeout(() => { verwijderTyping(); toonBookingFormulier(); }, 600);
+    toonBookingFormulier();   // antwoord staat klaar: geen nep-wachttijd
     return;
   }
 
-  voegTypingToe();
+  // Typindicator alleen als het antwoord echt op zich laat wachten (langer dan 100 ms)
+  const typTimer = setTimeout(voegTypingToe, 100);
   try {
     const r = await fetch("/chat", {
       method: "POST",
@@ -1094,7 +1094,7 @@ async function verstuurNaarBot(bericht) {
       body: JSON.stringify({ bericht })
     });
     const data = await r.json();
-    verwijderTyping();
+    clearTimeout(typTimer); verwijderTyping();
     const antwoord = data.antwoord || "Dat weet ik niet zeker. Bel ons op 070-514 61 16!";
     if (antwoord === "STOP") {
       await voegBotToe("Tot ziens! We zien je graag binnenkort bij Bagel Alley.");
@@ -1104,7 +1104,7 @@ async function verstuurNaarBot(bericht) {
       if (volgendeSet) zetSnelknoppen(volgendeSet);
     }
   } catch {
-    verwijderTyping();
+    clearTimeout(typTimer); verwijderTyping();
     await voegBotToe("Oeps, er ging iets mis. Bel ons op 070-514 61 16.");
   }
 }
@@ -1349,14 +1349,13 @@ window.addEventListener("load", () => {
   checkOpenStatus();
   zetSnelknoppen("start");
 
-  // Welkomstbericht na korte vertraging
-  setTimeout(async () => {
-    document.getElementById("minimizedBar").classList.add("zichtbaar");
+  // Balk staat al in beeld (zie markup); welkomstbericht direct klaarzetten
+  (async () => {
     document.getElementById("badge").classList.add("zichtbaar");
 
     // Zet welkomstbericht klaar (zichtbaar wanneer chat opengaat)
     await voegBotToe(`Hoi! Ik ben ${AVATAR_NAAM}, de automatische hulp van ${BEDRIJF_NAAM}. Ik beantwoord vragen over openingstijden, de kaart en reserveren. Liever iemand spreken? Bel <a href="tel:+31705146116">070-514 61 16</a>.`);
-  }, 800);
+  })();
 });
 
 </script>
