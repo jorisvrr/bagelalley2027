@@ -161,6 +161,10 @@
     *, *::before, *::after { scroll-behavior: auto !important; }
     :where(button, a, summary, .product-card, .shortcut-card):active { transform: none !important; }
     .ba-nudge { animation: none; }
-    .is-loading::after { animation-duration: 1.5s; }
+    /* niets beweegt: spinner pulseert alleen, hover verschuift niets */
+    .is-loading::after { animation: ba-puls 1.2s linear infinite; border-right-color: currentColor; }
+    @keyframes ba-puls { 0%, 100% { opacity: .3; } 50% { opacity: 1; } }
+    :where(a, button, .product-card, .shortcut-card, .menu-card, .icon):hover { transform: none !important; }
+    :where(a, button) .icon { transform: none !important; }
   }
 </style>

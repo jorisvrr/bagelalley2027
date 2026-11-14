@@ -392,6 +392,8 @@
 
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
+      .mobile-menu-btn span { transition: none; }   /* hamburger wordt direct een kruis */
+      .shortcut-card-bg { transition: none !important; transform: none !important; }
       /* chat: alleen faden, geen beweging */
       .chat-container, .chat-container.sluiten { transform: none !important; transition: opacity var(--dur-exit) linear; }
       .chat-container.sheet-start { transform: none !important; }

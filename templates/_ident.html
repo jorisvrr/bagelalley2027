@@ -37,6 +37,11 @@
   #ident:focus-visible .ident__name { max-width: 140px; opacity: 1; margin-right: .55rem; }
   @media (hover: hover) and (pointer: fine) { #ident:hover .ident__name { max-width: 140px; opacity: 1; margin-right: .55rem; } }
 
+  @media (prefers-reduced-motion: reduce) {
+    #ident, #ident.show { transform: none; }
+    .ident__name { transition: opacity var(--dur-ui) linear; }
+  }
+
   /* soepele wissel met de chat-widget (alleen relevant op pagina's met chat) */
   #chatWrapper { transition: opacity var(--dur-ui) var(--ease-out); }
 </style>
