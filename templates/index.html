@@ -949,27 +949,42 @@ function checkOpenStatus() {
 function bannerKlik() { verstuurNaarBot("__openingstijden_banner__"); }
 
 // ── MINIMIZE/OPEN ──
+// Openen voegt precies één geschiedenisregel toe; sluiten via de knop of Escape haalt hem weer
+// weg (history.back), zodat terug nooit twee keer nodig is. Het terug-gebaar sluit de chat.
+// Open of dicht wordt per sessie onthouden.
 const isTelefoon = () => matchMedia('(max-width: 768px)').matches;
-function minimizeChat() {
+const chatIsOpen = () => !document.getElementById("chatContainer").classList.contains("verborgen");
+function onthoudChat(open) { try { sessionStorage.setItem("ba-chat-open", open ? "1" : "0"); } catch (e) {} }
+function minimizeChat(opties = {}) {
+  if (!chatIsOpen()) return;
   document.getElementById("chatContainer").classList.add("verborgen");
   document.getElementById("minimizedBar").classList.add("zichtbaar");
   document.body.style.overflow = "";
+  onthoudChat(false);
+  if (!opties.uitGeschiedenis && history.state && history.state.chat) history.back();
   const knop = document.querySelector("#minimizedBar .min-left"); if (knop) knop.focus({ preventScroll: true });
 }
 document.addEventListener("keydown", (e) => {
-  if (e.key === "Escape" && !document.getElementById("chatContainer").classList.contains("verborgen")) minimizeChat();
+  if (e.key === "Escape" && chatIsOpen()) minimizeChat();
 });
+window.addEventListener("popstate", () => { if (chatIsOpen()) minimizeChat({ uitGeschiedenis: true }); });
 const ONLINE_RESERVEREN = {{ online_reserveren | tojson }};
 function openChatEnReserveer() { openChat(); toonBookingFormulier(); }
-function openChat() {
+function openChat(opties = {}) {
+  if (chatIsOpen()) return;
   document.getElementById("chatContainer").classList.remove("verborgen");
-  document.getElementById("chatContainer").classList.add("open-animatie");
   document.getElementById("minimizedBar").classList.remove("zichtbaar");
   document.getElementById("badge").classList.remove("zichtbaar");
-  setTimeout(() => document.getElementById("chatContainer").classList.remove("open-animatie"), 400);
   if (isTelefoon()) document.body.style.overflow = "hidden";
-  const kop = document.querySelector("#chatContainer .header-min"); if (kop) kop.focus({ preventScroll: true });
+  onthoudChat(true);
+  if (!(history.state && history.state.chat)) history.pushState({ chat: 1 }, "");
+  if (opties.focus !== false) { const kop = document.querySelector("#chatContainer .header-min"); if (kop) kop.focus({ preventScroll: true }); }
 }
+// Na herladen of terugkomen: chat weer open als hij open was in deze sessie
+(function () {
+  let open = false; try { open = sessionStorage.getItem("ba-chat-open") === "1"; } catch (e) {}
+  if (open) openChat({ focus: false });
+})();
 
 // ── SNELKNOPPEN ──
 // Max. 4 per set, volgorde naar gebruik. Bellen en Taart bestellen zijn echte links.
@@ -1309,13 +1324,22 @@ async function verstuurBooking() {
       if (!opties.uitGeschiedenis) history.pushState({ menu: 1 }, '');
       const eerste = links.querySelector('a'); if (eerste) eerste.focus();
     } else {
-      if (!opties.uitGeschiedenis && history.state && history.state.menu) history.replaceState(null, '');
+      if (!opties.uitGeschiedenis && history.state && history.state.menu) history.back();
       if (opties.focus !== false) btn.focus();
     }
   }
   btn.addEventListener('click', () => zet(!open));
-  links.querySelectorAll('a').forEach(a => a.addEventListener('click', () => zet(false, { focus: false })));
-  window.addEventListener('popstate', () => { if (open) zet(false, { uitGeschiedenis: true }); });
+  // Een link in het open menu: eerst de menuregel uit de geschiedenis halen, dan pas navigeren.
+  let wachtendeLink = null;
+  links.querySelectorAll('a').forEach(a => a.addEventListener('click', (e) => {
+    if (open && history.state && history.state.menu) {
+      e.preventDefault(); wachtendeLink = a.href; history.back();
+    } else zet(false, { focus: false });
+  }));
+  window.addEventListener('popstate', () => {
+    if (open) zet(false, { uitGeschiedenis: true, focus: false });
+    if (wachtendeLink) { const doel = wachtendeLink; wachtendeLink = null; location.href = doel; }
+  });
   document.addEventListener('keydown', (e) => {
     if (!open) return;
     if (e.key === 'Escape') { e.preventDefault(); zet(false); return; }
