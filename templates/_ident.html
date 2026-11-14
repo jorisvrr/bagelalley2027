@@ -13,7 +13,7 @@
     opacity: 0; transform: translateY(12px); pointer-events: none;
     transition: opacity var(--dur-ui) var(--ease-out), transform var(--dur-press) var(--ease-out), color var(--dur-ui) var(--ease-out);
   }
-  #ident.show { opacity: .4; transform: none; pointer-events: auto; }          #ident:focus-visible { opacity: .95; color: #ececef; }          @media (hover: hover) and (pointer: fine) { /* subtiel */
+  #ident.show { opacity: .4; transform: none; pointer-events: auto; }          #ident:focus-visible { opacity: .95; color: #ececef; transform: none; pointer-events: auto; }          @media (hover: hover) and (pointer: fine) { /* subtiel */
   #ident:hover { opacity: .95; color: #ececef; } }         /* duidelijker */
 
   /* In de footer: gewoon in de flow, altijd zichtbaar, zelfde hover-animatie */

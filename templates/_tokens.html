@@ -107,7 +107,9 @@
   }
 
   .has-chat { --chatbar-h: 68px; }
-  html { -webkit-text-size-adjust: 100%; -webkit-tap-highlight-color: transparent; }
+  html { -webkit-text-size-adjust: 100%; -webkit-tap-highlight-color: transparent;
+    /* focus en ankersprongen nooit onder de sticky nav of een vaste balk onderaan */
+    scroll-padding-top: 5.5rem; scroll-padding-bottom: 5.5rem; }
   body { font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif; }
 
   /* <picture> uit pic(): geen eigen box, de <img> bepaalt de layout */
