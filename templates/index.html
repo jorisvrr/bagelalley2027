@@ -254,7 +254,15 @@
     .min-avatar { width: 36px; height: 36px; border-radius: 50%; background: var(--purple); color: white; display: flex; align-items: center; justify-content: center; font-size: var(--fs-xs); font-weight: 700; flex-shrink: 0; }
     .min-naam { font-size: var(--fs-md); font-weight: 600; color: var(--cream); }
     .min-status { font-size: var(--fs-xs); color: rgba(245,240,232,.62); display: flex; align-items: center; gap: .35rem; }
-    .min-reserveer-btn { background: var(--purple); color: white; border: none; padding: .45rem 1rem; border-radius: var(--r-field); font-size: var(--fs-sm); font-weight: 500; cursor: pointer; transition: background .2s; }
+    .min-reserveer-btn { background: var(--purple); color: white; border: none; padding: .45rem 1rem; border-radius: var(--r-field); font-size: var(--fs-sm); font-weight: 500; cursor: pointer; text-decoration: none; }
+    /* Vaste mobiele balk: Route en Bellen direct; op desktop blijft "Reserveer nu" (opent de chat) */
+    .min-acties { display: flex; align-items: center; gap: .5rem; flex-shrink: 0; }
+    .min-route-btn { display: none; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: var(--r-field);
+      color: var(--cream); border: 1.5px solid rgba(245,240,232,.25); text-decoration: none; }
+    .min-acties .min-bel-btn { display: none; }
+    .min-text { min-width: 0; }
+    .min-naam, .min-status { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    @media (hover: hover) and (pointer: fine) { .min-route-btn:hover { border-color: var(--cream); } }
     @media (hover: hover) and (pointer: fine) { .min-reserveer-btn:hover { background: var(--purple3); } }
     .badge { display: none; background: #15803d; color: white; width: 18px; height: 18px; border-radius: 50%; font-size: var(--fs-xs); font-weight: 700; align-items: center; justify-content: center; margin-left: 6px; }
     .badge.zichtbaar { display: flex; }
@@ -473,6 +481,8 @@
       .footer-links { flex-wrap: wrap; gap: 2rem; }
       footer { padding: 2.5rem 1.5rem 1.5rem; }
       #chatWrapper { width: 100%; right: 0; }
+      .min-acties .min-route-btn, .min-acties .min-bel-btn { display: inline-flex; }
+      .min-acties .min-chat-reserveer { display: none; }
       .chat-container { height: min(600px, calc(var(--vvh, 100dvh) - 12px)); border-radius: var(--r-card) var(--r-card) 0 0; }
     }
   </style>
@@ -860,7 +870,11 @@ document.addEventListener('DOMContentLoaded', function() {
       </span>
       <span class="badge" id="badge" aria-label="1 nieuw bericht">1</span>
     </button>
-    <button type="button" class="min-reserveer-btn" onclick="openChatEnReserveer()">{{ icon('calendar', 16) }} Reserveer nu</button>
+    <span class="min-acties">
+      <a class="min-route-btn" href="https://www.google.com/maps/search/?api=1&amp;query=Bagel%20Alley%20Langstraat%2042%20Wassenaar" target="_blank" rel="noopener noreferrer" aria-label="Route plannen">{{ icon('navigation', 20) }}</a>
+      <a class="min-reserveer-btn min-bel-btn" href="tel:+31705146116">{{ icon('phone', 16) }} Bellen</a>
+      <button type="button" class="min-reserveer-btn min-chat-reserveer" onclick="openChatEnReserveer()">{{ icon('calendar', 16) }} Reserveer nu</button>
+    </span>
   </div>
 
   <!-- Chat container -->
