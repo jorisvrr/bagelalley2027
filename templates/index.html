@@ -3,7 +3,6 @@
 <html lang="nl">
 <head>
   <meta charset="UTF-8">
-  <script>document.documentElement.classList.add('js')</script>
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
   {% set seo_title = "Bagel Alley Wassenaar | Bagels, ontbijt, lunch & high tea" %}
   {% set seo_desc = "Ontbijt- en lunchcafé aan de Langstraat in Wassenaar: verse bagels, lunch en high tea vanaf 2 personen. Ook glutenvrij. Dinsdag gesloten." %}
@@ -102,24 +101,23 @@
 
     /* HERO */
     .hero { position: relative; height: 95vh; min-height: 560px; overflow: hidden; display: flex; align-items: flex-end; }
-    .hero-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 45%; animation: heroZoom 12s ease-out forwards; }}"); background-size: cover; background-position: center 45%; animation: heroZoom 12s ease-out forwards; }
-    @keyframes heroZoom { from { transform: scale(1.05); } to { transform: scale(1); } }
+    .hero-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 45%; }}"); background-size: cover; background-position: center 45%; }
     .hero-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(26,16,24,.93) 0%, rgba(26,16,24,.55) 45%, rgba(26,16,24,.12) 100%); }
     .hero-content { position: relative; z-index: 2; padding: 0 6rem 5rem; max-width: 780px; }
-    .hero-location { display: inline-flex; align-items: center; gap: .5rem; color: rgba(245,240,232,.85); font-size: var(--fs-base); font-weight: 500; letter-spacing: normal; text-decoration: none; margin-bottom: 1.5rem; width: fit-content; opacity: 0; animation: fadeUp .8s .2s forwards; transition: color .2s; }
+    .hero-location { display: inline-flex; align-items: center; gap: .5rem; color: rgba(245,240,232,.85); font-size: var(--fs-base); font-weight: 500; letter-spacing: normal; text-decoration: none; margin-bottom: 1.5rem; width: fit-content; transition: color .2s; }
     @media (hover: hover) and (pointer: fine) { .hero-location:hover { color: #fff; } }
     
-    .hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(3rem, 5.5vw, 5.5rem); font-weight: 700; line-height: 1.05; color: var(--cream); letter-spacing: var(--track-display); margin-bottom: 1.4rem; opacity: 0; animation: fadeUp .8s .4s forwards; }
+    .hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(3rem, 5.5vw, 5.5rem); font-weight: 700; line-height: 1.05; color: var(--cream); letter-spacing: var(--track-display); margin-bottom: 1.4rem; }
     .hero h1 em { font-style: italic; color: var(--purple2); }
-    .hero-desc { font-size: var(--fs-base); font-weight: 300; color: rgba(245,240,232,.72); line-height: 1.75; max-width: 500px; margin-bottom: 2.2rem; opacity: 0; animation: fadeUp .8s .6s forwards; }
-    .hero-buttons { display: flex; gap: 1rem; flex-wrap: wrap; opacity: 0; animation: fadeUp .8s .8s forwards; }
+    .hero-desc { font-size: var(--fs-base); font-weight: 300; color: rgba(245,240,232,.72); line-height: 1.75; max-width: 500px; margin-bottom: 2.2rem; }
+    .hero-buttons { display: flex; gap: 1rem; flex-wrap: wrap; }
     .btn-purple { background: var(--purple); color: white; padding: 1rem 2.4rem; font-size: var(--fs-md); font-weight: 500; letter-spacing: var(--track-button); text-transform: uppercase; border: none; cursor: pointer; text-decoration: none; display: inline-block; border-radius: var(--r-btn); transition: background .2s, transform .15s; }
     @media (hover: hover) and (pointer: fine) { .btn-purple:hover { background: var(--purple3); transform: translateY(-1px); } }
     .btn-ghost-light { background: transparent; color: var(--cream); padding: 1rem 2.4rem; font-size: var(--fs-md); font-weight: 500; letter-spacing: var(--track-button); text-transform: uppercase; border: 1.5px solid rgba(245,240,232,.45); cursor: pointer; text-decoration: none; display: inline-block; border-radius: var(--r-btn); transition: background-color .2s, border-color .2s, color .2s, transform .2s, box-shadow .2s; }
     @media (hover: hover) and (pointer: fine) { .btn-ghost-light:hover { background: rgba(245,240,232,.1); border-color: var(--cream); transform: translateY(-1px); } }
-    .hero-allergen { position: absolute; top: 1.7rem; right: 1.7rem; z-index: 5; display: inline-flex; align-items: center; gap: .6rem; background: linear-gradient(135deg, var(--purple), var(--purple3)); color: #fff; font-size: var(--fs-md); font-weight: 600; letter-spacing: normal; padding: .65rem 1.2rem .65rem .7rem; border-radius: var(--r-pill); box-shadow: var(--shadow-card); border: 1px solid rgba(255,255,255,.22); opacity: 0; animation: fadeUp .8s .5s forwards; }
+    .hero-allergen { position: absolute; top: 1.7rem; right: 1.7rem; z-index: 5; display: inline-flex; align-items: center; gap: .6rem; background: linear-gradient(135deg, var(--purple), var(--purple3)); color: #fff; font-size: var(--fs-md); font-weight: 600; letter-spacing: normal; padding: .65rem 1.2rem .65rem .7rem; border-radius: var(--r-pill); box-shadow: var(--shadow-card); border: 1px solid rgba(255,255,255,.22); }
     .hero-allergen .ha-icon { display: inline-flex; align-items: center; justify-content: center; width: 23px; height: 23px; border-radius: 50%; background: rgba(255,255,255,.92); color: var(--purple3); font-size: var(--fs-sm); font-weight: 800; flex-shrink: 0; }
-    .hero-stats { position: absolute; bottom: 0; right: 0; display: flex; z-index: 2; opacity: 0; animation: fadeIn .8s 1.1s forwards; }
+    .hero-stats { position: absolute; bottom: 0; right: 0; display: flex; z-index: 2; }
     .hero-stat { background: rgba(26,16,24,.82); backdrop-filter: blur(10px); padding: 1.4rem 2.2rem; border-left: 1px solid rgba(135,88,206,.2); text-align: center; }
     .hero-stat-number { font-family: 'Playfair Display', serif; font-size: var(--fs-2xl); font-weight: 700; color: var(--purple2); display: block; line-height: 1; }
     .hero-stat-label { font-size: var(--fs-xs); color: rgba(245,240,232,.62); letter-spacing: var(--track-label); text-transform: uppercase; margin-top: .35rem; display: block; }
@@ -370,16 +368,8 @@
 
 
     /* ANIMATIONS */
-    @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
-    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-    .js .reveal { opacity: 0; transform: translateY(28px); transition: opacity .7s ease, transform .7s ease; }
-    .js .reveal.visible { opacity: 1; transform: translateY(0); }
-    .reveal-delay-1 { transition-delay: .15s; }
-    .reveal-delay-2 { transition-delay: .3s; }
 
     @media (prefers-reduced-motion: reduce) {
-      .hero-bg, .hero-location, .hero h1, .hero-desc, .hero-buttons, .hero-allergen, .hero-stats { animation: none; opacity: 1; }
-      .js .reveal { opacity: 1; transform: none; transition: none; }
       html { scroll-behavior: auto; }
     }
 
@@ -611,18 +601,18 @@ document.addEventListener('DOMContentLoaded', function() {
 
 <!-- SFEER -->
 <section class="sfeer-section" id="sfeer">
-  <h2 class="section-title reveal">Zo ziet het eruit<br>aan de Langstraat.</h2>
+  <h2 class="section-title">Zo ziet het eruit<br>aan de Langstraat.</h2>
   <div class="sfeer-grid">
-    <div class="sfeer-img sfeer-main reveal">
+    <div class="sfeer-img sfeer-main">
       {{ pic('fotos/pexels-casnafu-24796900.jpg', 'Belegde bagels met sla en tomaat in een vitrine', '(max-width: 768px) 100vw, 50vw') }}
     </div>
-    <div class="sfeer-img reveal reveal-delay-1">
+    <div class="sfeer-img">
       {{ pic('fotos/pexels-amar-28056733.jpg', 'Bagel met een cappuccino en een bordje met banaan', '(max-width: 768px) 100vw, 25vw') }}
     </div>
-    <div class="sfeer-img reveal reveal-delay-2">
+    <div class="sfeer-img">
       {{ pic('fotos/pexels-fedigioia-11634304.jpg', 'Bagel met zaadjes op een donker bord', '(max-width: 768px) 100vw, 25vw') }}
     </div>
-    <div class="sfeer-text reveal reveal-delay-1">
+    <div class="sfeer-text">
       <h3 class="sfeer-text-title">Taarten uit eigen keuken</h3>
       <p class="sfeer-text-body">Onze taarten bakken we zelf. Je bagel kies je uit 25 soorten.</p>
       <a href="#menu" class="sfeer-link">Bekijk de menukaart</a>
@@ -633,16 +623,16 @@ document.addEventListener('DOMContentLoaded', function() {
 
 <!-- KOFFIE & VERSE SAPPEN -->
 <section class="sfeer-section" id="koffie">
-  <h2 class="section-title reveal">Koffie &amp; verse sappen</h2>
+  <h2 class="section-title">Koffie &amp; verse sappen</h2>
   <div class="feature-grid">
-    <div class="reveal">
+    <div >
       <div class="feature-img">
         {{ pic('specials/koffie.png', 'Twee koppen koffie met latte art', '(max-width: 768px) 100vw, 45vw') }}
       </div>
       <h3 class="feature-title">Espresso met een verhaal</h3>
       <p class="feature-body">We schenken koffie van La Garanta, met bonen uit Colombia. Single origin specialty koffie, vers voor ons gebrand en direct bij de boeren ingekocht.</p>
     </div>
-    <div class="reveal reveal-delay-1">
+    <div >
       <div class="feature-img">
         {{ pic('specials/smoothie.png', 'Groene smoothie in een beker met rietje', '(max-width: 768px) 100vw, 45vw') }}
       </div>
@@ -689,13 +679,13 @@ document.addEventListener('DOMContentLoaded', function() {
 <section class="menu-section" id="menu">
   <div class="menu-layout">
     <div class="menu-sticky">
-      <h2 class="section-title reveal">Meer dan<br>alleen<br>een bagel.</h2>
-      <p class="menu-section-body reveal">Van klassieke bagels met cream cheese tot uitgebreide High Tea arrangementen. Alles vers bereid in onze eigen keuken.</p>
-      <div class="menu-photo reveal reveal-delay-1">
+      <h2 class="section-title">Meer dan<br>alleen<br>een bagel.</h2>
+      <p class="menu-section-body">Van klassieke bagels met cream cheese tot uitgebreide High Tea arrangementen. Alles vers bereid in onze eigen keuken.</p>
+      <div class="menu-photo">
         {{ pic('fotos/pexels-barbara-g-135944487-11599632.jpg', 'Stapel bagels met sesam, maanzaad en andere zaadjes', '(max-width: 1024px) 100vw, 33vw') }}
         <div class="menu-photo-caption">Vers uit de keuken</div>
       </div>
-      <div class="menu-links reveal">
+      <div class="menu-links">
         <a href="/menu" class="menu-link-btn menu-link-btn--primary">
           {{ icon('utensils', 20) }} Bekijk de volledige menukaart
         </a>
@@ -705,7 +695,7 @@ document.addEventListener('DOMContentLoaded', function() {
       </div>
     </div>
     <div class="menu-grid">
-      <div class="menu-card reveal">
+      <div class="menu-card">
         <h3 class="menu-card-title">Bagels &amp; Toppings</h3>
         <p class="menu-card-body">Klassiek of signature, met zalm, kip, avocado, eggs &amp; more. Zelf samenstellen of kies een favoriet. Ook glutenvrije en lactosevrije bagels verkrijgbaar.</p>
         <div class="diet-tags">
@@ -714,27 +704,27 @@ document.addEventListener('DOMContentLoaded', function() {
         </div>
         <span class="menu-card-price">Vanaf €2,95</span>
       </div>
-      <div class="menu-card reveal reveal-delay-1">
+      <div class="menu-card">
         <h3 class="menu-card-title">High Tea</h3>
         <p class="menu-card-body">High tea vanaf 2 personen, bel om te reserveren.</p>
         <span class="menu-card-price">Vanaf €17,95</span>
         <a href="/high-tea" class="sfeer-link">Meer over high tea</a>
       </div>
-      <div class="menu-card reveal reveal-delay-1">
+      <div class="menu-card">
         <h3 class="menu-card-title">Tapas &amp; Sharing</h3>
         <p class="menu-card-body">Drie gesneden bagels met zes dips, om te delen.</p>
         <span class="menu-card-price">€24,95 voor 2 personen</span>
       </div>
-      <div class="menu-card reveal reveal-delay-2">
+      <div class="menu-card">
         <h3 class="menu-card-title">Takeaway</h3>
         <p class="menu-card-body">Alles van de kaart kun je ook meenemen.</p>
       </div>
-      <div class="menu-card reveal reveal-delay-2">
+      <div class="menu-card">
         <h3 class="menu-card-title">Koffie &amp; Thee</h3>
         <p class="menu-card-body">Koffie, verse munt- en gemberthee en koude dranken.</p>
         <span class="menu-card-price">Koffie vanaf €2,75</span>
       </div>
-      <div class="menu-card menu-card-dark reveal">
+      <div class="menu-card menu-card-dark">
         <h3 class="menu-card-title menu-card-title-light">Geef een<br>smaakvolle beleving</h3>
         <p class="menu-card-body menu-card-body-light">Cadeaubonnen beschikbaar vanaf €5. Het perfecte cadeau voor ieder moment.</p>
         <a href="#cadeaubon" class="sfeer-link">Meer info</a>
@@ -746,10 +736,10 @@ document.addEventListener('DOMContentLoaded', function() {
 <!-- BRUIDSTAART -->
 <section class="sfeer-section" id="bruidstaart">
   <div class="bruidstaart-grid">
-    <div class="bruidstaart-img reveal">
+    <div class="bruidstaart-img">
       {{ pic('specials/bruidstaart-home.jpg', 'Bruidspaar snijdt een witte bruidstaart aan', '(max-width: 768px) 100vw, 50vw') }}
     </div>
-    <div class="reveal reveal-delay-1">
+    <div >
       <h3 class="bruidstaart-title">Bruidstaart op maat</h3>
       <p class="bruidstaart-body">Gaan jullie trouwen of iets groots vieren? We maken een bruidstaart op maat. Mail ons wat jullie in gedachten hebben, of bel 070-514 61 16 voor een direct antwoord.</p>
       <div class="bruidstaart-actions">
@@ -762,9 +752,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
 <!-- OPENINGSTIJDEN -->
 <section class="hours-section" id="tijden">
-  <h2 class="section-title reveal">Openingstijden</h2>
+  <h2 class="section-title">Openingstijden</h2>
   <div class="hours-layout">
-    <div class="reveal">
+    <div >
       <table class="hours-table">
         <tr><td>Maandag</td><td>08:00 – 16:00</td></tr>
         <tr class="closed"><td>Dinsdag</td><td>Gesloten</td></tr>
@@ -777,7 +767,7 @@ document.addEventListener('DOMContentLoaded', function() {
       <div class="hours-note"><p><strong>Keuken sluit om 15:30.</strong> Op nationale feestdagen kunnen de tijden afwijken. Bel ons voor actuele info.</p></div>
       <a href="{{ reserveer_url }}" class="btn-purple hours-cta">{{ reserveer_label }}</a>
     </div>
-    <div class="hours-visual reveal reveal-delay-1">
+    <div class="hours-visual">
       {{ pic('fotos/pexels-marina-gr-109305987-19574245.jpg', 'Vitrine met bagels en pretzels', '(max-width: 768px) 100vw, 50vw') }}
       <div class="hours-visual-overlay"></div>
     </div>
@@ -795,9 +785,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
 <!-- CONTACT -->
 <section class="contact-section" id="contact">
-  <h2 class="section-title reveal">We zijn er voor je.</h2>
+  <h2 class="section-title">We zijn er voor je.</h2>
   <div class="contact-grid">
-    <div class="contact-block reveal">
+    <div class="contact-block">
       <h3>Vind ons</h3>
       <ul class="contact-list">
         <li>{{ icon('map-pin', 20) }}Langstraat 42, 2242 KM Wassenaar</li>
@@ -808,7 +798,7 @@ document.addEventListener('DOMContentLoaded', function() {
         <li>{{ icon('briefcase', 20) }}<a href="/jobs" style="color:inherit;text-decoration:none;border-bottom:1px solid rgba(107,95,122,.35);">Wij zoeken collega's: bekijk de vacatures</a></li>
       </ul>
     </div>
-    <div class="contact-map reveal reveal-delay-1" id="kaart" data-src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2450.1!2d4.3913!3d52.1502!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47c5be3f2b000001%3A0x1!2sLangstraat+42%2C+Wassenaar!5e0!3m2!1snl!2snl!4v1" data-title="Kaart: Bagel Alley, Langstraat 42, Wassenaar">
+    <div class="contact-map" id="kaart" data-src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2450.1!2d4.3913!3d52.1502!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47c5be3f2b000001%3A0x1!2sLangstraat+42%2C+Wassenaar!5e0!3m2!1snl!2snl!4v1" data-title="Kaart: Bagel Alley, Langstraat 42, Wassenaar">
         <div class="map-placeholder">
           <p>Hiermee laad je Google Maps. Google kan dan cookies plaatsen.</p>
           <div class="map-actions">
@@ -1335,12 +1325,6 @@ window.addEventListener("load", () => {
     await voegBotToe(`Hoi! Ik ben ${AVATAR_NAAM}, de automatische hulp van ${BEDRIJF_NAAM}. Ik beantwoord vragen over openingstijden, de kaart en reserveren. Liever iemand spreken? Bel <a href="tel:+31705146116">070-514 61 16</a>.`);
   }, 800);
 });
-
-// Reveal on scroll
-const observer = new IntersectionObserver(entries => {
-  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add("visible"); });
-}, { threshold: .12, rootMargin: "0px 0px -40px 0px" });
-document.querySelectorAll(".reveal").forEach(el => observer.observe(el));
 
 </script>
 </body>
