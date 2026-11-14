@@ -1000,6 +1000,8 @@ def bepaal_intent(bericht: str):
     if scores["openingstijden"] and _DAG_OF_NU.search(t) and not scores["feestdagen"]:
         scores["vandaag_open"] = scores["openingstijden"] + 2
     beste = max(scores.values())
+    if beste == 0 and _DAG_OF_NU.fullmatch(t.strip()):
+        return "vandaag_open", scores                        # los "vandaag", "morgen", "zaterdag": open?
     if beste == 0:
         if _GROET.match(t):
             return "greeting", scores
@@ -1161,7 +1163,31 @@ TAARTEN = {  # id: (naam, prijs klein, prijs groot); None = formaat niet leverba
 TEKST_OP_TAART_PRIJS = 6.00
 AFHAAL_SLOTS = ["10:00", "10:30", "11:00", "11:30", "12:00", "12:30",
                 "13:00", "13:30", "14:00", "14:30", "15:00", "15:30"]
-_TEL_RE = re.compile(r"^\+?[0-9][0-9 ()\-]{7,19}$")
+_TEL_RE = re.compile(r"^\+?[0-9(][0-9 ().\-]{7,22}$")
+
+
+def normaliseer_telefoon(invoer: str):
+    """Accepteer spaties, streepjes, punten, haakjes, +31, 0031 en (0); geef één schoon formaat terug.
+    Nederlands mobiel: 06-12345678. Ander Nederlands nummer: 0705146116. Buitenland: +32470123456.
+    Geeft None als het geen bruikbaar nummer is."""
+    t = str(invoer or "").strip()
+    if not _TEL_RE.match(t):
+        return None
+    t = t.replace("(0)", "")
+    plus = t.startswith("+")
+    cijfers = re.sub(r"\D", "", t)
+    if plus:
+        cijfers = "00" + cijfers
+    if cijfers.startswith("0031"):
+        cijfers = "0" + cijfers[4:]
+    if cijfers.startswith("00"):                      # buitenlands nummer
+        rest = cijfers[2:]
+        return "+" + rest if 8 <= len(rest) <= 15 else None
+    if len(cijfers) != 10 or not cijfers.startswith("0"):
+        return None
+    if cijfers.startswith("06"):
+        return "06-" + cijfers[2:]
+    return cijfers
 
 
 def nu_amsterdam() -> datetime:
@@ -1203,22 +1229,22 @@ def valideer_bestelling(data: dict):
     datum = _valid_iso_date(data.get("afhaaldatum"))
     vandaag = nu_amsterdam().date()
     if datum is None or datum <= vandaag or datum > vandaag + timedelta(days=365):
-        return None, "Kies een afhaaldatum vanaf morgen."
+        return None, "Bestellen kan vanaf morgen (minimaal 24 uur van tevoren). Kies een latere datum."
     if datum.weekday() == 1:
-        return None, "Op dinsdag zijn we gesloten. Kies een andere afhaaldatum."
+        return None, "Op dinsdag zijn we gesloten. Kies maandag of woensdag tot en met zondag."
     tijd = _clean_str(data.get("afhaaltijd"), 5)
     if tijd not in AFHAAL_SLOTS:
         return None, "Kies een afhaaltijd."
     naam = _eenregelig(data.get("naam"), 100)
-    email = _clean_str(data.get("email"), 150)
-    telefoon = _eenregelig(data.get("telefoon"), 30)
+    email = _clean_str(data.get("email"), 150).lower()
+    telefoon = normaliseer_telefoon(_eenregelig(data.get("telefoon"), 30))
     opmerkingen = _clean_str(data.get("opmerkingen"), 1000)
     if not naam:
-        return None, "Vul je naam in."
+        return None, "Vul je naam in, zodat we weten voor wie de taart is."
     if not _EMAIL_RE.match(email):
-        return None, "Vul een geldig e-mailadres in."
-    if not _TEL_RE.match(telefoon):
-        return None, "Vul een geldig telefoonnummer in."
+        return None, "Controleer je e-mailadres, bijvoorbeeld naam@voorbeeld.nl."
+    if not telefoon:
+        return None, "Gebruik cijfers, eventueel met spaties of streepjes, bijvoorbeeld 06-12345678."
     return {"regels": regels, "tekst": tekst, "totaal": totaal, "datum": datum, "tijd": tijd,
             "naam": naam, "email": email, "telefoon": telefoon, "opmerkingen": opmerkingen}, None
 

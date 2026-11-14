@@ -533,7 +533,7 @@
     tekst: 'Vul de tekst voor op de taart in, of zet de optie uit.',
   };
   const EMAIL_RE = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
-  const TEL_RE = /^\+?[0-9][0-9 ()\-]{7,19}$/;
+  const TEL_RE = /^\+?[0-9(][0-9 ().\-]{7,22}$/;   // zelfde als de server; de server maakt het netjes
   function nudge(el) {
     el.classList.remove('ba-nudge'); void el.offsetWidth; el.classList.add('ba-nudge');
     el.addEventListener('animationend', () => el.classList.remove('ba-nudge'), { once: true });
