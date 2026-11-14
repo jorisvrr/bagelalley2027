@@ -80,15 +80,20 @@
     --gutter: clamp(1.25rem, 5vw, 6rem);
     --section-y: clamp(4rem, 8vw, 7rem);
 
-    /* beweging */
-    --ease-out: cubic-bezier(.23, 1, .32, 1);
-    --dur-press: 120ms;
-    --dur-ui: 200ms;
-    --dur-reveal: 600ms;
+    /* beweging: alleen transform en opacity; exit sneller dan enter */
+    --ease-out: cubic-bezier(.23, 1, .32, 1);        /* binnenkomen */
+    --ease-in: cubic-bezier(.4, 0, 1, 1);             /* weggaan (alleen korte exits) */
+    --ease-in-out: cubic-bezier(.77, 0, .175, 1);     /* verplaatsen op het scherm */
+    --dur-press: 100ms;    /* druk-feedback */
+    --dur-ui: 150ms;       /* hover, kleur, kleine wissels */
+    --dur-sheet: 250ms;    /* chat- en menusheet openen */
+    --dur-exit: 150ms;     /* sluiten */
 
-    /* lagen */
+    /* lagen, van laag naar hoog: pagina < nav < credit < vaste balken < chat < menu < loader.
+       Het jorisvrr-credit ligt onder elke vaste balk, zodat het nooit over een actie of bedrag valt. */
     --z-nav: 100;
-    --z-ident: 150;
+    --z-ident: 110;
+    --z-sticky: 200;       /* vaste mobiele balk, totaalbalk /bestellen */
     --z-chat: 300;
     --z-sheet: 400;
     --z-loader: 1000;
@@ -114,24 +119,44 @@
   /* Toetsenbordfocus overal zichtbaar */
   :focus-visible { outline: 2px solid var(--purple); outline-offset: 2px; }
 
-  /* Eén gedeelde druk-staat voor alles wat je kunt aantikken */
-  a, button, [role="button"], label[for] { touch-action: manipulation; }
+  /* Eén gedeelde druk-staat voor alles wat je kunt aantikken (rust, hover, ingedrukt, focus,
+     disabled, laden, gelukt, fout). Kaarten krijgen een kleinere schaal. */
+  a, button, [role="button"], label[for], summary { touch-action: manipulation; }
   :where(button, .btn-purple, .btn-ghost, .btn-ghost-light, .btn-white, .nav-cta, .btn-submit, .btn-next, .btn-prev,
-         .product-card-btn, .snel-knop, .size-opt, .slot, .booking-slot, .min-reserveer-btn,
-         .menu-link-btn) {
+         .product-card-btn, .snel-knop, .size-opt, .slot, .booking-slot, .min-reserveer-btn, .min-route-btn,
+         .menu-link-btn, .map-btn, .map-route, .menu-zoom, .footer-col a, .sfeer-link, summary) {
     transition: transform var(--dur-press) var(--ease-out), background-color var(--dur-ui) var(--ease-out),
-                border-color var(--dur-ui) var(--ease-out), color var(--dur-ui) var(--ease-out);
+                border-color var(--dur-ui) var(--ease-out), color var(--dur-ui) var(--ease-out),
+                opacity var(--dur-ui) var(--ease-out);
     -webkit-user-select: none; user-select: none;
   }
   :where(button, .btn-purple, .btn-ghost, .btn-ghost-light, .btn-white, .nav-cta, .btn-submit, .btn-next, .btn-prev,
-         .product-card-btn, .snel-knop, .size-opt, .slot, .booking-slot, .min-reserveer-btn,
-         .menu-link-btn):active:not(:disabled) { transform: scale(.97); }
+         .product-card-btn, .snel-knop, .size-opt, .slot, .booking-slot, .min-reserveer-btn, .min-route-btn,
+         .menu-link-btn, .map-btn, .map-route, .menu-zoom, .footer-col a, .sfeer-link, summary):active:not(:disabled) { transform: scale(.97); }
+  :where(.product-card, .shortcut-card):active { transform: scale(.98); transition: transform var(--dur-press) var(--ease-out); }
+
+  /* disabled en laden: zichtbaar, niet dubbel te versturen */
+  :where(button, .btn-purple, .btn-ghost):disabled, [aria-disabled="true"] { opacity: .55; cursor: not-allowed; }
+  .is-loading { cursor: progress; }
+  .is-loading::after { content: ""; display: inline-block; width: 1em; height: 1em; margin-left: .5em; vertical-align: -.15em;
+    border: 2px solid currentColor; border-right-color: transparent; border-radius: 50%; animation: ba-spin .7s linear infinite; }
+  @keyframes ba-spin { to { transform: rotate(360deg); } }
+  .is-success { background-color: var(--success) !important; border-color: var(--success) !important; color: #fff !important; }
+
+  /* fout bij een veld: rode rand, melding eronder, korte horizontale nudge */
+  [aria-invalid="true"] { border-color: var(--error) !important; }
+  .field-error { display: block; margin-top: .35rem; font-size: var(--fs-sm); color: var(--error); line-height: 1.45; }
+  .field-error[hidden] { display: none; }
+  .ba-nudge { animation: ba-nudge 150ms var(--ease-in-out); }
+  @keyframes ba-nudge { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-4px); } 75% { transform: translateX(4px); } }
 
   /* Visueel verborgen, wel voor schermlezers */
   .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
 
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { scroll-behavior: auto !important; }
-    :where(button, a):active { transform: none !important; }
+    :where(button, a, summary, .product-card, .shortcut-card):active { transform: none !important; }
+    .ba-nudge { animation: none; }
+    .is-loading::after { animation-duration: 1.5s; }
   }
 </style>
