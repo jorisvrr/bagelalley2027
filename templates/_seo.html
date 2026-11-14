@@ -29,3 +29,9 @@
 {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"{{ site_url }}/"},{"@type":"ListItem","position":2,"name":"{{ seo_crumb | default(_t) }}","item":"{{ site_url }}{{ _p }}"}]}
 </script>
 {% endif %}
+
+{# Vercel Web Analytics #}
+<script>
+  window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+</script>
+<script defer src="/_vercel/insights/script.js"></script>
