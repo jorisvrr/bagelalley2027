@@ -219,8 +219,10 @@
     .map-placeholder p { font-size: var(--fs-md); color: var(--muted); }
     .map-actions { display: flex; flex-wrap: wrap; gap: .75rem; justify-content: center; }
     .map-btn, .map-route { display: inline-flex; align-items: center; gap: .5rem; min-height: 44px; padding: .6rem 1.2rem; border-radius: var(--r-btn); font: inherit; font-size: var(--fs-sm); font-weight: 500; letter-spacing: var(--track-button); text-transform: uppercase; text-decoration: none; cursor: pointer; }
-    .map-btn { background: var(--purple); color: #fff; border: 0; }
-    .map-route { color: var(--purple3); border: 1.5px solid rgba(135,88,206,.3); }
+    /* twee bestaande varianten: primair (gevuld) en secundair (lijn). Route is de hoofdactie. */
+    .map-knop--primair { background: var(--purple); color: #fff; border: 0; }
+    .map-knop--secundair { background: transparent; color: var(--purple3); border: 1.5px solid rgba(135,88,206,.3); }
+    @media (hover: hover) and (pointer: fine) { .map-knop--primair:hover { background: var(--purple3); } .map-knop--secundair:hover { border-color: var(--purple); } }
     .contact-map iframe { width: 100%; height: 100%; border: none; }
 
     /* FOOTER */
@@ -793,7 +795,7 @@ document.addEventListener('DOMContentLoaded', function() {
         <tr><td>Zondag</td><td>08:00 – 16:00</td></tr>
       </table>
       <div class="hours-note"><p><strong>Keuken sluit om 15:30.</strong> Op nationale feestdagen kunnen de tijden afwijken. Bel ons voor actuele info.</p></div>
-      <a href="{{ reserveer_url }}" class="btn-purple hours-cta">{{ reserveer_label }}</a>
+      <a href="{{ reserveer_url }}" class="btn-ghost-light hours-cta">{{ reserveer_label }}</a>
     </div>
     <div class="hours-visual">
       {{ pic('fotos/pexels-marina-gr-109305987-19574245.jpg', 'Vitrine met bagels en pretzels', '(max-width: 768px) 100vw, 50vw') }}
@@ -830,8 +832,8 @@ document.addEventListener('DOMContentLoaded', function() {
         <div class="map-placeholder">
           <p>Hiermee laad je Google Maps. Google kan dan cookies plaatsen.</p>
           <div class="map-actions">
-            <button type="button" class="map-btn" id="toonKaart">{{ icon('map', 20) }} Toon kaart</button>
-            <a class="map-route" href="https://www.google.com/maps/search/?api=1&amp;query=Bagel%20Alley%20Langstraat%2042%20Wassenaar" target="_blank" rel="noopener noreferrer">{{ icon('navigation', 20) }} Route plannen</a>
+            <button type="button" class="map-btn map-knop--secundair" id="toonKaart">{{ icon('map', 20) }} Toon kaart</button>
+            <a class="map-route map-knop--primair" href="https://www.google.com/maps/search/?api=1&amp;query=Bagel%20Alley%20Langstraat%2042%20Wassenaar" target="_blank" rel="noopener noreferrer">{{ icon('navigation', 20) }} Route plannen</a>
           </div>
         </div>
       </div>
