@@ -4,10 +4,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
-  {% set seo_title = "Taarten & High Tea bestellen | Bagel Alley Wassenaar" %}
-  {% set seo_desc = "Bestel online bij Bagel Alley Wassenaar: huisgemaakte taarten zoals Apple Pie, Oreo, Red Velvet en Carrot Cake. Vers gemaakt, klaar om af te halen." %}
+  {% set seo_title = "Taarten en bruidstaart | Bagel Alley Wassenaar" %}
+  {% set seo_desc = "Huisgemaakte taarten uit Wassenaar: Apple Pie, Oreo, Chocolade, Red Velvet en Carrot Cake, klein of groot. Bruidstaart? Bel of mail ons." %}
   {% set seo_path = "/shop" %}
-  {% set seo_crumb = "Online bestellen" %}
+  {% set seo_crumb = "Taarten" %}
   {% include "_seo.html" ignore missing %}
   {% include "_tokens.html" ignore missing %}
   <style>
@@ -18,19 +18,16 @@
     .nav-logo img { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; }
     .nav-logo-text { font-family: 'Playfair Display', serif; font-size: var(--fs-logo); font-weight: 700; color: var(--cream); }
     .nav-logo-text span { color: var(--purple2); }
-    .nav-back { display: inline-flex; align-items: center; gap: .4rem; font-size: var(--fs-sm); color: rgba(245,240,232,.62); text-decoration: none; transition: color .2s; }
+    .nav-back { display: inline-flex; align-items: center; gap: .4rem; font-size: var(--fs-sm); color: rgba(245,240,232,.62); text-decoration: none; transition: color var(--dur-ui) var(--ease-out); }
     @media (hover: hover) and (pointer: fine) { .nav-back:hover { color: var(--purple2); } }
     .nav-cta { background: var(--purple); color: white; padding: .5rem 1.4rem; border-radius: var(--r-btn); font-size: var(--fs-sm); font-weight: 500; text-decoration: none; }
     @media (hover: hover) and (pointer: fine) { .nav-cta:hover { background: var(--purple3); } }
     .page-hero { background: linear-gradient(135deg, var(--dark2) 0%, rgba(135,88,206,.08) 100%); padding: 3.5rem 3rem 2.5rem; border-bottom: 1px solid rgba(135,88,206,.12); }
     .page-hero-inner { max-width: 860px; }
-    .page-label { font-size: var(--fs-xs); font-weight: 500; letter-spacing: var(--track-label); text-transform: uppercase; color: var(--purple-light); display: block; margin-bottom: .7rem; }
     .page-title { font-family: 'Playfair Display', serif; font-size: clamp(2rem,4vw,3.2rem); font-weight: 700; line-height: 1.1; color: var(--cream); margin-bottom: 1rem; }
     .page-title em { font-style: italic; color: var(--purple2); }
     .page-desc { font-size: var(--fs-base); color: rgba(245,240,232,.62); line-height: 1.7; max-width: 520px; }
     .pickup-badge { display: inline-flex; align-items: center; gap: .4rem; margin-top: 1.2rem; background: rgba(135,88,206,.15); border: 1px solid rgba(135,88,206,.3); color: var(--purple-light); font-size: var(--fs-sm); font-weight: 500; padding: .35rem .9rem; border-radius: var(--r-pill); }
-    .page-badges { display: flex; gap: .7rem; flex-wrap: wrap; margin-top: 1.5rem; }
-    .page-badge { background: rgba(135,88,206,.15); border: 1px solid rgba(135,88,206,.3); color: var(--purple-light); font-size: var(--fs-xs); font-weight: 500; letter-spacing: var(--track-label); text-transform: uppercase; padding: .35rem .9rem; border-radius: var(--r-pill); }
     .shop-main { max-width: 1100px; margin: 0 auto; padding: 2.5rem 3rem 5rem; }
     .shop-notice { background: rgba(135,88,206,.1); border: 1px solid rgba(135,88,206,.25); border-radius: var(--r-field); padding: 1.2rem 1.6rem; margin-bottom: 2.5rem; display: flex; align-items: flex-start; gap: 1rem; }
     .shop-notice-icon { font-size: var(--fs-lg); flex-shrink: 0; }
@@ -38,10 +35,9 @@
     .shop-notice-text strong { color: var(--purple-light); }
     .shop-notice-text a { color: var(--purple-light); text-decoration: none; border-bottom: 1px solid rgba(155,110,224,.35); }
     .shop-section { margin-bottom: 3rem; }
-    .shop-section-label { font-size: var(--fs-xs); font-weight: 500; letter-spacing: var(--track-label); text-transform: uppercase; color: var(--purple-light); display: block; margin-bottom: .4rem; }
     .shop-section-title { font-family: 'Playfair Display', serif; font-size: var(--fs-2xl); font-weight: 700; color: var(--cream); margin-bottom: 1.5rem; }
     .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.2rem; }
-    .product-card { background: var(--dark2); border-radius: var(--r-card); border: 1px solid rgba(135,88,206,.1); overflow: hidden; transition: border-color .25s, transform .2s, box-shadow .2s; text-decoration: none; display: flex; flex-direction: column; }
+    .product-card { background: var(--dark2); border-radius: var(--r-card); border: 1px solid rgba(135,88,206,.1); overflow: hidden; transition: border-color var(--dur-ui) var(--ease-out), transform var(--dur-press) var(--ease-out); text-decoration: none; display: flex; flex-direction: column; }
     @media (hover: hover) and (pointer: fine) { .product-card:hover { border-color: var(--purple); transform: translateY(-3px); box-shadow: var(--shadow-card); } }
     .product-card-img-wrap { overflow: hidden; }
     .product-card-img { width: 100%; height: 200px; object-fit: cover; display: block; }
@@ -50,7 +46,7 @@
     .product-card-desc { font-size: var(--fs-sm); color: rgba(245,240,232,.62); line-height: 1.6; flex: 1; }
     .product-card-footer { padding: .9rem 1.4rem; border-top: 1px solid rgba(135,88,206,.08); display: flex; align-items: center; justify-content: space-between; }
     .product-card-price { font-size: var(--fs-md); font-weight: 600; color: var(--purple-light); }
-    .product-card-btn { display: inline-flex; align-items: center; gap: .25rem; background: rgba(135,88,206,.15); color: var(--purple-light); border: 1px solid rgba(135,88,206,.3); padding: .35rem .9rem; border-radius: var(--r-field); font-size: var(--fs-xs); font-weight: 500; cursor: pointer; text-decoration: none; transition: background-color .2s, border-color .2s, color .2s, transform .2s, box-shadow .2s; }
+    .product-card-btn { display: inline-flex; align-items: center; gap: .25rem; background: rgba(135,88,206,.15); color: var(--purple-light); border: 1px solid rgba(135,88,206,.3); padding: .35rem .9rem; border-radius: var(--r-field); font-size: var(--fs-xs); font-weight: 500; cursor: pointer; text-decoration: none; transition: background-color var(--dur-ui) var(--ease-out), border-color var(--dur-ui) var(--ease-out), color var(--dur-ui) var(--ease-out), transform var(--dur-press) var(--ease-out); }
     @media (hover: hover) and (pointer: fine) { .product-card-btn:hover { background: rgba(135,88,206,.3); } }
     .divider { height: 1px; background: rgba(135,88,206,.1); margin: 2.5rem 0; }
     .custom-order-card { background: var(--purple); border-radius: var(--r-card); padding: 2.2rem 2.5rem; display: flex; align-items: center; justify-content: space-between; gap: 2rem; flex-wrap: wrap; margin-bottom: 2rem; }
@@ -105,7 +101,7 @@
   <div class="shop-notice">
     <span class="shop-notice-icon">{{ icon('info', 24) }}</span>
     <p class="shop-notice-text">
-      Taart bestellen gaat via het <a href="/bestellen">bestelformulier</a>. Iets op maat of een grote bestelling? Bel <a href="tel:+31705146116">070-514 61 16</a> of app <a href="https://wa.me/31651343359" target="_blank" rel="noopener">06-513 43 359</a>.
+      Taart bestellen gaat via het <a href="/bestellen">bestelformulier</a>. Iets op maat of een grote bestelling? Bel <a href="tel:+31705146116">070-514 61 16</a> of app <a href="https://wa.me/31651343359" target="_blank" rel="noopener noreferrer">06-513 43 359</a>.
     </p>
   </div>
 
@@ -113,7 +109,7 @@
     <h2 class="shop-section-title">Taarten &amp; Gebak</h2>
     <div class="product-grid">
       <a href="/bestellen" class="product-card">
-        <div class="product-card-img-wrap">{{ pic('taarten/apple.png', 'Apple Pie', '(max-width: 480px) 100vw, (max-width: 768px) 50vw, 340px', 'product-card-img') }}</div>
+        <div class="product-card-img-wrap">{{ pic('taarten/apple.png', 'Apple Pie', '(max-width: 480px) 100vw, (max-width: 768px) 50vw, 340px', 'product-card-img', priority=True) }}</div>
         <div class="product-card-body">
           <div class="product-card-title">Apple Pie</div>
           <p class="product-card-desc">Huisgemaakte appeltaart, per stuk of heel te bestellen.</p>
@@ -153,7 +149,7 @@
         <div class="product-card-footer"><span class="product-card-price">Vanaf €32,50</span><span class="product-card-btn">Bestellen {{ icon('chevron-right', 16) }}</span></div>
       </a>
       <a href="/bestellen" class="product-card">
-        <div class="product-card-img-wrap">{{ pic('taarten/tekst.png', 'Tekst op taart', '(max-width: 480px) 100vw, (max-width: 768px) 50vw, 340px', 'product-card-img') }}</div>
+        <div class="product-card-img-wrap">{{ pic('taarten/tekst.png', 'Taart met een persoonlijke tekst in rode letters', '(max-width: 480px) 100vw, (max-width: 768px) 50vw, 340px', 'product-card-img') }}</div>
         <div class="product-card-body">
           <div class="product-card-title">Tekst op taart</div>
           <p class="product-card-desc">Laat een naam of persoonlijke tekst op de taart zetten.</p>
@@ -189,6 +185,5 @@
   </div>
 </div>
 {% include "_ident.html" ignore missing %}
-{% include "_cookie.html" ignore missing %}
 </body>
 </html>

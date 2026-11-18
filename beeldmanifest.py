@@ -1,7 +1,4 @@
-"""Afbeeldingsmanifest voor pic() in app.py: per origineel pad de WebP/AVIF-varianten.
-Gegenereerd uit public/static/opt/manifest.json. Staat als Python-module naast app.py,
-omdat Vercel de map public/ niet in de Python-functie meeneemt (die serveert hij via de CDN).
-Opnieuw genereren na nieuwe afbeeldingen."""
+"""Afbeeldingsmanifest voor pic() in app.py. Gegenereerd door maak_varianten.py."""
 
 BEELDEN = {'fotos/pexels-amar-28056733.jpg': {'avif': [['opt/fotos-pexels-amar-28056733-800.avif', 800]],
                                     'h': 1200,
@@ -54,6 +51,12 @@ BEELDEN = {'fotos/pexels-amar-28056733.jpg': {'avif': [['opt/fotos-pexels-amar-2
                                                        1200],
                                                       ['opt/fotos-pexels-roman-odintsov-4869221-1600.webp',
                                                        1600]]},
+ 'fotos/terras-proosten-langstraat.png': {'avif': [['opt/fotos-terras-proosten-langstraat-800.avif', 800],
+                                                   ['opt/fotos-terras-proosten-langstraat-1200.avif', 1200]],
+                                          'h': 1500,
+                                          'w': 1200,
+                                          'webp': [['opt/fotos-terras-proosten-langstraat-800.webp', 800],
+                                                   ['opt/fotos-terras-proosten-langstraat-1200.webp', 1200]]},
  'logo.png': {'avif': [], 'h': 150, 'w': 150, 'webp': [['opt/logo-150.webp', 150]]},
  'menu/menu_1.webp': {'avif': [],
                       'h': 1101,

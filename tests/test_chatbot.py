@@ -53,7 +53,7 @@ def test_antwoord_regels(intent, antwoord):
 def test_links_alleen_eigen_paginas_tel_mail_maps():
     for intent, antwoord in _alle_antwoorden():
         for href in re.findall(r'href="([^"]+)"', antwoord):
-            assert href.startswith(("/", "tel:", "mailto:", "https://www.google.com/maps")), (intent, href)
+            assert href.startswith(("/", "tel:", "mailto:", "https://www.google.com/maps", "https://www.instagram.com/bagelalleywassenaar/")), (intent, href)
 
 
 def test_allergie_antwoorden_eindigen_met_vaste_zin():
@@ -84,3 +84,27 @@ def test_afscheid_geeft_stop_en_onbekend_wordt_gelogd(capsys):
     assert app.reageer_zonder_ai("bedankt!") == "STOP"
     app.reageer_zonder_ai("wat vind je van het weer")
     assert "[CHAT-ONBEKEND] wat vind je van het weer" in capsys.readouterr().out
+
+
+def test_bevestigde_feiten_klant():
+    assert "naast de Langstraat" in app.chat_antwoord("parking")
+    assert "52.143773331281174%2C4.392209959142655" in app.chat_antwoord("parking")
+    assert app.chat_antwoord("wifi_laptop") == "Ja, we hebben wifi voor gasten."
+    assert "Langstraat 43" in app.chat_antwoord("terras")
+    assert "@bagelalleywassenaar" in app.chat_antwoord("instagram_social")
+    for intent in ["parking", "wifi_laptop", "terras", "instagram_social"]:
+        assert "Goede vraag over" not in app.chat_antwoord(intent)
+    for vraag, intent in [("waar kan ik parkeren", "parking"), ("is er wifi", "wifi_laptop"),
+                          ("hebben jullie een terras", "terras"), ("hebben jullie instagram", "instagram_social")]:
+        assert app.bepaal_intent(vraag)[0] == intent
+
+
+def test_high_tea_prijzen_zijn_per_persoon():
+    assert "Per persoon" in app.chat_antwoord("high_tea")
+    assert "€17,95 per persoon" in app.chat_antwoord("prijzen")
+    c = app.app.test_client()
+    pagina = c.get("/high-tea").get_data(as_text=True)
+    assert pagina.count('title="per persoon">p.p.</abbr>') == 3
+    assert "€32,50 per persoon" in pagina                    # meta-omschrijving
+    assert "Vanaf €17,95 p.p." in c.get("/").get_data(as_text=True)
+    assert "prijzen per persoon" in c.get("/menu").get_data(as_text=True)

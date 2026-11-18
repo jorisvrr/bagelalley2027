@@ -3,7 +3,7 @@ public/static/menu/menu_1.webp en menu_2.webp (de gedrukte kaart).
 
 Pas dit bestand aan als de kaart verandert. Prijzen zonder euroteken, zoals op de kaart.
 Niet opgenomen (bewust): het koffie-tekstje van de brander en het blok
-"Order for take away" met het 06-nummer (zie CLIENT-TODO.md).
+"Order for take away" met het 06-nummer (zie CLIENT-TODO.md in de projectdocumenten, buiten de repo).
 """
 
 # Elke sectie: titel, optionele subtitel/kolommen, en regels (naam, omschrijving, prijzen).
@@ -166,7 +166,7 @@ MENUKAART = [
     },
     {
         "titel": "High Tea",
-        "intro": "Vanaf 2 personen. Zie onze wandborden voor meer informatie.",
+        "intro": "Vanaf 2 personen, prijzen per persoon. Zie onze wandborden voor meer informatie.",
         "regels": [
             ("Afternoon tea", "", "17,95"),
             ("Dream tea", "", "27,50"),

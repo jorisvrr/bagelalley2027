@@ -1,6 +1,7 @@
 # region ── IMPORTS ─────────────────────────────────────────────
-from flask import Flask, render_template, request, jsonify, session, Response, abort
+from flask import Flask, render_template, request, jsonify, session, Response, abort, redirect
 import os
+from urllib.parse import urlsplit
 import json
 import re
 import requests
@@ -28,12 +29,30 @@ app.config.update(
     MAX_CONTENT_LENGTH=64 * 1024,  # alleen kleine JSON-berichten, geen uploads
 )
 
+# Content-Security-Policy. 'unsafe-inline' is nodig voor de inline scripts en onclick-handlers.
+# Google Maps mag alleen als iframe (laadt pas na een tik). Nieuwe externe dienst? Hier toevoegen.
+CSP = "; ".join([
+    "default-src 'self'",
+    "script-src 'self' 'unsafe-inline'",
+    "style-src 'self' 'unsafe-inline'",
+    "img-src 'self' data:",
+    "font-src 'self'",
+    "connect-src 'self'",
+    "frame-src https://www.google.com",
+    "frame-ancestors 'self'",
+    "base-uri 'self'",
+    "form-action 'self'",
+    "object-src 'none'",
+    "manifest-src 'self'",
+])
+
 @app.after_request
 def _security_headers(resp):
     resp.headers.setdefault("X-Content-Type-Options", "nosniff")
     resp.headers.setdefault("X-Frame-Options", "SAMEORIGIN")
     resp.headers.setdefault("Referrer-Policy", "strict-origin-when-cross-origin")
     resp.headers.setdefault("Permissions-Policy", "camera=(), microphone=(), geolocation=()")
+    resp.headers.setdefault("Content-Security-Policy", CSP)
     if os.environ.get("VERCEL"):
         resp.headers.setdefault("Strict-Transport-Security", "max-age=31536000")
     return resp
@@ -42,7 +61,7 @@ def _security_headers(resp):
 import hmac
 from werkzeug.middleware.proxy_fix import ProxyFix
 
-# Railway zit achter een reverse proxy: vertrouw 1 proxy-hop zodat we het
+# Vercel zit achter een reverse proxy: vertrouw 1 proxy-hop zodat we het
 # echte client-IP zien (nodig voor correcte rate limiting) en de juiste scheme.
 app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1)
 
@@ -68,7 +87,7 @@ try:
     def _rate_limit_exempt():
         # Statische bestanden en infra-endpoints niet limiteren (anders breken
         # asset-loads en health checks). Echte endpoints blijven wél begrensd.
-        return request.endpoint in {"static", "ping", "robots_txt", "sitemap_xml"}
+        return request.endpoint in {"static", "robots_txt", "sitemap_xml"}
 
 except ImportError:
     print("[WAARSCHUWING] Flask-Limiter niet geinstalleerd - rate limiting staat UIT. "
@@ -96,6 +115,18 @@ def _safe_eq(a, b) -> bool:
 def _clean_str(value, maxlen: int) -> str:
     """Strip + harde lengtelimiet voor vrije-tekst input."""
     return str(value or "").strip()[:maxlen]
+
+_STUURTEKENS = re.compile(r"[\x00-\x1f\x7f\u2028\u2029]+")
+
+def _eenregelig(value, maxlen: int) -> str:
+    """Als _clean_str, maar voor velden van een regel: regeleinden en andere
+    stuurtekens worden een spatie (komt o.a. in het onderwerp van de mail)."""
+    return " ".join(_STUURTEKENS.sub(" ", str(value or "")).split())[:maxlen]
+
+def _json_body() -> dict:
+    """JSON-body als dict. Alles wat geen JSON-object is (lijst, getal, tekst) telt als leeg."""
+    data = request.get_json(silent=True)
+    return data if isinstance(data, dict) else {}
 
 _EMAIL_RE = re.compile(r"^[^@\s]+@[^@\s]+\.[^@\s]+$")
 
@@ -136,7 +167,7 @@ a:focus-visible{{outline:2px solid #B394EC;outline-offset:2px}}</style>
 </head><body><main class="c"><div class="b">{code}</div><h1>{titel}</h1><p>{tekst}</p>
 <nav aria-label="Verder naar"><a class="p" href="/">Naar de homepage</a><a href="/menu">Bekijk de kaart</a>
 <a href="tel:+31705146116">Bel 070-514 61 16</a>
-<a href="https://www.google.com/maps/search/?api=1&amp;query=Bagel%20Alley%20Langstraat%2042%20Wassenaar" rel="noopener">Route</a></nav></main></body></html>"""
+<a href="https://www.google.com/maps/search/?api=1&amp;query=Bagel%20Alley%20Langstraat%2042%20Wassenaar" rel="noopener noreferrer">Route</a></nav></main></body></html>"""
     return html, code
 
 @app.errorhandler(404)
@@ -160,7 +191,7 @@ except Exception as e:
     print(f"[MENU] tekstversie niet geladen: {e}")
     MENUKAART = []
 
-# Responsieve afbeeldingen: public/static/opt/manifest.json (WebP/AVIF-varianten).
+# Responsieve afbeeldingen: beeldmanifest.py (WebP/AVIF-varianten in public/static/opt/).
 # pic() geeft een <picture> met srcset, width/height en lazy loading. Zonder manifest
 # valt hij terug op het originele bestand.
 from markupsafe import Markup
@@ -173,6 +204,12 @@ try:
 except Exception as e:
     print(f"[IMG] manifest niet geladen: {e}")
     _IMG_MANIFEST = {}
+
+
+@app.template_filter("slug")
+def slug(tekst) -> str:
+    """'High Tea' -> 'high-tea'. Voor ankers in de tekstversie van de kaart."""
+    return re.sub(r"[^a-z0-9]+", "-", str(tekst).lower()).strip("-")
 
 
 @app.template_global()
@@ -194,7 +231,8 @@ def pic(path, alt="", sizes="100vw", cls="", eager=False, priority=False):
 
 # region ── SENDGRID MAIL ───────────────────────────────────────
 SENDGRID_API_KEY = os.environ.get("SENDGRID_API_KEY", "")
-MAIL_VAN         = os.environ.get("MAIL_VAN", "jorisvrr@gmail.com")
+# Afzender: alleen via env var (een in SendGrid geverifieerd adres). Geen standaard.
+MAIL_VAN         = os.environ.get("MAIL_VAN", "").strip()
 MAIL_VAN_NAAM    = "Bagel Alley"
 
 def datum_nl(datum_str: str) -> str:
@@ -252,7 +290,8 @@ BAGEL_VD_MAAND = {
     "inspiratie": "Lichte, zonnige smaken en de balans tussen hartig en fris. "
                   "Lekker bij het ontbijt, de lunch of een weekendbrunch.",
     "ingredienten": ["Rucola", "Omelet", "Chorizo", "Zongedroogde tomaten"],
-    "foto": "specials/bagelvdmaand.png",
+    "foto": "specials/bagelvdmaand.png",          # site (WebP/AVIF via pic())
+    "email_foto": "email/bagelvdmaand.jpg",       # nieuwsbrief (JPG, e-mailclients)
 }
 _MAANDEN = ["januari", "februari", "maart", "april", "mei", "juni",
             "juli", "augustus", "september", "oktober", "november", "december"]
@@ -267,7 +306,7 @@ def bagel_vd_maand() -> dict:
     return {**BAGEL_VD_MAAND,
             "maand": f"{_MAANDEN[nu.month - 1].capitalize()} {nu.year}",
             "einde": begin_volgende.isoformat(),
-            "afbeelding": "/static/" + BAGEL_VD_MAAND["foto"]}
+            "afbeelding": "/static/" + BAGEL_VD_MAAND["email_foto"]}
 
 def mail_html(naam: str, datum_str: str, tijd: str, gasten: int) -> str:
     """Reserverings-bevestigingsmail (warme, redactionele stijl)."""
@@ -275,10 +314,10 @@ def mail_html(naam: str, datum_str: str, tijd: str, gasten: int) -> str:
     delen = naam.split()
     voornaam = delen[0] if delen else naam
     gasten_label = "persoon" if gasten == 1 else "personen"
-    img_hero    = f"{SITE_URL}/static/fotos/pexels-amar-28056733.jpg"
-    img_classic = f"{SITE_URL}/static/fotos/pexels-barbara-g-135944487-11599632.jpg"
-    img_salmon  = f"{SITE_URL}/static/fotos/pexels-amar-28056766.jpg"
-    img_coffee  = f"{SITE_URL}/static/specials/koffie.png"
+    img_hero    = f"{SITE_URL}/static/email/pexels-amar-28056733.jpg"
+    img_classic = f"{SITE_URL}/static/email/pexels-barbara-g-135944487-11599632.jpg"
+    img_salmon  = f"{SITE_URL}/static/email/pexels-amar-28056766.jpg"
+    img_coffee  = f"{SITE_URL}/static/email/koffie.jpg"
     return f"""<!DOCTYPE html><html lang="nl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Je tafel staat klaar | Bagel Alley</title><style>@media (max-width:480px){{.col{{display:block!important;width:100%!important;padding-bottom:18px!important}}}}</style></head>
 <body style="margin:0;padding:0;background:#ece7df;font-family:Georgia,'Times New Roman',serif;">
 <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#ece7df;"><tr><td align="center" style="padding:26px 12px;">
@@ -335,16 +374,16 @@ def newsletter_html(naam: str = "") -> str:
     voornaam = delen[0] if delen else ""
     intro = (f"Hoi {voornaam}, ontdek " if voornaam else "Ontdek ")
     img_botm   = f"{SITE_URL}{b['afbeelding']}"
-    img_coffee = f"{SITE_URL}/static/specials/koffie.png"
-    img_cake   = f"{SITE_URL}/static/taarten/redvelvet.png"
-    img_bagel  = f"{SITE_URL}/static/fotos/pexels-anchornhaven-43716305-29445728.jpg"
+    img_coffee = f"{SITE_URL}/static/email/koffie.jpg"
+    img_cake   = f"{SITE_URL}/static/email/redvelvet.jpg"
+    img_bagel  = f"{SITE_URL}/static/email/pexels-anchornhaven-43716305-29445728.jpg"
 
-    ing = "".join(
-        f"""<td align="center" valign="top" style="padding:4px;">
-          <div style="display:inline-block;font-family:Arial,sans-serif;font-size:12px;color:#5a4f68;background:#ffffff;border:1px solid #e4dcd0;border-radius:999px;padding:6px 12px;line-height:1.3;">{label}</div>
-        </td>"""
+    # Eén cel met inline-blokjes: loopt op een smal scherm door naar een volgende regel.
+    ing = '<td align="center" style="padding:0;">' + "".join(
+        f'<span style="display:inline-block;margin:4px;font-family:Arial,sans-serif;font-size:12px;color:#5a4f68;'
+        f'background:#ffffff;border:1px solid #e4dcd0;border-radius:999px;padding:6px 12px;line-height:1.3;">{label}</span>'
         for label in b["ingredienten"]
-    )
+    ) + "</td>"
 
     def _more(img, titel, tekst):
         return f"""<td class="col" width="33%" valign="top" style="padding:0 6px;">
@@ -405,11 +444,16 @@ def newsletter_html(naam: str = "") -> str:
 </body></html>"""
 
 
+def mail_ingesteld() -> bool:
+    """True als zowel de SendGrid-key als de afzender (MAIL_VAN) gezet zijn."""
+    return bool(SENDGRID_API_KEY and MAIL_VAN)
+
+
 def sendgrid_verstuur(naar: str, onderwerp: str, html_inhoud: str, antwoord_naar: str = "vrcbagel@gmail.com") -> bool:
     """Verstuurt een HTML-mail via SendGrid. Geeft alleen True terug als SendGrid
-    de mail heeft geaccepteerd (status 200/202). Zonder API-key: False."""
-    if not SENDGRID_API_KEY:
-        print("[MAIL] SENDGRID_API_KEY ontbreekt, mail niet verstuurd")
+    de mail heeft geaccepteerd (status 200/202). Zonder API-key of afzender: False."""
+    if not mail_ingesteld():
+        print("[MAIL] SENDGRID_API_KEY of MAIL_VAN ontbreekt, mail niet verstuurd")
         return False
     try:
         payload = {
@@ -426,7 +470,7 @@ def sendgrid_verstuur(naar: str, onderwerp: str, html_inhoud: str, antwoord_naar
             timeout=10,
         )
         ok = resp.status_code in (200, 202)
-        print(f"[MAIL] {onderwerp[:40]} -> status {resp.status_code}")
+        print(f"[MAIL] status {resp.status_code}")   # geen onderwerp: daar staat de klantnaam in
         if not ok:
             print(f"[MAIL FOUT] {resp.text[:300]}")
         return ok
@@ -525,26 +569,24 @@ BEDRIJF = {
 # endregion
 
 # region ── SEO / STRUCTURED DATA ───────────────────────────────
-# Canonieke domein. Zet desnoods de env var SITE_URL als je een ander
-# (sub)domein gebruikt, bijv. https://bagelalley.up.railway.app
+# Canonieke domein. Zet op Vercel de env var SITE_URL=https://bagelalley.nl
+# zodra het domein is overgezet. Zonder SITE_URL: het productiedomein van Vercel.
 SITE_URL = (os.environ.get("SITE_URL")
             or (("https://" + os.environ["VERCEL_PROJECT_PRODUCTION_URL"]) if os.environ.get("VERCEL_PROJECT_PRODUCTION_URL") else "")
             or "https://bagelalley.nl").rstrip("/")
 
 # Online reserveren aan/uit. Standaard UIT: reserveren gaat telefonisch.
-# Weer aanzetten: env var ONLINE_RESERVEREN=1 op Railway (geen codewijziging nodig).
+# Weer aanzetten: env var ONLINE_RESERVEREN=1 op Vercel (geen codewijziging nodig).
 ONLINE_RESERVEREN = os.environ.get("ONLINE_RESERVEREN", "0").strip().lower() in ("1", "true", "ja", "yes")
 RESERVEER_TEL_LINK = "tel:+31705146116"
 
-# Geo-coordinaten van de zaak. Controleer deze in Google Maps en pas
-# ze hier aan als ze niet exact kloppen (rechtsklik op de pin → coordinaten).
-GEO = {"lat": 52.1463, "lng": 4.4012}
+# Geo-coordinaten van Langstraat 42, 2242 KM Wassenaar.
+# Bron: BAG via PDOK Locatieserver (adresobject Langstraat 42), gecontroleerd 13-11-2026.
+GEO = {"lat": 52.14408, "lng": 4.39315}
 
-# (Optioneel) social profielen van de zaak, vul aan voor 'sameAs'.
-SOCIAL = [
-    # "https://www.instagram.com/bagelalley/",
-    # "https://www.facebook.com/bagelalley/",
-]
+# Profielen van de zaak voor 'sameAs'. Alleen bevestigde URL's.
+# Het Google Bedrijfsprofiel hier toevoegen zodra de URL bekend is.
+SOCIAL = ["https://www.instagram.com/bagelalleywassenaar/"]
 
 _DAGEN = {0: "Monday", 1: "Tuesday", 2: "Wednesday",
           3: "Thursday", 4: "Friday", 5: "Saturday", 6: "Sunday"}
@@ -567,7 +609,8 @@ def build_restaurant_schema() -> str:
             })
     schema = {
         "@context": "https://schema.org",
-        "@type": "Restaurant",
+        "@type": ["Restaurant", "CafeOrCoffeeShop"],
+        "@id": SITE_URL + "/#zaak",
         "name": BEDRIJF["naam"],
         "image": SITE_URL + "/static/og-image.jpg",
         "logo": SITE_URL + "/static/favicon/android-chrome-512x512.png",
@@ -576,7 +619,7 @@ def build_restaurant_schema() -> str:
         "email": BEDRIJF["email"],
         "priceRange": "\u20ac\u20ac",
         "servesCuisine": ["Bagels", "Breakfast", "Lunch", "High Tea", "Tapas", "Koffie"],
-        "acceptsReservations": True,
+        "acceptsReservations": SITE_URL + "/reserveren",   # reserveren gaat telefonisch, die pagina legt het uit
         "hasMenu": SITE_URL + "/menu",
         "address": {
             "@type": "PostalAddress",
@@ -592,6 +635,10 @@ def build_restaurant_schema() -> str:
             "longitude": GEO["lng"],
         },
         "openingHoursSpecification": spec,
+        "amenityFeature": [
+            {"@type": "LocationFeatureSpecification", "name": "Terras (aan de overkant, Langstraat 43)", "value": True},
+            {"@type": "LocationFeatureSpecification", "name": "Wifi voor gasten", "value": True},
+        ],
     }
     if SOCIAL:
         schema["sameAs"] = SOCIAL
@@ -614,6 +661,35 @@ def inject_seo_globals():
         "reserveer_label": "Tafel reserveren" if ONLINE_RESERVEREN else "Bel om te reserveren",
     }
 
+# Oude URL's van de vorige bagelalley.nl -> nieuwe pagina's (301, permanent).
+# Nieuwe regel nodig? Voeg hem hier toe, zonder slash aan het eind; "/pad/" werkt dan ook.
+OUDE_URLS = {
+    "/menu-takeaway": "/menu",
+    "/tapas": "/menu#tapas",
+    "/online-shop": "/shop",
+    "/contact": "/#contact",
+    "/cadeaubon": "/#cadeaubon",
+}
+_PAGINAS = {"/menu", "/high-tea", "/shop", "/bestellen", "/jobs", "/reserveren", "/privacy"}
+_CANON_HOST = urlsplit(os.environ["SITE_URL"]).netloc.lower() if os.environ.get("SITE_URL") else ""
+
+@app.before_request
+def _oude_urls():
+    pad = request.path.lower()
+    kort = pad.rstrip("/") or "/"
+    if kort in OUDE_URLS:
+        return redirect(OUDE_URLS[kort], code=301)
+    if pad != kort and kort in _PAGINAS:          # /jobs/ -> /jobs
+        return redirect(kort, code=301)
+
+@app.after_request
+def _geen_index_buiten_hoofddomein(resp):
+    # Zodra SITE_URL gezet is (bijv. https://bagelalley.nl), krijgt elk ander domein
+    # (zoals *.vercel.app) noindex, zodat Google geen dubbele site indexeert.
+    if _CANON_HOST and request.host.lower() != _CANON_HOST:
+        resp.headers["X-Robots-Tag"] = "noindex"
+    return resp
+
 @app.route("/robots.txt")
 def robots_txt():
     body = (
@@ -624,21 +700,24 @@ def robots_txt():
     )
     return Response(body, mimetype="text/plain")
 
+# Datum van de laatste inhoudelijke wijziging per pagina (voor <lastmod> in de sitemap).
+# Pas de datum aan als de tekst, prijzen of tijden op die pagina veranderen.
+SITEMAP = [
+    ("/", "2026-11-18"),
+    ("/menu", "2026-11-18"),
+    ("/high-tea", "2026-11-18"),
+    ("/shop", "2026-11-13"),
+    ("/bestellen", "2026-11-13"),
+    ("/reserveren", "2026-11-13"),
+    ("/jobs", "2026-11-13"),
+    ("/privacy", "2026-11-13"),
+]
+
 @app.route("/sitemap.xml")
 def sitemap_xml():
-    vandaag = date.today().isoformat()
-    paginas = [
-        ("/", "1.0"),
-        ("/menu", "0.9"),
-        ("/shop", "0.9"),
-        ("/reserveren", "0.8"),
-        ("/bestellen", "0.7"),
-        ("/jobs", "0.5"),
-    ]
     items = "".join(
-        "<url><loc>{0}{1}</loc><lastmod>{2}</lastmod><changefreq>weekly</changefreq>"
-        "<priority>{3}</priority></url>".format(SITE_URL, pad, vandaag, prio)
-        for pad, prio in paginas
+        "<url><loc>{0}{1}</loc><lastmod>{2}</lastmod></url>".format(SITE_URL, pad, gewijzigd)
+        for pad, gewijzigd in SITEMAP
     )
     xml = ('<?xml version="1.0" encoding="UTF-8"?>\n'
            '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'
@@ -661,7 +740,7 @@ def favicon_ico():
 def link(tekst, url):
     """Maakt een klikbare HTML link met huisstijl. Eigen pagina's (/...) openen in hetzelfde tabblad."""
     extern = url.startswith("http")
-    doel = ' target="_blank" rel="noopener"' if extern else ""
+    doel = ' target="_blank" rel="noopener noreferrer"' if extern else ""
     return f'<a href="{url}"{doel} class="chat-link">{tekst}</a>'
 # endregion
 
@@ -671,22 +750,24 @@ def link(tekst, url):
 _TEL = link("070-514 61 16", "tel:+31705146116")
 _MAIL = link("vrcbagel@gmail.com", "mailto:vrcbagel@gmail.com")
 _ROUTE = "https://www.google.com/maps/search/?api=1&query=Bagel%20Alley%20Langstraat%2042%20Wassenaar"
+_PARKEREN = "https://www.google.com/maps/search/?api=1&query=52.143773331281174%2C4.392209959142655"
+_INSTAGRAM = "https://www.instagram.com/bagelalleywassenaar/"
 _ALLERGIE_SLOT = f'Heb je een allergie? Bel {link("ons even", "tel:+31705146116")}, dan vertellen we precies wat erin zit.'
 
 # Nog niet bevestigde feiten. Zolang de waarde None is, geeft de chat een veilig antwoord
 # dat het onderwerp herkent en naar de telefoon verwijst. Vul hier het antwoord in zodra
-# de klant het bevestigt (zie CLIENT-TODO.md, "Chatbot: veilige antwoorden").
+# de klant het bevestigt (zie CLIENT-TODO.md in de projectdocumenten buiten de repo, "Chatbot: veilige antwoorden").
 CHAT_FEITEN = {
     "feestdagen":       None,   # openingstijden rond kerst, oud en nieuw, pasen, koningsdag ...
-    "parking":          None,   # waar parkeren, betaald of blauwe zone?
+    "parking":          f'Je kunt parkeren naast de Langstraat, vlak bij de zaak. De parkeerplek zie je {link("hier op de kaart", _PARKEREN)}.',
     "huisdieren":       None,   # honden/huisdieren binnen en op het terras?
     "kinderstoel":      None,   # kinderstoel aanwezig?
     "betalen":          None,   # pin, contant, creditcard, tikkie, apple pay?
-    "wifi_laptop":      None,   # wifi voor gasten, stopcontacten, laptop welkom?
-    "terras":           None,   # terras, buiten zitten?
+    "wifi_laptop":      "Ja, we hebben wifi voor gasten.",
+    "terras":           "Ja, we hebben een terras aan de overkant van de straat, op Langstraat 43.",
     "toegankelijkheid": None,   # rolstoel, drempel, mindervalidentoilet?
     "toilet":           None,   # toilet, verschoontafel?
-    "instagram_social": None,   # instagram / facebook handle?
+    "instagram_social": f'Je vindt ons op Instagram: {link("@bagelalleywassenaar", _INSTAGRAM)}.',
     "drukte":           None,   # drukke momenten, wachttijd?
 }
 _ONDERWERP = {
@@ -781,10 +862,10 @@ KENNISBANK = {
     "adres":            f'Je vindt ons aan de Langstraat 42, 2242 KM Wassenaar. Plan je route {link("hier", _ROUTE)}.',
     "contact":          f"Bel ons op {_TEL} of mail naar {_MAIL}.",
     "menu":             f'Op de kaart staan bagels, ontbijt, soepen, salades, high tea, tapas en taart. Bekijk {link("de hele kaart", "/menu")}.',
-    "prijzen":          f'Een bagel kost €2,95, belegd €4,95 tot €10,50. Ontbijt kost €9,50 tot €16,50, koffie vanaf €2,75 en high tea vanaf €17,95. Alle prijzen staan op {link("de kaart", "/menu")}.',
+    "prijzen":          f'Een bagel kost €2,95, belegd €4,95 tot €10,50. Ontbijt kost €9,50 tot €16,50, koffie vanaf €2,75 en high tea vanaf €17,95 per persoon. Alle prijzen staan op {link("de kaart", "/menu")}.',
     "bagels":           f'Je kiest uit 25 bagelsoorten, ook glutenvrij. Een bagel naar keuze kost €2,95, belegd vanaf €4,95. Bekijk {link("de kaart", "/menu")}.',
     "ontbijt_brunch_lunch": f'Er zijn zes ontbijtjes van €9,50 tot €16,50. Voor de lunch zijn er bagels, soep (€7,95) en salades (€13,50). Bekijk {link("de kaart", "/menu")}.',
-    "high_tea":         f"High tea kan vanaf 2 personen: Afternoon tea €17,95, Dream tea €27,50, Alley's tea €32,50. Bel {_TEL} om te reserveren.",
+    "high_tea":         f"High tea kan vanaf 2 personen. Per persoon: Afternoon tea €17,95, Dream tea €27,50, Alley's tea €32,50. Bel {_TEL} om te reserveren. Meer op {link('de high tea-pagina', '/high-tea')}.",
     "tapas":            f'Tapas bagels voor 2 personen: drie gesneden bagels met zes dips, voor €24,95. Bekijk {link("de kaart", "/menu")}.',
     "koffie":           "We schenken koffie van La Garanta, met bonen uit Colombia. Koffie kost vanaf €2,75 en een cappuccino vanaf €3,50; haver- of sojamelk is €0,75.",
     "thee":             "Thee naar keuze kost €3,25, verse munt- of gemberthee €3,95 en een pot thee €7,25. Chai thee of chai latte is €4,95.",
@@ -919,6 +1000,8 @@ def bepaal_intent(bericht: str):
     if scores["openingstijden"] and _DAG_OF_NU.search(t) and not scores["feestdagen"]:
         scores["vandaag_open"] = scores["openingstijden"] + 2
     beste = max(scores.values())
+    if beste == 0 and _DAG_OF_NU.fullmatch(t.strip()):
+        return "vandaag_open", scores                        # los "vandaag", "morgen", "zaterdag": open?
     if beste == 0:
         if _GROET.match(t):
             return "greeting", scores
@@ -1042,6 +1125,27 @@ def bestellen():
     return render_template("bestellen.html", bedrijf=BEDRIJF)
 
 
+def _high_tea_regels():
+    """(naam, prijs) van de High Tea-sectie op de gedrukte kaart (menukaart.py)."""
+    for sectie in MENUKAART:
+        if sectie.get("titel") == "High Tea":
+            return [(naam, prijs) for naam, _omschrijving, prijs in sectie["regels"] if prijs]
+    return []
+
+
+@app.route("/high-tea")
+def high_tea():
+    regels = _high_tea_regels()
+    if not regels:
+        abort(404)
+    return render_template("high_tea.html", bedrijf=BEDRIJF, high_tea=regels)
+
+
+@app.route("/privacy")
+def privacy():
+    return render_template("privacy.html", bedrijf=BEDRIJF)
+
+
 @app.route("/jobs")
 def jobs():
     return render_template("jobs.html", bedrijf=BEDRIJF)
@@ -1059,7 +1163,31 @@ TAARTEN = {  # id: (naam, prijs klein, prijs groot); None = formaat niet leverba
 TEKST_OP_TAART_PRIJS = 6.00
 AFHAAL_SLOTS = ["10:00", "10:30", "11:00", "11:30", "12:00", "12:30",
                 "13:00", "13:30", "14:00", "14:30", "15:00", "15:30"]
-_TEL_RE = re.compile(r"^\+?[0-9][0-9 ()\-]{7,19}$")
+_TEL_RE = re.compile(r"^\+?[0-9(][0-9 ().\-]{7,22}$")
+
+
+def normaliseer_telefoon(invoer: str):
+    """Accepteer spaties, streepjes, punten, haakjes, +31, 0031 en (0); geef één schoon formaat terug.
+    Nederlands mobiel: 06-12345678. Ander Nederlands nummer: 0705146116. Buitenland: +32470123456.
+    Geeft None als het geen bruikbaar nummer is."""
+    t = str(invoer or "").strip()
+    if not _TEL_RE.match(t):
+        return None
+    t = t.replace("(0)", "")
+    plus = t.startswith("+")
+    cijfers = re.sub(r"\D", "", t)
+    if plus:
+        cijfers = "00" + cijfers
+    if cijfers.startswith("0031"):
+        cijfers = "0" + cijfers[4:]
+    if cijfers.startswith("00"):                      # buitenlands nummer
+        rest = cijfers[2:]
+        return "+" + rest if 8 <= len(rest) <= 15 else None
+    if len(cijfers) != 10 or not cijfers.startswith("0"):
+        return None
+    if cijfers.startswith("06"):
+        return "06-" + cijfers[2:]
+    return cijfers
 
 
 def nu_amsterdam() -> datetime:
@@ -1095,28 +1223,28 @@ def valideer_bestelling(data: dict):
         gezien.add(tid)
         regels.append((naam, "Klein" if formaat == "klein" else "Groot", prijs))
         totaal += prijs
-    tekst = _clean_str(data.get("tekst"), 40)
+    tekst = _eenregelig(data.get("tekst"), 40)
     if tekst:
         totaal += TEKST_OP_TAART_PRIJS
     datum = _valid_iso_date(data.get("afhaaldatum"))
     vandaag = nu_amsterdam().date()
     if datum is None or datum <= vandaag or datum > vandaag + timedelta(days=365):
-        return None, "Kies een afhaaldatum vanaf morgen."
+        return None, "Bestellen kan vanaf morgen (minimaal 24 uur van tevoren). Kies een latere datum."
     if datum.weekday() == 1:
-        return None, "Op dinsdag zijn we gesloten. Kies een andere afhaaldatum."
+        return None, "Op dinsdag zijn we gesloten. Kies maandag of woensdag tot en met zondag."
     tijd = _clean_str(data.get("afhaaltijd"), 5)
     if tijd not in AFHAAL_SLOTS:
         return None, "Kies een afhaaltijd."
-    naam = _clean_str(data.get("naam"), 100)
-    email = _clean_str(data.get("email"), 150)
-    telefoon = _clean_str(data.get("telefoon"), 30)
+    naam = _eenregelig(data.get("naam"), 100)
+    email = _clean_str(data.get("email"), 150).lower()
+    telefoon = normaliseer_telefoon(_eenregelig(data.get("telefoon"), 30))
     opmerkingen = _clean_str(data.get("opmerkingen"), 1000)
     if not naam:
-        return None, "Vul je naam in."
+        return None, "Vul je naam in, zodat we weten voor wie de taart is."
     if not _EMAIL_RE.match(email):
-        return None, "Vul een geldig e-mailadres in."
-    if not _TEL_RE.match(telefoon):
-        return None, "Vul een geldig telefoonnummer in."
+        return None, "Controleer je e-mailadres, bijvoorbeeld naam@voorbeeld.nl."
+    if not telefoon:
+        return None, "Gebruik cijfers, eventueel met spaties of streepjes, bijvoorbeeld 06-12345678."
     return {"regels": regels, "tekst": tekst, "totaal": totaal, "datum": datum, "tijd": tijd,
             "naam": naam, "email": email, "telefoon": telefoon, "opmerkingen": opmerkingen}, None
 
@@ -1150,42 +1278,30 @@ def bestelling_mail_html(b: dict) -> str:
 @app.route("/bestellen/verstuur", methods=["POST"])
 @limiter.limit("5 per minute")
 def bestelling_verstuur():
-    data = request.get_json(silent=True) or {}
+    data = _json_body()
     bestelling, fout = valideer_bestelling(data)
     if fout:
         return jsonify({"succes": False, "reden": "ongeldig", "fout": fout}), 400
-    if not SENDGRID_API_KEY:
+    if not mail_ingesteld():
         return jsonify({"succes": False, "reden": "niet_verstuurd",
                         "fout": "De bestelling kon niet automatisch worden verstuurd."}), 503
     onderwerp = f"Taartbestelling {bestelling['naam']} (afhalen {bestelling['datum'].strftime('%d-%m-%Y')} {bestelling['tijd']})"
     if not sendgrid_verstuur(ORDER_MAIL_TO, onderwerp, bestelling_mail_html(bestelling), antwoord_naar=bestelling["email"]):
         return jsonify({"succes": False, "reden": "niet_verstuurd",
                         "fout": "De bestelling kon niet automatisch worden verstuurd."}), 502
-    print(f"[BESTELLING] {bestelling['naam']} | {bestelling['datum']} {bestelling['tijd']} | {_euro(bestelling['totaal'])}")
+    print(f"[BESTELLING] afhalen {bestelling['datum']} {bestelling['tijd']} | {_euro(bestelling['totaal'])}")   # geen persoonsgegevens in de logs
     return jsonify({"succes": True})
 
 
 @app.route("/chat", methods=["POST"])
 @limiter.limit("20 per minute")
 def chat():
-    data = request.get_json(silent=True) or {}
+    data = _json_body()
     bericht = _clean_str(data.get("bericht"), 1000)   # harde lengtelimiet
     if not bericht:
         return jsonify({"antwoord": "Ik begreep je niet, kun je het opnieuw proberen?"})
     antwoord = reageer_met_ai(bericht)
     return jsonify({"antwoord": antwoord})
-
-
-@app.route("/callback", methods=["POST"])
-@limiter.limit("10 per minute")
-def callback():
-    data = request.get_json(silent=True) or {}
-    naam = _clean_str(data.get("naam"), 100)
-    telefoon = _clean_str(data.get("telefoon"), 30)
-    if not naam or not telefoon:
-        return jsonify({"succes": False, "fout": "Naam en telefoon zijn verplicht."}), 400
-    print(f"[TERUGBELVERZOEK] {naam} - {telefoon}")
-    return jsonify({"succes": True})
 
 
 @app.route("/volle-slots", methods=["GET"])
@@ -1210,7 +1326,7 @@ def reserveren_post():
             "succes": False,
             "fout": "Online reserveren is op dit moment niet mogelijk. Bel ons op 070-514 61 16.",
         }), 403
-    data = request.get_json(silent=True) or {}
+    data = _json_body()
     naam     = _clean_str(data.get("naam"), 100)
     email    = _clean_str(data.get("email"), 150)
     telefoon = _clean_str(data.get("telefoon"), 30)
@@ -1249,7 +1365,7 @@ def reserveren_post():
         )
         conn.commit()
 
-    print(f"[RESERVERING] {naam} | {email} | {datum} om {tijd} | {gasten} gasten")
+    print(f"[RESERVERING] {datum} om {tijd} | {gasten} gasten")   # geen persoonsgegevens in de logs
     stuur_bevestigingsmail(naam, email, datum, tijd, gasten)
     # Nieuwsbrief alleen bij expliciete opt-in (AVG-conform)
     if bool(data.get("nieuwsbrief")):
@@ -1340,7 +1456,7 @@ def admin():
 @app.route("/admin/login", methods=["POST"])
 @limiter.limit("5 per minute")
 def admin_login():
-    data = request.get_json(silent=True) or {}
+    data = _json_body()
     gebruiker = _clean_str(data.get("gebruiker"), 100)
     wachtwoord = str(data.get("wachtwoord") or "")[:200]
     if ADMIN_PASS and _safe_eq(gebruiker, ADMIN_USER) and _safe_eq(wachtwoord, ADMIN_PASS):
@@ -1396,10 +1512,6 @@ def admin_verwijder(boeking_id):
         conn.commit()
     return jsonify({"succes": True})
 # endregion
-
-@app.route("/ping")
-def ping():
-    return "ok", 200
 
 
 # region ── OPSTARTEN ───────────────────────────────────────────

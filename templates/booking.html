@@ -8,7 +8,7 @@
   {% if online_reserveren %}
   {% set seo_desc = "Reserveer eenvoudig online een tafel bij Bagel Alley in Wassenaar. Direct bevestigd. Geniet van breakfast, lunch of high tea." %}
   {% else %}
-  {% set seo_desc = "Reserveer een tafel bij Bagel Alley in Wassenaar: bel 070-514 61 16 tijdens openingstijden. Voor breakfast, lunch of high tea." %}
+  {% set seo_desc = "Reserveer een tafel bij Bagel Alley in Wassenaar: bel 070-514 61 16 tijdens openingstijden. Voor ontbijt, lunch of high tea vanaf 2 personen." %}
   {% endif %}
   {% set seo_path = "/reserveren" %}
   {% set seo_crumb = "Reserveren" %}
@@ -24,7 +24,7 @@
     .nav-logo { display: flex; align-items: center; gap: .75rem; text-decoration: none; }
     .nav-logo-text { font-family: 'Playfair Display', serif; font-size: var(--fs-logo); font-weight: 700; color: var(--cream); }
     .nav-logo-text span { color: var(--purple2); }
-    .nav-back { font-size: var(--fs-sm); color: rgba(245,240,232,.62); text-decoration: none; letter-spacing: var(--track-button); text-transform: uppercase; transition: color .2s; display: inline-flex; align-items: center; gap: .4rem; }
+    .nav-back { font-size: var(--fs-sm); color: rgba(245,240,232,.62); text-decoration: none; letter-spacing: var(--track-button); text-transform: uppercase; transition: color var(--dur-ui) var(--ease-out); display: inline-flex; align-items: center; gap: .4rem; }
     @media (hover: hover) and (pointer: fine) { .nav-back:hover { color: var(--purple2); } }
 
     /* HERO STRIP */
@@ -34,17 +34,9 @@
       text-align: center;
       border-bottom: 1px solid rgba(135,88,206,.15);
     }
-    .booking-hero-label { font-size: var(--fs-xs); font-weight: 500; letter-spacing: var(--track-label); text-transform: uppercase; color: var(--purple-light); display: block; margin-bottom: .8rem; }
     .booking-hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(2.2rem, 4vw, 3.5rem); font-weight: 700; color: var(--cream); line-height: 1.1; margin-bottom: 1rem; }
     .booking-hero h1 em { font-style: italic; color: var(--purple2); }
     .booking-hero-sub { padding-bottom: 2.5rem; font-size: var(--fs-base); color: rgba(245,240,232,.62); max-width: 480px; margin: 0 auto 2.5rem; line-height: 1.7; }
-    .booking-hero-tabs {
-      display: flex; justify-content: center; gap: 0;
-      border-top: 1px solid rgba(135,88,206,.15);
-      margin-top: 0;
-    }
-    .booking-hero-tab { padding: 1rem 2rem; font-size: var(--fs-sm); font-weight: 500; letter-spacing: var(--track-button); text-transform: uppercase; color: rgba(245,240,232,.62); border-top: 3px solid transparent; margin-top: -1px; }
-    .booking-hero-tab.active { color: var(--purple-light); border-top-color: var(--purple); }
 
     /* MAIN LAYOUT */
     .booking-main { max-width: 1100px; margin: 0 auto; padding: 3rem 2rem 5rem; display: grid; grid-template-columns: 1fr 380px; gap: 3rem; align-items: start; }
@@ -64,7 +56,7 @@
       border: 1.5px solid rgba(135,88,206,.2); border-radius: var(--r-field);
       font-family: 'DM Sans', sans-serif; color: var(--text);
       background: #fafafa; outline: none; width: 100%;
-      transition: border-color .2s, box-shadow .2s;
+      transition: border-color var(--dur-ui) var(--ease-out);
     }
     .form-input:focus, .form-select:focus { border-color: var(--purple); background: white; box-shadow: var(--focus-ring); }
     .form-input::placeholder { color: #736b7a; }
@@ -73,7 +65,7 @@
     /* TIJDSLOT GRID */
     .slot-label { font-size: var(--fs-sm); font-weight: 500; color: var(--muted);   margin-top: .2rem; }
     .slot-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: .6rem; }
-    .slot { min-height: 44px; padding: .55rem .4rem; border: 1.5px solid rgba(135,88,206,.2); border-radius: var(--r-field); font-size: var(--fs-sm); text-align: center; cursor: pointer; color: var(--text); transition: background-color .15s, border-color .15s, color .15s, transform .15s, box-shadow .15s; font-family: 'DM Sans', sans-serif; }
+    .slot { min-height: 44px; padding: .55rem .4rem; border: 1.5px solid rgba(135,88,206,.2); border-radius: var(--r-field); font-size: var(--fs-sm); text-align: center; cursor: pointer; color: var(--text); transition: background-color var(--dur-ui) var(--ease-out), border-color var(--dur-ui) var(--ease-out), color var(--dur-ui) var(--ease-out), transform var(--dur-press) var(--ease-out); font-family: 'DM Sans', sans-serif; }
     @media (hover: hover) and (pointer: fine) { .slot:hover { border-color: var(--purple); background: rgba(135,88,206,.06); } }
     .slot.gekozen { background: var(--purple) !important; color: white !important; border-color: var(--purple) !important; font-weight: 500; }
     .slot.vol { background: #f5f5f5; color: #ccc; cursor: not-allowed; border-color: #e8e8e8; text-decoration: line-through; }
@@ -85,7 +77,7 @@
     .form-success strong { display: block; font-size: var(--fs-base); margin-bottom: .4rem; }
 
     /* SUBMIT BTN */
-    .btn-submit { background: var(--purple); color: white; border: none; padding: 1rem 2rem; font-size: var(--fs-base); font-weight: 500; border-radius: var(--r-field); cursor: pointer; transition: background .2s, transform .15s; width: 100%; font-family: 'DM Sans', sans-serif; letter-spacing: var(--track-button); }
+    .btn-submit { background: var(--purple); color: white; border: none; padding: 1rem 2rem; font-size: var(--fs-base); font-weight: 500; border-radius: var(--r-field); cursor: pointer; transition: background-color var(--dur-ui) var(--ease-out), transform var(--dur-press) var(--ease-out); width: 100%; font-family: 'DM Sans', sans-serif; letter-spacing: var(--track-button); }
     .nieuwsbrief-optin { display: flex; align-items: flex-start; gap: .6rem; margin: 0 0 1rem; padding: .85rem 1rem; background: rgba(135,88,206,.06); border: 1px solid rgba(135,88,206,.18); border-radius: var(--r-field); cursor: pointer; font-size: var(--fs-sm); color: #5a5560; line-height: 1.5; }
     .nieuwsbrief-optin input { margin-top: .15rem; width: 16px; height: 16px; accent-color: var(--purple); flex-shrink: 0; cursor: pointer; }
     .nieuwsbrief-optin strong { color: var(--purple3); font-weight: 600; }
@@ -308,7 +300,7 @@
 
     <div class="sidebar-card sidebar-card--photo">
       <div class="sidebar-img">
-        {{ pic('fotos/pexels-anchornhaven-43716305-29445728.jpg', 'Belegde bagels bij Bagel Alley', '(max-width: 900px) 100vw, 380px') }}
+        {{ pic('fotos/pexels-anchornhaven-43716305-29445728.jpg', 'Bagels met sesam en maanzaad op een rooster', '(max-width: 900px) 100vw, 380px') }}
       </div>
       <div class="sidebar-photo-text">
         <p>Heb je een groep of speciale wens? Bel ons op <a href="tel:+31705146116">070-514 61 16</a> voor maatwerk.</p>
@@ -422,6 +414,5 @@ laadSlots();
 </script>
 {% endif %}
 {% include "_ident.html" ignore missing %}
-{% include "_cookie.html" ignore missing %}
 </body>
 </html>

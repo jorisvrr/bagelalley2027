@@ -4,8 +4,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
-  {% set seo_title = "Taart bestellen | Bagel Alley Wassenaar" %}
-  {% set seo_desc = "Bestel je taart online bij Bagel Alley Wassenaar. Kies een of meerdere taarten, voeg een persoonlijke tekst toe en haal vers af in Wassenaar." %}
+  {% set seo_title = "Taart bestellen en afhalen | Bagel Alley Wassenaar" %}
+  {% set seo_desc = "Bestel je taart online en haal hem op aan de Langstraat 42 in Wassenaar. Minimaal 24 uur van tevoren. Klein vanaf €32,50, groot €45." %}
   {% set seo_path = "/bestellen" %}
   {% set seo_crumb = "Taart bestellen" %}
   {% include "_seo.html" ignore missing %}
@@ -20,12 +20,11 @@
     .nav-logo { display: flex; align-items: center; gap: .75rem; text-decoration: none; }
     .nav-logo-text { font-family: 'Playfair Display', serif; font-size: var(--fs-logo); font-weight: 700; color: var(--cream); }
     .nav-logo-text span { color: var(--purple2); }
-    .nav-back { font-size: var(--fs-sm); color: rgba(245,240,232,.62); text-decoration: none; letter-spacing: var(--track-button); text-transform: uppercase; transition: color .2s; display: inline-flex; align-items: center; gap: .4rem; }
+    .nav-back { font-size: var(--fs-sm); color: rgba(245,240,232,.62); text-decoration: none; letter-spacing: var(--track-button); text-transform: uppercase; transition: color var(--dur-ui) var(--ease-out); display: inline-flex; align-items: center; gap: .4rem; }
     @media (hover: hover) and (pointer: fine) { .nav-back:hover { color: var(--purple2); } }
 
     /* HERO STRIP */
     .order-hero { background: var(--dark2); padding: 3.5rem 4rem 2.5rem; text-align: center; border-bottom: 1px solid rgba(135,88,206,.15); }
-    .order-hero-label { font-size: var(--fs-xs); font-weight: 500; letter-spacing: var(--track-label); text-transform: uppercase; color: var(--purple-light); display: block; margin-bottom: .8rem; }
     .order-hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(2.2rem, 4vw, 3.5rem); font-weight: 700; color: var(--cream); line-height: 1.1; margin-bottom: 1rem; }
     .order-hero h1 em { font-style: italic; color: var(--purple2); }
     .order-hero-sub { font-size: var(--fs-base); color: rgba(245,240,232,.62); max-width: 520px; margin: 0 auto; line-height: 1.7; }
@@ -35,7 +34,7 @@
     .step-pill { display: flex; align-items: center; gap: .5rem; padding: 0 1.2rem; position: relative; flex: 1; justify-content: center; }
     .step-pill:not(:last-child)::after { content: ''; position: absolute; right: -1px; top: 11px; width: 100%; height: 2px; background: rgba(135,88,206,.15); z-index: 0; }
     .step-pill.done:not(:last-child)::after { background: var(--purple); }
-    .step-num { width: 24px; height: 24px; border-radius: 50%; background: rgba(135,88,206,.15); color: #5A4E69; display: flex; align-items: center; justify-content: center; font-size: var(--fs-xs); font-weight: 600; flex-shrink: 0; z-index: 1; transition: background-color .2s, border-color .2s, color .2s, transform .2s, box-shadow .2s; }
+    .step-num { width: 24px; height: 24px; border-radius: 50%; background: rgba(135,88,206,.15); color: #5A4E69; display: flex; align-items: center; justify-content: center; font-size: var(--fs-xs); font-weight: 600; flex-shrink: 0; z-index: 1; transition: background-color var(--dur-ui) var(--ease-out), border-color var(--dur-ui) var(--ease-out), color var(--dur-ui) var(--ease-out), transform var(--dur-press) var(--ease-out); }
     .step-pill.active .step-num { background: var(--purple); color: white; }
     .step-pill.done .step-num { background: var(--purple); color: white; }
     .step-label { font-size: var(--fs-xs); font-weight: 500; letter-spacing: var(--track-button); color: var(--muted); z-index: 1; white-space: nowrap; }
@@ -57,14 +56,14 @@
     /* PRODUCT CARDS (STAP 1) */
     .product-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
     .multi-hint { display: flex; gap: .5rem; align-items: flex-start; font-size: var(--fs-sm); color: var(--purple3); background: rgba(135,88,206,.08); border: 1px solid rgba(135,88,206,.18); border-radius: var(--r-field); padding: .7rem .9rem; margin-bottom: 1.1rem; line-height: 1.5; }
-    .product-card { border: 1.5px solid rgba(135,88,206,.18); border-radius: var(--r-field); padding: 1.1rem; cursor: pointer; transition: background-color .15s, border-color .15s, color .15s, transform .15s, box-shadow .15s; position: relative; }
+    .product-card { border: 1.5px solid rgba(135,88,206,.18); border-radius: var(--r-field); padding: 1.1rem; cursor: pointer; transition: background-color var(--dur-ui) var(--ease-out), border-color var(--dur-ui) var(--ease-out), color var(--dur-ui) var(--ease-out), transform var(--dur-press) var(--ease-out); position: relative; }
     @media (hover: hover) and (pointer: fine) { .product-card:hover { border-color: var(--purple); background: rgba(135,88,206,.04); } }
     .product-card.gekozen { border-color: var(--purple); background: rgba(135,88,206,.07); box-shadow: var(--focus-ring); }
     .product-card-check { position: absolute; top: .9rem; right: .9rem; width: 22px; height: 22px; border-radius: 50%; border: 1.5px solid rgba(135,88,206,.3); background: white; display: flex; align-items: center; justify-content: center; font-size: var(--fs-xs); color: transparent; }
     .product-card.gekozen .product-card-check { background: var(--purple); border-color: var(--purple); color: white; }
     .product-card-title { font-family: 'Playfair Display', serif; font-weight: 700; font-size: var(--fs-base); color: var(--dark); margin-bottom: .55rem; padding-right: 1.5rem; }
     .size-options { display: flex; gap: .5rem; margin-top: .3rem; }
-    .size-opt { min-height: 44px; flex: 1; text-align: center; padding: .5rem .3rem; border: 1.5px solid rgba(135,88,206,.18); border-radius: var(--r-field); font-size: var(--fs-sm); cursor: pointer; transition: background-color .15s, border-color .15s, color .15s, transform .15s, box-shadow .15s; }
+    .size-opt { min-height: 44px; flex: 1; text-align: center; padding: .5rem .3rem; border: 1.5px solid rgba(135,88,206,.18); border-radius: var(--r-field); font-size: var(--fs-sm); cursor: pointer; transition: background-color var(--dur-ui) var(--ease-out), border-color var(--dur-ui) var(--ease-out), color var(--dur-ui) var(--ease-out), transform var(--dur-press) var(--ease-out); }
     @media (hover: hover) and (pointer: fine) { .size-opt:hover { border-color: var(--purple); } }
     .size-opt.gekozen { background: var(--purple); color: white; border-color: var(--purple); font-weight: 500; }
     .size-opt-price { display: block; font-size: var(--fs-xs); opacity: .7; margin-top: .15rem; }
@@ -77,7 +76,7 @@
       border: 1.5px solid rgba(135,88,206,.2); border-radius: var(--r-field);
       font-family: 'DM Sans', sans-serif; color: var(--text);
       background: #fafafa; outline: none; width: 100%;
-      transition: border-color .2s, box-shadow .2s;
+      transition: border-color var(--dur-ui) var(--ease-out);
     }
     .form-input:focus, .form-select:focus, .form-textarea:focus { border-color: var(--purple); background: white; box-shadow: var(--focus-ring); }
     .form-input::placeholder, .form-textarea::placeholder { color: #736b7a; }
@@ -85,12 +84,12 @@
     .form-textarea { resize: vertical; min-height: 90px; font-family: 'DM Sans', sans-serif; }
 
     /* EXTRA OPTIE TOGGLE (STAP 2) */
-    .toggle-card { border: 1.5px solid rgba(135,88,206,.18); border-radius: var(--r-field); padding: 1.1rem 1.2rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; cursor: pointer; transition: border-color .15s; }
+    .toggle-card { border: 1.5px solid rgba(135,88,206,.18); border-radius: var(--r-field); padding: 1.1rem 1.2rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; cursor: pointer; transition: border-color var(--dur-ui) var(--ease-out); }
     @media (hover: hover) and (pointer: fine) { .toggle-card:hover { border-color: var(--purple); } }
     .toggle-card-text strong { display: block; font-size: var(--fs-base); color: var(--dark); }
     .toggle-card-text span { font-size: var(--fs-sm); color: var(--muted); }
-    .toggle-switch { width: 42px; height: 24px; border-radius: var(--r-card); background: rgba(135,88,206,.2); position: relative; flex-shrink: 0; transition: background .2s; }
-    .toggle-switch::after { content: ''; position: absolute; top: 2px; left: 2px; width: 20px; height: 20px; border-radius: 50%; background: white; transition: transform .2s; box-shadow: 0 1px 3px rgba(0,0,0,.2); }
+    .toggle-switch { width: 42px; height: 24px; border-radius: var(--r-card); background: rgba(135,88,206,.2); position: relative; flex-shrink: 0; transition: background-color var(--dur-ui) var(--ease-out); }
+    .toggle-switch::after { content: ''; position: absolute; top: 2px; left: 2px; width: 20px; height: 20px; border-radius: 50%; background: white; transition: transform var(--dur-press) var(--ease-out); box-shadow: 0 1px 3px rgba(0,0,0,.2); }
     .toggle-switch.aan { background: var(--purple); }
     .toggle-switch.aan::after { transform: translateX(18px); }
 
@@ -100,15 +99,17 @@
 
     /* SLOT GRID (afhaaltijd) */
     .slot-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: .4rem; }
-    .slot { min-height: 44px; padding: .55rem .4rem; border: 1.5px solid rgba(135,88,206,.2); border-radius: var(--r-field); font-size: var(--fs-sm); text-align: center; cursor: pointer; color: var(--text); transition: background-color .15s, border-color .15s, color .15s, transform .15s, box-shadow .15s; }
+    .slot { min-height: 44px; padding: .55rem .4rem; border: 1.5px solid rgba(135,88,206,.2); border-radius: var(--r-field); font-size: var(--fs-sm); text-align: center; cursor: pointer; color: var(--text); transition: background-color var(--dur-ui) var(--ease-out), border-color var(--dur-ui) var(--ease-out), color var(--dur-ui) var(--ease-out), transform var(--dur-press) var(--ease-out); }
     @media (hover: hover) and (pointer: fine) { .slot:hover { border-color: var(--purple); background: rgba(135,88,206,.06); } }
     .slot.gekozen { background: var(--purple) !important; color: white !important; border-color: var(--purple) !important; font-weight: 500; }
 
     /* STEP NAV BUTTONS */
     .step-nav { display: flex; justify-content: space-between; gap: 1rem; margin-top: .5rem; }
-    .btn-prev { display: inline-flex; align-items: center; gap: .35rem; background: transparent; color: var(--muted); border: 1.5px solid rgba(135,88,206,.2); padding: .9rem 1.6rem; font-size: var(--fs-md); font-weight: 500; border-radius: var(--r-field); cursor: pointer; transition: background-color .2s, border-color .2s, color .2s, transform .2s, box-shadow .2s; font-family: 'DM Sans', sans-serif; }
+    .privacy-note { font-size: var(--fs-sm); color: var(--muted); line-height: 1.6; margin: .2rem 0 1rem; }
+    .privacy-note a { color: var(--purple3); display: inline-block; padding: .7rem 0; margin: -.7rem 0; }
+    .btn-prev { display: inline-flex; align-items: center; gap: .35rem; background: transparent; color: var(--muted); border: 1.5px solid rgba(135,88,206,.2); padding: .9rem 1.6rem; font-size: var(--fs-md); font-weight: 500; border-radius: var(--r-field); cursor: pointer; transition: background-color var(--dur-ui) var(--ease-out), border-color var(--dur-ui) var(--ease-out), color var(--dur-ui) var(--ease-out), transform var(--dur-press) var(--ease-out); font-family: 'DM Sans', sans-serif; }
     @media (hover: hover) and (pointer: fine) { .btn-prev:hover { border-color: var(--purple); color: var(--purple); } }
-    .btn-next, .btn-submit { display: inline-flex; align-items: center; gap: .35rem; background: var(--purple); color: white; border: none; padding: .9rem 1.8rem; font-size: var(--fs-md); font-weight: 500; border-radius: var(--r-field); cursor: pointer; transition: background .2s, transform .15s; font-family: 'DM Sans', sans-serif; letter-spacing: normal; margin-left: auto; }
+    .btn-next, .btn-submit { display: inline-flex; align-items: center; gap: .35rem; background: var(--purple); color: white; border: none; padding: .9rem 1.8rem; font-size: var(--fs-md); font-weight: 500; border-radius: var(--r-field); cursor: pointer; transition: background-color var(--dur-ui) var(--ease-out), transform var(--dur-press) var(--ease-out); font-family: 'DM Sans', sans-serif; letter-spacing: normal; margin-left: auto; }
     @media (hover: hover) and (pointer: fine) { .btn-next:hover, .btn-submit:hover { background: var(--purple3); transform: translateY(-1px); } }
     .btn-next:disabled, .btn-submit:disabled { opacity: .5; cursor: not-allowed; transform: none; }
 
@@ -117,7 +118,22 @@
     .size-opt:focus-visible, .slot:focus-visible, .toggle-card:focus-visible { outline: 2px solid var(--purple); outline-offset: 2px; }
     .order-result { border-radius: var(--r-field); padding: 1.2rem 1.4rem; font-size: var(--fs-md); line-height: 1.6; }
     .order-result strong { display: block; font-family: 'Playfair Display', serif; font-size: var(--fs-lg); margin-bottom: .4rem; }
-    .order-ok { background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; }
+    .order-ok { background: #f0fdf4; color: #166534; border: 1.5px solid #86efac; padding: 1.4rem 1.5rem; }
+    .order-ok-kop { display: flex; align-items: center; gap: .8rem; margin-bottom: .6rem; }
+    .order-ok-kop strong { margin: 0; font-size: var(--fs-xl); color: #14532d; }
+    .order-ok-vink { flex-shrink: 0; color: var(--success); }
+    .order-ok-sub { font-weight: 600; color: #14532d; margin-bottom: .3rem; }
+    .order-ok-stappen { margin: 0 0 0 1.1rem; display: grid; gap: .25rem; }
+    .order-ok-stappen a { color: #14532d; font-weight: 600; display: inline-block; padding: .7rem 0; margin: -.7rem 0; }
+    /* vinkje tekent zijn pad: cirkel, dan de haak (samen 270 ms, eenmalig) */
+    .order-ok-vink circle { stroke-dasharray: 151; stroke-dashoffset: 151; }
+    .order-ok-vink path { stroke-dasharray: 36; stroke-dashoffset: 36; }
+    .order-ok:not([hidden]) .order-ok-vink circle { animation: vinkTeken 150ms var(--ease-out) forwards; }
+    .order-ok:not([hidden]) .order-ok-vink path { animation: vinkTeken 150ms var(--ease-out) 120ms forwards; }
+    @keyframes vinkTeken { to { stroke-dashoffset: 0; } }
+    @media (prefers-reduced-motion: reduce) {
+      .order-ok-vink circle, .order-ok-vink path { stroke-dashoffset: 0; animation: none !important; }
+    }
     .order-fail { background: #fff8eb; color: #5c3b00; border: 1px solid #f3d9a4; }
     .order-fail pre { white-space: pre-wrap; font-family: inherit; font-size: var(--fs-md); background: #fff; border: 1px solid #f3d9a4; border-radius: var(--r-field); padding: .8rem 1rem; margin: .8rem 0; max-height: 260px; overflow: auto; color: var(--text); }
     .order-actions { display: flex; flex-wrap: wrap; gap: .6rem; margin-top: .4rem; }
@@ -171,7 +187,7 @@
       .nav-cta-short { display: inline; }
     }
     .steps-current { display: none; text-align: center; font-size: var(--fs-sm); color: var(--muted); margin-top: .6rem; }
-    .mobile-total { display: none; position: fixed; left: 0; right: 0; bottom: 0; z-index: var(--z-nav); align-items: center; justify-content: space-between; gap: 1rem;
+    .mobile-total { display: none; position: fixed; left: 0; right: 0; bottom: 0; z-index: var(--z-sticky); align-items: center; justify-content: space-between; gap: 1rem;
       padding: .8rem max(1.2rem, env(safe-area-inset-left, 0px)) calc(.8rem + var(--safe-bottom)) max(1.2rem, env(safe-area-inset-left, 0px));
       background: var(--dark2); color: var(--cream); box-shadow: var(--shadow-up); font-size: var(--fs-sm); }
     .mobile-total strong { font-family: 'Playfair Display', serif; font-size: var(--fs-xl); color: var(--purple-light); }
@@ -179,6 +195,7 @@
       body.has-totalbar { --chatbar-h: 64px; }
       .steps-current { display: block; }
       .mobile-total { display: flex; }
+      .mobile-total ~ #ident { display: none; }   /* nooit over het totaalbedrag */
     }
   </style>
   {% include "_favicons.html" ignore missing %}
@@ -231,6 +248,7 @@
       <p id="cardSub">Klein is voor ± 8 personen, groot voor ± 12/16 personen</p>
     </div>
     <div class="order-card-body">
+      <noscript><p class="multi-hint">{{ icon('info', 16) }} <span>Dit bestelformulier werkt alleen met JavaScript aan. Bestellen kan ook via <a href="tel:+31705146116" style="color:inherit">070-514 61 16</a> of <a href="mailto:vrcbagel@gmail.com" style="color:inherit">vrcbagel@gmail.com</a>.</span></p></noscript>
 
       <!-- STAP 1: PRODUCT -->
       <div class="step-panel active" data-panel="1">
@@ -238,7 +256,7 @@
         <div class="product-grid" id="productGrid">
           <!-- cards worden via JS gevuld -->
         </div>
-        <div class="form-error" id="error1">Kies eerst minimaal één taart met een formaat.</div>
+        <div class="form-error" id="error1" role="alert">Kies minimaal één taart: tik bij een taart op Klein of Groot.</div>
         <div class="step-nav">
           <span></span>
           <button class="btn-next" onclick="goToStep(2)">Volgende {{ icon('chevron-right', 20) }}</button>
@@ -256,9 +274,9 @@
         </button>
         <div class="form-group" id="tekstVeldWrap" style="display:none;">
           <label class="form-label" for="tekstOpTaart">Gewenste tekst <span>*</span></label>
-          <input type="text" id="tekstOpTaart" class="form-input" placeholder="Bijv. Gefeliciteerd Anne!" maxlength="40" autocomplete="off" enterkeyhint="done">
+          <input type="text" id="tekstOpTaart" class="form-input" placeholder="Bijv. Gefeliciteerd Anne!" maxlength="40" autocomplete="off" enterkeyhint="done" aria-describedby="fout-tekstOpTaart">
+          <span class="field-error" id="fout-tekstOpTaart" hidden></span>
         </div>
-        <div class="form-error" id="error2">Vul de gewenste tekst in, of zet de optie uit.</div>
         <div class="step-nav">
           <button class="btn-prev" onclick="goToStep(1)">{{ icon('chevron-left', 20) }} Vorige</button>
           <button class="btn-next" onclick="goToStep(3)">Volgende {{ icon('chevron-right', 20) }}</button>
@@ -268,35 +286,39 @@
       <!-- STAP 3: AFHALEN & CONTACT -->
       <div class="step-panel" data-panel="3">
         <div class="pickup-note">
-          {{ icon('map-pin', 16) }} <strong>Alleen afhalen</strong> bij Bagel Alley, Langstraat 42 in Wassenaar. Bezorgen is niet mogelijk. Je dient minimaal 24 uur van te voren te bestellen.
+          {{ icon('map-pin', 16) }} <strong>Alleen afhalen</strong> bij Bagel Alley, Langstraat 42 in Wassenaar. Bezorgen is niet mogelijk. Bestel minimaal 24 uur van tevoren.
         </div>
         <div class="form-row">
           <div class="form-group">
             <label class="form-label" for="afhaaldatum">Afhaaldatum <span>*</span></label>
-            <input type="date" id="afhaaldatum" class="form-input" min="" required>
+            <input type="date" id="afhaaldatum" class="form-input" min="" required aria-describedby="fout-afhaaldatum">
+            <span class="field-error" id="fout-afhaaldatum" hidden></span>
           </div>
           <div class="form-group">
             <label class="form-label" for="naam">Naam <span>*</span></label>
-            <input type="text" id="naam" class="form-input" placeholder="Je volledige naam" autocomplete="name" autocapitalize="words" enterkeyhint="next" required>
+            <input type="text" id="naam" class="form-input" placeholder="Je volledige naam" autocomplete="name" autocapitalize="words" enterkeyhint="next" required aria-describedby="fout-naam">
+            <span class="field-error" id="fout-naam" hidden></span>
           </div>
         </div>
         <div class="form-group">
-          <label class="form-label">Afhaaltijd <span>*</span></label>
-          <div class="slot-grid" id="slotGrid">
+          <span class="form-label" id="label-afhaaltijd">Afhaaltijd <span>*</span></span>
+          <div class="slot-grid" id="slotGrid" role="group" aria-labelledby="label-afhaaltijd" aria-describedby="fout-afhaaltijd">
             <!-- tijdsloten via JS -->
           </div>
+          <span class="field-error" id="fout-afhaaltijd" hidden></span>
         </div>
         <div class="form-row">
           <div class="form-group">
             <label class="form-label" for="email">E-mailadres <span>*</span></label>
-            <input type="email" id="email" class="form-input" placeholder="jouw@email.nl" autocomplete="email" inputmode="email" autocapitalize="none" spellcheck="false" enterkeyhint="next" required>
+            <input type="email" id="email" class="form-input" placeholder="jouw@email.nl" autocomplete="email" inputmode="email" autocapitalize="none" spellcheck="false" enterkeyhint="next" required aria-describedby="fout-email">
+            <span class="field-error" id="fout-email" hidden></span>
           </div>
           <div class="form-group">
             <label class="form-label" for="telefoon">Telefoonnummer <span>*</span></label>
-            <input type="tel" id="telefoon" class="form-input" placeholder="06-12345678" autocomplete="tel" inputmode="tel" enterkeyhint="next" required>
+            <input type="tel" id="telefoon" class="form-input" placeholder="06-12345678" autocomplete="tel" inputmode="tel" enterkeyhint="next" required aria-describedby="fout-telefoon">
+            <span class="field-error" id="fout-telefoon" hidden></span>
           </div>
         </div>
-        <div class="form-error" id="error3" role="alert">Vul alle verplichte velden in.</div>
         <div class="step-nav">
           <button class="btn-prev" onclick="goToStep(2)">{{ icon('chevron-left', 20) }} Vorige</button>
           <button class="btn-next" onclick="goToStep(4)">Volgende {{ icon('chevron-right', 20) }}</button>
@@ -311,21 +333,32 @@
         </div>
         <div class="form-error" id="error4" role="alert"></div>
         <div class="order-result order-ok" id="orderOk" hidden role="status" tabindex="-1">
-          <strong>Bedankt, je bestelling is verstuurd</strong>
-          We hebben je bestelling ontvangen en bevestigen hem zo snel mogelijk per e-mail.
-          Vragen? Bel ons op <a href="tel:+31705146116" style="color:inherit;font-weight:600;">070-514 61 16</a>.
+          <div class="order-ok-kop">
+            <svg class="order-ok-vink" viewBox="0 0 52 52" width="44" height="44" aria-hidden="true" focusable="false">
+              <circle cx="26" cy="26" r="24" fill="none" stroke="currentColor" stroke-width="2.5"/>
+              <path d="M15 27 l7 7 l15 -16" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <strong>Bestelling verstuurd</strong>
+          </div>
+          <p class="order-ok-sub">Wat gebeurt er nu?</p>
+          <ul class="order-ok-stappen">
+            <li>We bevestigen je bestelling zo snel mogelijk per e-mail<span id="okEmail"></span>.</li>
+            <li>Ophalen op <span id="okMoment"></span> bij Bagel Alley, Langstraat 42 in Wassenaar.</li>
+            <li>Vragen of iets wijzigen? Bel <a href="tel:+31705146116">070-514 61 16</a>.</li>
+          </ul>
         </div>
         <div class="order-result order-fail" id="orderFail" hidden role="alert" tabindex="-1">
           <strong>Nog niet verstuurd</strong>
           Je bestelling kon niet automatisch naar ons worden verstuurd. Stuur hem op een van deze manieren, dan bevestigen we hem zo snel mogelijk:
           <pre id="orderText"></pre>
           <div class="order-actions">
-            <button type="button" id="orderCopy">Kopieer bestelling</button>
-            <a id="orderWhatsApp" href="#" target="_blank" rel="noopener">WhatsApp 06-513 43 359</a>
+            <button type="button" id="orderCopy" aria-live="polite">Kopieer bestelling</button>
+            <a id="orderWhatsApp" href="#" target="_blank" rel="noopener noreferrer">WhatsApp 06-513 43 359</a>
             <a id="orderMail" href="mailto:vrcbagel@gmail.com">Mail naar vrcbagel@gmail.com</a>
             <a href="tel:+31705146116">Bel 070-514 61 16</a>
           </div>
         </div>
+        <p class="privacy-note">We gebruiken je gegevens alleen voor deze bestelling. Lees meer in onze <a href="/privacy">privacyverklaring</a>.</p>
         <div class="step-nav" id="step4Nav">
           <button class="btn-prev" onclick="goToStep(3)">{{ icon('chevron-left', 20) }} Vorige</button>
           <button class="btn-submit" id="orderSubmit" onclick="plaatsBestelling()">Bestelling versturen</button>
@@ -452,11 +485,11 @@
     document.getElementById('tekstVeldWrap').style.display = tekstAan ? 'flex' : 'none';
     if (!tekstAan) {
       document.getElementById('tekstOpTaart').value = '';
-      document.getElementById('error2').style.display = 'none';
+      wisFout('tekstOpTaart');
     }
     updateSummary();
   }
-  document.getElementById('tekstOpTaart').addEventListener('input', updateSummary);
+  document.getElementById('tekstOpTaart').addEventListener('input', () => { wisFout('tekstOpTaart'); updateSummary(); });
 
   // ---------- STAP 3: TIJDSLOTEN ----------
   const tijdsloten = ['10:00','10:30','11:00','11:30','12:00','12:30','13:00','13:30','14:00','14:30','15:00','15:30'];
@@ -473,7 +506,7 @@
       el.classList.add('gekozen');
       el.setAttribute('aria-pressed', 'true');
       gekozenSlot = tijd;
-      document.getElementById('error3').style.display = 'none';
+      wisFout('afhaaltijd');
     });
     slotGrid.appendChild(el);
   });
@@ -484,16 +517,55 @@
   document.getElementById('afhaaldatum').min =
     `${morgen.getFullYear()}-${String(morgen.getMonth() + 1).padStart(2, '0')}-${String(morgen.getDate()).padStart(2, '0')}`;
 
-  // dinsdag is gesloten, blokkeer die datum
+  // ---------- FOUTEN PER VELD ----------
+  // Melding direct bij het veld, aria-invalid, focus naar het eerste foute veld en een korte
+  // nudge (de nudge staat uit bij reduced motion, zie _tokens.html).
+  const MELDING = {
+    datumLeeg: 'Kies een afhaaldatum. Bestellen kan vanaf morgen (minimaal 24 uur van tevoren).',
+    datumTeVroeg: 'Bestellen kan vanaf morgen (minimaal 24 uur van tevoren). Kies een latere datum.',
+    dinsdag: 'Op dinsdag zijn we gesloten. Kies maandag of woensdag tot en met zondag.',
+    tijd: 'Kies een afhaaltijd.',
+    naam: 'Vul je naam in, zodat we weten voor wie de taart is.',
+    emailLeeg: 'Vul je e-mailadres in; daar sturen we de bevestiging heen.',
+    email: 'Controleer je e-mailadres, bijvoorbeeld naam@voorbeeld.nl.',
+    telefoonLeeg: 'Vul je telefoonnummer in, voor als we iets moeten overleggen.',
+    telefoon: 'Gebruik cijfers, eventueel met spaties of streepjes, bijvoorbeeld 06-12345678.',
+    tekst: 'Vul de tekst voor op de taart in, of zet de optie uit.',
+  };
+  const EMAIL_RE = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
+  const TEL_RE = /^\+?[0-9(][0-9 ().\-]{7,22}$/;   // zelfde als de server; de server maakt het netjes
+  function nudge(el) {
+    el.classList.remove('ba-nudge'); void el.offsetWidth; el.classList.add('ba-nudge');
+    el.addEventListener('animationend', () => el.classList.remove('ba-nudge'), { once: true });
+  }
+  function zetFout(id, tekst) {
+    const melding = document.getElementById('fout-' + id), veldEl = document.getElementById(id) || document.getElementById('slotGrid');
+    melding.textContent = tekst; melding.hidden = false;
+    veldEl.setAttribute('aria-invalid', 'true');
+  }
+  function wisFout(id) {
+    const melding = document.getElementById('fout-' + id), veldEl = id === 'afhaaltijd' ? document.getElementById('slotGrid') : document.getElementById(id);
+    if (melding) { melding.hidden = true; melding.textContent = ''; }
+    if (veldEl) veldEl.removeAttribute('aria-invalid');
+  }
+  function toonEersteFout(ids) {
+    if (!ids.length) return;
+    const eerste = ids[0] === 'afhaaltijd' ? document.querySelector('.slot') : document.getElementById(ids[0]);
+    const doel = ids[0] === 'afhaaltijd' ? document.getElementById('slotGrid') : eerste;
+    eerste.focus({ preventScroll: true });
+    doel.scrollIntoView({ block: 'center' });
+    nudge(doel);
+  }
+  ['naam', 'email', 'telefoon'].forEach(id => document.getElementById(id).addEventListener('input', () => wisFout(id)));
+
+  // dinsdag is gesloten: direct melden wat wél kan
   document.getElementById('afhaaldatum').addEventListener('change', function () {
-    const err = document.getElementById('error3');
     if (this.value && new Date(this.value + 'T12:00:00').getDay() === 2) {
-      err.textContent = 'We zijn op dinsdag gesloten. Kies een andere afhaaldatum.';
-      err.style.display = 'block';
+      zetFout('afhaaldatum', MELDING.dinsdag);
       this.value = '';
-    } else {
-      err.textContent = 'Vul alle verplichte velden in.';
-      err.style.display = 'none';
+      nudge(this);
+    } else if (this.value) {
+      wisFout('afhaaldatum');
     }
   });
 
@@ -529,7 +601,9 @@
 
   function valideerStap1() {
     if (Object.keys(gekozenProducten).length === 0) {
-      document.getElementById('error1').style.display = 'block';
+      const err = document.getElementById('error1');
+      err.style.display = 'block'; nudge(err);
+      const eerste = document.querySelector('.size-opt'); if (eerste) eerste.focus({ preventScroll: true });
       return false;
     }
     return true;
@@ -537,24 +611,29 @@
 
   function valideerStap2() {
     if (tekstAan && document.getElementById('tekstOpTaart').value.trim() === '') {
-      document.getElementById('error2').style.display = 'block';
+      zetFout('tekstOpTaart', MELDING.tekst); toonEersteFout(['tekstOpTaart']);
       return false;
     }
     return true;
   }
 
   function valideerStap3() {
+    const fouten = [];
     const datum = document.getElementById('afhaaldatum').value;
-    const naam = document.getElementById('naam').value.trim();
-    const email = document.getElementById('email').value.trim();
-    const telefoon = document.getElementById('telefoon').value.trim();
-    if (!datum || !naam || !gekozenSlot || !email || !telefoon) {
-      document.getElementById('error3').textContent = 'Vul alle verplichte velden in.';
-      document.getElementById('error3').style.display = 'block';
-      return false;
-    }
-    document.getElementById('error3').style.display = 'none';
-    return true;
+    const minDatum = document.getElementById('afhaaldatum').min;
+    if (!datum) { zetFout('afhaaldatum', MELDING.datumLeeg); fouten.push('afhaaldatum'); }
+    else if (new Date(datum + 'T12:00:00').getDay() === 2) { zetFout('afhaaldatum', MELDING.dinsdag); fouten.push('afhaaldatum'); }
+    else if (minDatum && datum < minDatum) { zetFout('afhaaldatum', MELDING.datumTeVroeg); fouten.push('afhaaldatum'); }
+    if (!veld('naam')) { zetFout('naam', MELDING.naam); fouten.push('naam'); }
+    if (!gekozenSlot) { zetFout('afhaaltijd', MELDING.tijd); fouten.push('afhaaltijd'); }
+    const email = veld('email'), telefoon = veld('telefoon');
+    if (!email) { zetFout('email', MELDING.emailLeeg); fouten.push('email'); }
+    else if (!EMAIL_RE.test(email)) { zetFout('email', MELDING.email); fouten.push('email'); }
+    if (!telefoon) { zetFout('telefoon', MELDING.telefoonLeeg); fouten.push('telefoon'); }
+    else if (!TEL_RE.test(telefoon)) { zetFout('telefoon', MELDING.telefoon); fouten.push('telefoon'); }
+    // volgorde op het scherm: datum, naam, tijd, e-mail, telefoon
+    toonEersteFout(fouten);
+    return fouten.length === 0;
   }
 
   // ---------- LIVE SAMENVATTING / PRIJS ----------
@@ -627,8 +706,9 @@
       const r = document.createRange(); r.selectNodeContents(document.getElementById('orderText'));
       const sel = getSelection(); sel.removeAllRanges(); sel.addRange(r); document.execCommand('copy');
     }
-    knop.textContent = 'Gekopieerd';
-    setTimeout(() => { knop.textContent = 'Kopieer bestelling'; }, 2500);
+    knop.textContent = 'Gekopieerd'; knop.classList.add('is-success');
+    clearTimeout(knop._terug);
+    knop._terug = setTimeout(() => { knop.textContent = 'Kopieer bestelling'; knop.classList.remove('is-success'); }, 2000);
   });
 
   async function plaatsBestelling() {
@@ -639,7 +719,7 @@
     const fout = document.getElementById('error4');
     fout.style.display = 'none';
     document.getElementById('orderFail').hidden = true;
-    knop.disabled = true; knop.textContent = 'Bezig met versturen…';
+    knop.disabled = true; knop.textContent = 'Bezig met versturen'; knop.classList.add('is-loading'); knop.setAttribute('aria-busy', 'true');
     const payload = {
       taarten: Object.values(gekozenProducten).map(p => ({ id: p.id, formaat: p.formaat })),
       tekst: tekstAan ? veld('tekstOpTaart') : '',
@@ -651,9 +731,13 @@
       const r = await fetch('/bestellen/verstuur', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
       data = await r.json().catch(() => null);
     } catch { data = null; }
-    knop.disabled = false; knop.textContent = 'Bestelling versturen';
+    knop.disabled = false; knop.textContent = 'Bestelling versturen'; knop.classList.remove('is-loading'); knop.removeAttribute('aria-busy');
     if (data && data.succes === true) {
       document.getElementById('step4Nav').style.display = 'none';
+      const d = new Date(veld('afhaaldatum') + 'T12:00:00');
+      document.getElementById('okMoment').textContent =
+        d.toLocaleDateString('nl-NL', { weekday: 'long', day: 'numeric', month: 'long' }) + ' om ' + gekozenSlot;
+      document.getElementById('okEmail').textContent = ' aan ' + veld('email');
       const ok = document.getElementById('orderOk');
       ok.hidden = false; ok.focus({ preventScroll: true });
       ok.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -670,6 +754,5 @@
 
 <div class="mobile-total" aria-live="polite"><span>Totaal van je bestelling</span><strong id="mobileTotal">€0,00</strong></div>
 {% include "_ident.html" ignore missing %}
-{% include "_cookie.html" ignore missing %}
 </body>
 </html>

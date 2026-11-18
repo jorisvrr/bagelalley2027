@@ -4,8 +4,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
-  {% set seo_title = "Menukaart | Bagel Alley Wassenaar" %}
-  {% set seo_desc = "Bekijk de menukaart van Bagel Alley Wassenaar: bagels, breakfast, lunch, high tea, tapas, verse koffie en smoothies. Glutenvrij & lactosevrij mogelijk." %}
+  {% set seo_title = "Menukaart met prijzen | Bagel Alley Wassenaar" %}
+  {% set seo_desc = "De kaart van Bagel Alley in Wassenaar met prijzen: bagels, ontbijt, soepen, salades, tapas en high tea. Glutenvrije bagel en vegetarische keuze." %}
   {% set seo_path = "/menu" %}
   {% set seo_crumb = "Menukaart" %}
   {% include "_seo.html" ignore missing %}
@@ -31,14 +31,14 @@
       display: inline-flex; align-items: center; gap: .4rem;
       font-size: var(--fs-sm); font-weight: 500; color: rgba(245,240,232,.62);
       text-decoration: none; letter-spacing: var(--track-button);
-      transition: color .2s;
+      transition: color var(--dur-ui) var(--ease-out);
     }
     @media (hover: hover) and (pointer: fine) { .nav-back:hover { color: var(--purple2); } }
     .nav-cta {
       background: var(--purple); color: white;
       padding: .5rem 1.4rem; border-radius: var(--r-btn);
       font-size: var(--fs-sm); font-weight: 500; letter-spacing: var(--track-button);
-      text-decoration: none; transition: background .2s;
+      text-decoration: none; transition: background-color var(--dur-ui) var(--ease-out);
     }
     @media (hover: hover) and (pointer: fine) { .nav-cta:hover { background: var(--purple3); } }
 
@@ -49,11 +49,6 @@
       border-bottom: 1px solid rgba(135,88,206,.12);
     }
     .page-hero-inner { max-width: 860px; }
-    .page-label {
-      font-size: var(--fs-xs); font-weight: 500; letter-spacing: var(--track-label);
-      text-transform: uppercase; color: var(--purple-light);
-      display: block; margin-bottom: .7rem;
-    }
     .page-title {
       font-family: 'Playfair Display', serif;
       font-size: clamp(2rem, 4vw, 3.2rem);
@@ -64,15 +59,6 @@
     .page-desc {
       font-size: var(--fs-base); color: rgba(245,240,232,.62);
       line-height: 1.7; max-width: 520px;
-    }
-    .page-badges {
-      display: flex; gap: .7rem; flex-wrap: wrap; margin-top: 1.5rem;
-    }
-    .page-badge {
-      background: rgba(135,88,206,.15); border: 1px solid rgba(135,88,206,.3);
-      color: var(--purple-light); font-size: var(--fs-xs); font-weight: 500;
-      letter-spacing: var(--track-label); text-transform: uppercase;
-      padding: .35rem .9rem; border-radius: var(--r-pill);
     }
 
     /* MAIN CONTENT */
@@ -92,13 +78,6 @@
     }
     .menu-intro-text { font-size: var(--fs-md); color: rgba(245,240,232,.62); line-height: 1.6; }
     .menu-intro-text strong { color: var(--purple-light); font-weight: 500; }
-
-    /* MENU IMAGES */
-    .menu-section-label {
-      font-size: var(--fs-xs); font-weight: 500; letter-spacing: var(--track-label);
-      text-transform: uppercase; color: var(--purple-light);
-      margin-bottom: 1rem; display: block;
-    }
     .menu-section-title {
       font-family: 'Playfair Display', serif;
       font-size: var(--fs-xl); font-weight: 700; color: var(--cream);
@@ -129,12 +108,6 @@
     .menu-img-caption-text {
       font-size: var(--fs-sm); color: rgba(245,240,232,.62);
       letter-spacing: var(--track-button);
-    }
-    .menu-img-caption-badge {
-      font-size: var(--fs-xs); font-weight: 500; letter-spacing: var(--track-label);
-      text-transform: uppercase; color: var(--purple-light);
-      background: rgba(135,88,206,.12); border: 1px solid rgba(135,88,206,.25);
-      padding: .25rem .7rem; border-radius: var(--r-pill);
     }
 
     /* DIVIDER */
@@ -174,7 +147,7 @@
       padding: .8rem 1.8rem; font-size: var(--fs-sm); font-weight: 500;
       letter-spacing: var(--track-button); text-transform: uppercase;
       border: none; cursor: pointer; text-decoration: none;
-      display: inline-flex; align-items: center; gap: .5rem; border-radius: var(--r-btn); transition: background .2s;
+      display: inline-flex; align-items: center; gap: .5rem; border-radius: var(--r-btn); transition: background-color var(--dur-ui) var(--ease-out);
     }
     @media (hover: hover) and (pointer: fine) { .btn-purple:hover { background: var(--purple3); } }
     .btn-ghost {
@@ -183,22 +156,11 @@
       letter-spacing: var(--track-button); text-transform: uppercase;
       border: 1.5px solid rgba(245,240,232,.2); cursor: pointer;
       text-decoration: none; display: inline-flex; align-items: center; gap: .5rem; border-radius: var(--r-btn);
-      transition: background-color .2s, border-color .2s, color .2s, transform .2s, box-shadow .2s;
+      transition: background-color var(--dur-ui) var(--ease-out), border-color var(--dur-ui) var(--ease-out), color var(--dur-ui) var(--ease-out), transform var(--dur-press) var(--ease-out);
     }
     @media (hover: hover) and (pointer: fine) { .btn-ghost:hover { border-color: rgba(245,240,232,.4); color: var(--cream); } }
 
-    .menu-img-fallback {
-      display: none; align-items: center; justify-content: center;
-      flex-direction: column; gap: 1rem;
-      padding: 3rem 2rem; background: rgba(135,88,206,.06);
-      border-radius: var(--r-field); text-align: center;
-    }
-    .menu-img-fallback-icon { font-size: 2.5rem; }
-    .menu-img-fallback-text { font-size: var(--fs-md); color: rgba(245,240,232,.62); line-height: 1.6; }
-    .menu-img-fallback-code { font-family: monospace; background: rgba(135,88,206,.15); color: var(--purple-light); padding: .3rem .7rem; border-radius: var(--r-btn); font-size: var(--fs-sm); }
-
     .menu-img-caption { gap: 1rem; }
-    .menu-img-caption-badge { white-space: nowrap; }
 
     .menu-zoom { display: block; }
     .menu-zoom-hint { font-size: var(--fs-xs); color: var(--purple-light); white-space: nowrap; }
@@ -276,15 +238,8 @@
       <h2 class="menu-section-title">Bagels, Ontbijt, Bowls & Boxes</h2>
     </div>
     <div class="menu-img-card">
-      <a class="menu-zoom" href="{{ url_for('static', filename='menu/menu_1.webp') }}" target="_blank" rel="noopener" aria-label="Menukaart pagina 1 op ware grootte openen">
+      <a class="menu-zoom" href="{{ url_for('static', filename='menu/menu_1.webp') }}" target="_blank" rel="noopener noreferrer" aria-label="Menukaart pagina 1 op ware grootte openen">
       {{ pic('menu/menu_1.webp', 'Menukaart Bagel Alley, pagina 1: ontbijt, bagels, sappen, smoothies, yoghurt en bowls', '(max-width: 1100px) 100vw, 1000px', eager=True) }}</a>
-      <div class="menu-img-fallback">
-        
-        <div class="menu-img-fallback-text">
-          Zet <span class="menu-img-fallback-code">menu_1.webp</span> in de map<br>
-          <span class="menu-img-fallback-code">public/static/menu/</span>
-        </div>
-      </div>
       <div class="menu-img-caption">
         <span class="menu-img-caption-text">Bagels · Ontbijt · Fresh Juices · Smoothies · Yoghurt · Bowls · Take Away Boxes</span>
         <span class="menu-zoom-hint">Tik om te vergroten</span>
@@ -304,15 +259,8 @@
       <h2 class="menu-section-title">Soepen, Salades, Drankjes & Zoet</h2>
     </div>
     <div class="menu-img-card">
-      <a class="menu-zoom" href="{{ url_for('static', filename='menu/menu_2.webp') }}" target="_blank" rel="noopener" aria-label="Menukaart pagina 2 op ware grootte openen">
+      <a class="menu-zoom" href="{{ url_for('static', filename='menu/menu_2.webp') }}" target="_blank" rel="noopener noreferrer" aria-label="Menukaart pagina 2 op ware grootte openen">
       {{ pic('menu/menu_2.webp', 'Menukaart Bagel Alley, pagina 2: soepen, salades, zoetigheden, high tea, tapas, koffie en thee', '(max-width: 1100px) 100vw, 1000px') }}</a>
-      <div class="menu-img-fallback">
-        
-        <div class="menu-img-fallback-text">
-          Zet <span class="menu-img-fallback-code">menu_2.webp</span> in de map<br>
-          <span class="menu-img-fallback-code">public/static/menu/</span>
-        </div>
-      </div>
       <div class="menu-img-caption">
         <span class="menu-img-caption-text">Soups & Salads · Sweets & Goodies · Coffee · Drinks · High Tea · Tapas</span>
         <span class="menu-zoom-hint">Tik om te vergroten</span>
@@ -326,9 +274,10 @@
     <p class="menu-text-note">Overgenomen van de gedrukte kaart. Prijzen in euro.</p>
     <div class="menu-text-grid">
       {% for sectie in menukaart %}
-      <section class="menu-text-section">
+      <section class="menu-text-section" id="{{ sectie.titel|slug }}">
         <h3>{{ sectie.titel }}</h3>
         {% if sectie.intro %}<p class="menu-text-intro">{{ sectie.intro }}</p>{% endif %}
+        {% if sectie.titel == "High Tea" %}<p class="menu-text-intro"><a href="/high-tea">Meer over onze high tea</a></p>{% endif %}
         <dl>
           {% for naam, omschrijving, prijs in sectie.regels %}
           <div class="menu-text-row{% if not prijs %} menu-text-row--sub{% endif %}">
@@ -341,6 +290,15 @@
       {% endfor %}
     </div>
   </details>
+  <script>
+    // Link naar een sectie (bijv. /menu#tapas): klap de tekstversie open en spring ernaartoe.
+    (function () {
+      if (location.hash === '#high-tea') { location.replace('/high-tea'); return; }   // high tea heeft een eigen pagina
+      var doel = location.hash && document.getElementById(decodeURIComponent(location.hash.slice(1)));
+      var d = doel && doel.closest('details');
+      if (d) { d.open = true; doel.scrollIntoView(); }
+    })();
+  </script>
   {% endif %}
 
   <!-- CTA -->
@@ -358,6 +316,5 @@
 </div>
 
 {% include "_ident.html" ignore missing %}
-{% include "_cookie.html" ignore missing %}
 </body>
 </html>

@@ -1,0 +1,16 @@
+# Niet nodig op Vercel: tests, dev-bestanden en documentatie.
+# Let op: beeldmanifest.py, menukaart.py en public/ zijn WEL nodig.
+tests/
+requirements-dev.txt
+*.md
+.pytest_cache/
+__pycache__/
+*.pyc
+.venv/
+venv/
+.env
+.env.*
+.DS_Store
+node_modules/
+*.tgz
+audit-screenshots/

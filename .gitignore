@@ -1,7 +1,23 @@
-*.db
+# Python
 __pycache__/
 *.pyc
-.env
-.DS_Store
-.vercel
 .venv/
+venv/
+.pytest_cache/
+
+# Lokale data en geheimen
+*.db
+.env
+.env.*
+
+# Systeem en tooling
+.DS_Store
+node_modules/
+*.tgz
+.vercel
+
+# Werkdocumenten (staan in ~/Projects/bagelalley_docs/)
+audit-screenshots/
+CLEANUP-PLAN.md
+AUDIT.md
+CLIENT-TODO.md
