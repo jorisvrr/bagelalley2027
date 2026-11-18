@@ -153,6 +153,7 @@
     .sfeer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; grid-template-rows: 240px 240px; gap: 12px; margin-top: 3rem; }
     .sfeer-img { overflow: hidden; border-radius: var(--r-btn); background: var(--cream2); }
     .sfeer-main { grid-row: 1/3; }
+    .sfeer-main img { object-position: 50% 51%; }   /* staande foto: de glazen helemaal, de bagel eronder */
     .sfeer-img img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform var(--dur-press) var(--ease-out); }
     @media (hover: hover) and (pointer: fine) { .sfeer-img:hover img { transform: scale(1.04); } }
     .sfeer-text { grid-column: 2/4; grid-row: 2; display: flex; flex-direction: column; justify-content: flex-end; padding: 2rem; background: var(--dark2); border-radius: var(--r-btn); }
@@ -493,6 +494,7 @@
       .sfeer-grid { grid-template-columns: 1fr; grid-template-rows: auto; }
       .sfeer-main { grid-row: 1; height: auto; }
       .sfeer-img { aspect-ratio: 4 / 3; }
+      .sfeer-img.sfeer-main { aspect-ratio: auto; height: min(calc((100vw - 3rem) * 1.25), 34rem); }   /* staande foto: heel op mobiel, begrensd op tablet */
       .sfeer-text { grid-column: 1; }
       .menu-grid { grid-template-columns: 1fr; }
       .hours-layout, .contact-grid { grid-template-columns: 1fr; gap: 2.5rem; }
@@ -637,7 +639,7 @@ document.addEventListener('DOMContentLoaded', function() {
   <h2 class="section-title">Zo ziet het eruit<br>aan de Langstraat.</h2>
   <div class="sfeer-grid">
     <div class="sfeer-img sfeer-main">
-      {{ pic('fotos/pexels-casnafu-24796900.jpg', 'Belegde bagels met sla en tomaat in een vitrine', '(max-width: 768px) 100vw, 50vw') }}
+      {{ pic('fotos/terras-proosten-langstraat.png', 'Proosten met drie glazen sinaasappelsap op het terras, met op tafel een bagel met zalm en ei, een fruitbowl en een cappuccino', '(max-width: 768px) 100vw, 50vw') }}
     </div>
     <div class="sfeer-img">
       {{ pic('fotos/pexels-amar-28056733.jpg', 'Bagel met een cappuccino en een bordje met banaan', '(max-width: 768px) 100vw, 25vw') }}
