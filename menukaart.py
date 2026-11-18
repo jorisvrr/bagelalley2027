@@ -166,7 +166,7 @@ MENUKAART = [
     },
     {
         "titel": "High Tea",
-        "intro": "Vanaf 2 personen. Zie onze wandborden voor meer informatie.",
+        "intro": "Vanaf 2 personen, prijzen per persoon. Zie onze wandborden voor meer informatie.",
         "regels": [
             ("Afternoon tea", "", "17,95"),
             ("Dream tea", "", "27,50"),

@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
   {% set seo_title = "High tea in Wassenaar vanaf 2 personen | Bagel Alley" %}
-  {% set seo_desc = "High tea bij Bagel Alley in Wassenaar, al vanaf 2 personen: Afternoon tea €17,95, Dream tea €27,50 of Alley's tea €32,50. Reserveren gaat telefonisch." %}
+  {% set seo_desc = "High tea in Wassenaar, al vanaf 2 personen: Afternoon tea €17,95, Dream tea €27,50 of Alley's tea €32,50 per persoon. Reserveren gaat telefonisch." %}
   {% set seo_path = "/high-tea" %}
   {% set seo_crumb = "High tea" %}
   {% include "_seo.html" ignore missing %}
@@ -46,6 +46,7 @@
     .ht-row:last-child { border-bottom: none; }
     .ht-naam { font-family: 'Playfair Display', serif; font-size: var(--fs-lg); color: var(--cream); }
     .ht-prijs { font-size: var(--fs-md); font-weight: 600; color: var(--purple-light); white-space: nowrap; }
+    .ht-prijs abbr { text-decoration: none; font-weight: 400; }
     .ht-note { font-size: var(--fs-md); line-height: 1.7; color: rgba(245,240,232,.7); }
     .ht-note a { color: var(--purple-light); }
 
@@ -111,7 +112,7 @@
     <div class="ht-body">
       <ul class="ht-list">
         {% for naam, prijs in high_tea %}
-        <li class="ht-row"><span class="ht-naam">{{ naam }}</span><span class="ht-prijs">€{{ prijs }}</span></li>
+        <li class="ht-row"><span class="ht-naam">{{ naam }}</span><span class="ht-prijs">€{{ prijs }} <abbr title="per persoon">p.p.</abbr></span></li>
         {% endfor %}
       </ul>
       <p class="ht-note">Zie onze wandborden in de zaak voor meer informatie. De rest van de kaart vind je op <a href="/menu">de menukaart</a>.</p>

@@ -703,9 +703,9 @@ def robots_txt():
 # Datum van de laatste inhoudelijke wijziging per pagina (voor <lastmod> in de sitemap).
 # Pas de datum aan als de tekst, prijzen of tijden op die pagina veranderen.
 SITEMAP = [
-    ("/", "2026-11-13"),
-    ("/menu", "2026-11-13"),
-    ("/high-tea", "2026-11-13"),
+    ("/", "2026-11-18"),
+    ("/menu", "2026-11-18"),
+    ("/high-tea", "2026-11-18"),
     ("/shop", "2026-11-13"),
     ("/bestellen", "2026-11-13"),
     ("/reserveren", "2026-11-13"),
@@ -862,10 +862,10 @@ KENNISBANK = {
     "adres":            f'Je vindt ons aan de Langstraat 42, 2242 KM Wassenaar. Plan je route {link("hier", _ROUTE)}.',
     "contact":          f"Bel ons op {_TEL} of mail naar {_MAIL}.",
     "menu":             f'Op de kaart staan bagels, ontbijt, soepen, salades, high tea, tapas en taart. Bekijk {link("de hele kaart", "/menu")}.',
-    "prijzen":          f'Een bagel kost €2,95, belegd €4,95 tot €10,50. Ontbijt kost €9,50 tot €16,50, koffie vanaf €2,75 en high tea vanaf €17,95. Alle prijzen staan op {link("de kaart", "/menu")}.',
+    "prijzen":          f'Een bagel kost €2,95, belegd €4,95 tot €10,50. Ontbijt kost €9,50 tot €16,50, koffie vanaf €2,75 en high tea vanaf €17,95 per persoon. Alle prijzen staan op {link("de kaart", "/menu")}.',
     "bagels":           f'Je kiest uit 25 bagelsoorten, ook glutenvrij. Een bagel naar keuze kost €2,95, belegd vanaf €4,95. Bekijk {link("de kaart", "/menu")}.',
     "ontbijt_brunch_lunch": f'Er zijn zes ontbijtjes van €9,50 tot €16,50. Voor de lunch zijn er bagels, soep (€7,95) en salades (€13,50). Bekijk {link("de kaart", "/menu")}.',
-    "high_tea":         f"High tea kan vanaf 2 personen: Afternoon tea €17,95, Dream tea €27,50, Alley's tea €32,50. Bel {_TEL} om te reserveren. Meer op {link('de high tea-pagina', '/high-tea')}.",
+    "high_tea":         f"High tea kan vanaf 2 personen. Per persoon: Afternoon tea €17,95, Dream tea €27,50, Alley's tea €32,50. Bel {_TEL} om te reserveren. Meer op {link('de high tea-pagina', '/high-tea')}.",
     "tapas":            f'Tapas bagels voor 2 personen: drie gesneden bagels met zes dips, voor €24,95. Bekijk {link("de kaart", "/menu")}.',
     "koffie":           "We schenken koffie van La Garanta, met bonen uit Colombia. Koffie kost vanaf €2,75 en een cappuccino vanaf €3,50; haver- of sojamelk is €0,75.",
     "thee":             "Thee naar keuze kost €3,25, verse munt- of gemberthee €3,95 en een pot thee €7,25. Chai thee of chai latte is €4,95.",

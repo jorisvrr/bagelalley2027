@@ -97,3 +97,14 @@ def test_bevestigde_feiten_klant():
     for vraag, intent in [("waar kan ik parkeren", "parking"), ("is er wifi", "wifi_laptop"),
                           ("hebben jullie een terras", "terras"), ("hebben jullie instagram", "instagram_social")]:
         assert app.bepaal_intent(vraag)[0] == intent
+
+
+def test_high_tea_prijzen_zijn_per_persoon():
+    assert "Per persoon" in app.chat_antwoord("high_tea")
+    assert "€17,95 per persoon" in app.chat_antwoord("prijzen")
+    c = app.app.test_client()
+    pagina = c.get("/high-tea").get_data(as_text=True)
+    assert pagina.count('title="per persoon">p.p.</abbr>') == 3
+    assert "€32,50 per persoon" in pagina                    # meta-omschrijving
+    assert "Vanaf €17,95 p.p." in c.get("/").get_data(as_text=True)
+    assert "prijzen per persoon" in c.get("/menu").get_data(as_text=True)
